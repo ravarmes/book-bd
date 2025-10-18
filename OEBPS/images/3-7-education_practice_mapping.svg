@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="320" viewBox="0 0 860 320" role="img" aria-labelledby="title desc">
+  <title id="title">Exercício Integrado: Registro de Práticas Corporais</title>
+  <desc id="desc">Mapeamento N:M entre aluno e prática_corporal via registro_pratica com atributos data e duração.</desc>
+  <style>
+    .tbl{fill:#fff;stroke:#333;stroke-width:1.2px;rx:8;ry:8}
+    .hdr{fill:#e8f0fe}
+    .txt{font-family:Arial, Helvetica, sans-serif;fill:#222;font-size:14px}
+    .arrow{stroke:#444;stroke-width:2;marker-end:url(#arrow)}
+    .badge{font-size:12px;fill:#1a73e8}
+  </style>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#444" />
+    </marker>
+  </defs>
+
+  <!-- aluno -->
+  <rect x="60" y="40" width="240" height="120" class="tbl" />
+  <rect x="60" y="40" width="240" height="30" class="hdr" />
+  <text x="70" y="60" class="txt"><tspan font-weight="bold">aluno</tspan></text>
+  <text x="70" y="90" class="txt">matricula <tspan class="badge">PK</tspan></text>
+  <text x="70" y="115" class="txt">nome</text>
+
+  <!-- pratica_corporal -->
+  <rect x="560" y="40" width="240" height="120" class="tbl" />
+  <rect x="560" y="40" width="240" height="30" class="hdr" />
+  <text x="570" y="60" class="txt"><tspan font-weight="bold">pratica_corporal</tspan></text>
+  <text x="570" y="90" class="txt">id_pratica <tspan class="badge">PK</tspan></text>
+  <text x="570" y="115" class="txt">descricao</text>
+
+  <!-- registro_pratica associativa -->
+  <rect x="260" y="190" width="340" height="110" class="tbl" />
+  <rect x="260" y="190" width="340" height="30" class="hdr" />
+  <text x="270" y="210" class="txt"><tspan font-weight="bold">registro_pratica</tspan></text>
+  <text x="270" y="240" class="txt">matricula_aluno <tspan class="badge">FK → aluno</tspan></text>
+  <text x="270" y="265" class="txt">id_pratica <tspan class="badge">FK → pratica_corporal</tspan> • data • duracao</text>
+
+  <!-- Setas -->
+  <line x1="300" y1="160" x2="360" y2="190" class="arrow" />
+  <line x1="560" y1="160" x2="500" y2="190" class="arrow" />
+</svg>

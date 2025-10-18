@@ -1,0 +1,92 @@
+A Biblioteca Escolar pretende informatizar o controle do acervo e das operações de empréstimo, devolução e reserva de livros. O sistema deve permitir que alunos consultem os livros disponíveis, realizem reservas e deixem avaliações sobre os livros lidos.
+
+Para fins de cadastro e contato, o sistema deve registrar as informações de endereço e telefones dos alunos. Cada aluno reside em um único endereço e pode possuir vários telefones.
+
+Os bibliotecários serão responsáveis por registrar os empréstimos e as devoluções realizados pelos alunos. As multas são geradas automaticamente em caso de devolução em atraso.
+
+Cada livro é escrito por um ou mais autores e um autor pode ter escrito vários livros (relacionamento N:N). Cada livro pode possuir vários exemplares físicos, identificados por código e localizados em prateleiras específicas. O sistema deverá controlar o status de cada exemplar (disponível, emprestado, reservado, extraviado).
+
+O sistema deve também gerar relatórios gerenciais, como listagem de livros mais emprestados, alunos com mais multas e histórico de movimentações.
+
+### Regras principais:
+
+* Cada aluno pode ter até 3 empréstimos ativos simultaneamente.
+* Cada aluno pode ter no máximo 2 reservas ativas (de livros).
+* Atrasos geram multas, calculadas como R$ 10,00 para cada dia em atraso.
+* Aluno com multa pendente não pode realizar novos empréstimos.
+* Cada empréstimo pode receber uma avaliação (nota de 1 a 5 e comentário opcional), feita pelo aluno após a devolução do exemplar.
+
+---
+
+## 1 – Enumerar as entidades
+
+* Aluno
+* Bibliotecário
+* Livro
+* Autor
+* Exemplar
+* Empréstimo
+* Devolução
+* Reserva
+* Multa
+* Avaliação
+* Endereço
+* Telefone
+
+---
+
+## 2 – Atributos das entidades
+
+* Aluno
+    (id\_aluno, nome, turma, matricula, id\_endereco)
+
+* Bibliotecário
+    (id\_bibliotecario, nome, registro\_funcional)
+
+* Livro
+    (id\_livro, titulo, editora, isbn)
+
+* Autor
+    (id\_autor, nome)
+
+* Exemplar
+    (id\_exemplar, codigo, localizacao, status, id\_livro)
+
+* Empréstimo
+    (id\_emprestimo, data\_emprestimo, data\_prevista, id\_aluno, id\_bibliotecario, id\_exemplar)
+
+* Devolução
+    (id\_devolucao, data\_devolucao, id\_emprestimo, id\_bibliotecario)
+
+* Reserva
+    (id\_reserva, data\_reserva, status, id\_aluno, id\_livro)
+
+* Multa
+    (id\_multa, valor, data\_geracao, status, id\_devolucao)
+
+* Avaliacao
+    (id\_avaliacao, nota, data\_avaliacao, comentario, id\_aluno, id\_emprestimo)
+
+* Endereço
+    (id\_endereco, rua, bairro, estado)
+
+* Telefone
+    (id\_telefone, numero, tipo\_telefone, id\_aluno)
+
+---
+
+## 3 – Identificar relacionamentos
+
+* Aluno reside em Endereço (1:1)
+* Aluno possui Telefone (1:N)
+* Autor escreve Livro (N:N)
+* Exemplar pertence a Livro (1:N)
+* Aluno realiza Empréstimo (1:N)
+* Bibliotecário registra Empréstimo (1:N)
+* Empréstimo refere-se a Exemplar (1:1)
+* Empréstimo gera Devolução (1:1)
+* Devolução é registrada por Bibliotecário (1:N)
+* Aluno realiza Reserva (1:N)
+* Reserva refere-se a Livro (1:N)
+* Multa está associada a Devolução (1:1)
+* Avaliação está vinculada a Empréstimo (1:1) e a Aluno (1:N)

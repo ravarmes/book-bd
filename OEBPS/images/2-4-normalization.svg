@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" role="img" aria-label="Normalização 1FN, 2FN e 3FN">
+  <defs>
+    <style>
+      .panel { fill:#f6fbff; stroke:#1e5aa6; stroke-width:2; }
+      .title { font: 700 18px 'Segoe UI', Arial, sans-serif; fill:#0b3d91; }
+      .text { font: 500 14px 'Segoe UI', Arial, sans-serif; fill:#08345e; }
+      .arrow { stroke:#3a4e67; stroke-width:2; marker-end:url(#m); }
+    </style>
+    <marker id="m" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8 Z" fill="#3a4e67" />
+    </marker>
+  </defs>
+
+  <!-- 1FN -->
+  <rect class="panel" x="40" y="60" width="200" height="220" rx="8"/>
+  <text class="title" x="140" y="92" text-anchor="middle">1FN</text>
+  <text class="text" x="60" y="120">• Dados atômicos</text>
+  <text class="text" x="60" y="144">• Evitar compostos</text>
+  <text class="text" x="60" y="168">Ex.: ALUNO(nome, turma,</text>
+  <text class="text" x="60" y="188">matricula)</text>
+
+  <!-- seta -->
+  <line class="arrow" x1="240" y1="170" x2="320" y2="170"/>
+
+  <!-- 2FN -->
+  <rect class="panel" x="320" y="60" width="200" height="220" rx="8"/>
+  <text class="title" x="420" y="92" text-anchor="middle">2FN</text>
+  <text class="text" x="340" y="120">• 1FN + sem dependência</text>
+  <text class="text" x="340" y="144">parcial (chave composta)</text>
+  <text class="text" x="340" y="168">Ex.: NOTA(aluno, disciplina,</text>
+  <text class="text" x="340" y="188">nota) separa DISCIPLINA</text>
+
+  <!-- seta -->
+  <line class="arrow" x1="520" y1="170" x2="600" y2="170"/>
+
+  <!-- 3FN -->
+  <rect class="panel" x="600" y="60" width="200" height="220" rx="8"/>
+  <text class="title" x="700" y="92" text-anchor="middle">3FN</text>
+  <text class="text" x="620" y="120">• 2FN + sem dependência</text>
+  <text class="text" x="620" y="144">transitiva (não‑chave→não‑chave)</text>
+  <text class="text" x="620" y="168">Ex.: EMPRESTIMO(aluno,</text>
+  <text class="text" x="620" y="188">livro, datas) com ALUNO e</text>
+  <text class="text" x="620" y="208">LIVRO normalizados</text>
+
+  <!-- rodapé -->
+  <text class="text" x="400" y="360" text-anchor="middle">Normalização inicial: reduzir redundância e anomalias (inserção/atualização/exclusão)</text>
+</svg>

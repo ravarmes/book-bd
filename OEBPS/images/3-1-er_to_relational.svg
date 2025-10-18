@@ -1,0 +1,159 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 950" width="1400" height="950">
+  <defs>
+    <style>
+      .title-main { font: 700 36px 'Segoe UI', Arial, sans-serif; fill:#1a1a1a; }
+      .title-sub { font: 500 16px 'Segoe UI', Arial, sans-serif; fill:#666; }
+      .box-title { font: 700 18px 'Segoe UI', Arial, sans-serif; fill:white; }
+      .box-text { font: 500 15px 'Segoe UI', Arial, sans-serif; line-height: 1.8; }
+      .box-text-bold { font: 600 15px 'Segoe UI', Arial, sans-serif; }
+      .box-italic { font-style: italic; }
+      .arrow-line { stroke:#2c3e50; stroke-width:3; fill:none; }
+      .box-er { fill:#4A90E2; stroke:#2E5C8A; stroke-width:2; }
+      .box-rel { fill:#27AE60; stroke:#1B5E20; stroke-width:2; }
+      .box-assoc { fill:#F39C12; stroke:#B8860B; stroke-width:2; }
+      .icon-circle { fill:white; opacity:0.3; }
+      .text-code { font-family: 'Courier New', monospace; font-size: 14px; fill:white; }
+    </style>
+    
+    <!-- Ícones -->
+    <g id="icon-entity">
+      <rect x="-8" y="-5" width="16" height="10" fill="white" rx="1"/>
+      <circle cx="-4" cy="-2" r="1.5" fill="white" opacity="0.6"/>
+      <circle cx="0" cy="-2" r="1.5" fill="white" opacity="0.6"/>
+      <circle cx="4" cy="-2" r="1.5" fill="white" opacity="0.6"/>
+      <line x1="-4" y1="1" x2="-4" y2="4" stroke="white" stroke-width="1" opacity="0.6"/>
+      <line x1="0" y1="1" x2="0" y2="4" stroke="white" stroke-width="1" opacity="0.6"/>
+      <line x1="4" y1="1" x2="4" y2="4" stroke="white" stroke-width="1" opacity="0.6"/>
+    </g>
+    
+    <g id="icon-table">
+      <rect x="-7" y="-5" width="14" height="10" fill="none" stroke="white" stroke-width="1.2" rx="0.5"/>
+      <line x1="-7" y1="-1" x2="7" y2="-1" stroke="white" stroke-width="1"/>
+      <line x1="-7" y1="2" x2="7" y2="2" stroke="white" stroke-width="1"/>
+      <circle cx="-3" cy="0" r="0.8" fill="white"/>
+      <circle cx="3" cy="0" r="0.8" fill="white"/>
+    </g>
+    
+    <g id="icon-link">
+      <circle cx="-5" cy="0" r="2.5" fill="none" stroke="white" stroke-width="1.2"/>
+      <circle cx="5" cy="0" r="2.5" fill="none" stroke="white" stroke-width="1.2"/>
+      <line x1="-2.5" y1="0" x2="2.5" y2="0" stroke="white" stroke-width="1.5"/>
+      <circle cx="-5" cy="0" r="1" fill="white"/>
+      <circle cx="5" cy="0" r="1" fill="white"/>
+    </g>
+    
+    <!-- Marcador de seta -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#2c3e50"/>
+    </marker>
+  </defs>
+  
+  <!-- Título -->
+  <text class="title-main" x="700" y="50" text-anchor="middle">Do Modelo ER para o Modelo Relacional</text>
+  <text class="title-sub" x="700" y="80" text-anchor="middle">Mapeamento de entidades, relacionamentos e atributos</text>
+  
+  <!-- ========== LADO ESQUERDO: MODELO ER ========== -->
+  
+  <!-- Caixa 1: Conceitos ER -->
+  <rect class="box-er" x="60" y="120" width="380" height="160" rx="12"/>
+  
+  <circle cx="105" cy="155" r="24" class="icon-circle"/>
+  <use href="#icon-entity" x="105" y="155"/>
+  
+  <text class="box-title" x="250" y="150" text-anchor="middle">Modelo ER</text>
+  
+  <line x1="85" y1="170" x2="415" y2="170" stroke="white" stroke-width="1" opacity="0.3"/>
+  
+  <text class="box-text-bold" x="90" y="195" fill="white">Componentes:</text>
+  <text class="box-text" x="90" y="220" fill="white">• Entidades (objetos)</text>
+  <text class="box-text" x="90" y="240" fill="white">• Atributos (propriedades)</text>
+  <text class="box-text" x="90" y="260" fill="white">• Relacionamentos (vínculos)</text>
+  
+  <!-- Seta 1 para conceitos -->
+  <line class="arrow-line" x1="440" y1="200" x2="570" y2="200" marker-end="url(#arrowhead)"/>
+  <text style="font: 600 14px 'Segoe UI', Arial, sans-serif; fill:#2c3e50;" x="505" y="190" text-anchor="middle">Mapear</text>
+  
+  <!-- Caixa 2: Exemplos ER (AUMENTADA) -->
+  <rect class="box-er" x="60" y="290" width="380" height="330" rx="12"/>
+  
+  <text class="box-title" x="250" y="320" text-anchor="middle">Exemplos de Entidades</text>
+  
+  <line x1="85" y1="335" x2="415" y2="335" stroke="white" stroke-width="1" opacity="0.3"/>
+  
+  <text class="text-code" x="85" y="365" fill="white">aluno(<tspan class="box-italic">matrícula</tspan>, nome)</text>
+  <text class="text-code" x="85" y="390" fill="white">livro(<tspan class="box-italic">isbn</tspan>, título)</text>
+  <text class="text-code" x="85" y="415" fill="white">exemplar(<tspan class="box-italic">cod_exemplar</tspan>, isbn,</text>
+  <text class="text-code" x="85" y="435" fill="white">   localização, status)</text>
+  
+  <text class="text-code" x="85" y="465" fill="white">avaliacao(<tspan class="box-italic">id_avaliacao</tspan>,</text>
+  <text class="text-code" x="85" y="485" fill="white">   id_emprestimo, nota, comentário)</text>
+  
+  <text class="box-text-bold" x="85" y="520" fill="white">Relacionamentos:</text>
+  <text class="text-code" x="85" y="545" fill="white">empresta(aluno, exemplar, data)</text>
+  
+  <text class="text-code" x="85" y="570" fill="white">reserva(aluno, livro, data)</text>
+  
+  <!-- Seta 2 para exemplos -->
+  <line class="arrow-line" x1="440" y1="455" x2="570" y2="455" marker-end="url(#arrowhead)"/>
+  <text style="font: 600 14px 'Segoe UI', Arial, sans-serif; fill:#2c3e50;" x="505" y="445" text-anchor="middle">Mapear</text>
+  
+  <!-- ========== LADO DIREITO: MODELO RELACIONAL ========== -->
+  
+  <!-- Caixa 1: Conceitos Relacional -->
+  <rect class="box-rel" x="570" y="120" width="380" height="160" rx="12"/>
+  
+  <circle cx="615" cy="155" r="24" class="icon-circle"/>
+  <use href="#icon-table" x="615" y="155"/>
+  
+  <text class="box-title" x="760" y="150" text-anchor="middle">Modelo Relacional</text>
+  
+  <line x1="595" y1="170" x2="925" y2="170" stroke="white" stroke-width="1" opacity="0.3"/>
+  
+  <text class="box-text-bold" x="590" y="195" fill="white">Componentes:</text>
+  <text class="box-text" x="590" y="220" fill="white">• Tabelas (relações)</text>
+  <text class="box-text" x="590" y="240" fill="white">• PK - Chave Primária</text>
+  <text class="box-text" x="590" y="260" fill="white">• FK - Chave Estrangeira</text>
+  
+  <!-- Caixa 2: Exemplos Relacional (AUMENTADA) -->
+  <rect class="box-rel" x="570" y="290" width="380" height="330" rx="12"/>
+  
+  <text class="box-title" x="760" y="320" text-anchor="middle">Tabelas do Banco de Dados</text>
+  
+  <line x1="595" y1="335" x2="925" y2="335" stroke="white" stroke-width="1" opacity="0.3"/>
+  
+  <text class="text-code" x="590" y="365" fill="white">aluno(<tspan style="text-decoration: underline;">matrícula</tspan> PK,</text>
+  <text class="text-code" x="590" y="385" fill="white">   nome)</text>
+  
+  <text class="text-code" x="590" y="410" fill="white">livro(<tspan style="text-decoration: underline;">isbn</tspan> PK, título)</text>
+  
+  <text class="text-code" x="590" y="435" fill="white">exemplar(<tspan style="text-decoration: underline;">cod_exemplar</tspan> PK,</text>
+  <text class="text-code" x="590" y="455" fill="white">   isbn FK, localização, status)</text>
+  
+  <text class="text-code" x="590" y="480" fill="white">avaliacao(<tspan style="text-decoration: underline;">id_avaliacao</tspan> PK,</text>
+  <text class="text-code" x="590" y="500" fill="white">   id_emprestimo FK, matrícula FK,</text>
+  <text class="text-code" x="590" y="520" fill="white">   nota, data_avaliacao, comentário)</text>
+  
+  <text class="text-code" x="590" y="545" fill="white">telefone_aluno(<tspan style="text-decoration: underline;">matrícula</tspan> FK,</text>
+  <text class="text-code" x="590" y="565" fill="white">   <tspan style="text-decoration: underline;">telefone</tspan>)</text>
+  
+  <!-- ========== CAIXA DE DESTAQUE: TABELAS ASSOCIATIVAS (POSICIONADA MAIS ABAIXO) ========== -->
+  
+  <rect class="box-assoc" x="60" y="660" width="890" height="240" rx="12"/>
+  
+  <circle cx="105" cy="705" r="24" class="icon-circle"/>
+  <use href="#icon-link" x="105" y="705"/>
+  
+  <text class="box-title" x="505" y="700" text-anchor="middle">Tabelas Associativas (Relacionamentos M:N)</text>
+  
+  <line x1="85" y1="720" x2="925" y2="720" stroke="#B8860B" stroke-width="1" opacity="0.4"/>
+  
+  <text class="box-text-bold" x="100" y="750" fill="#333">Propósito:</text>
+  <text class="box-text" x="100" y="773" fill="#333">Relacionamentos muitos-para-muitos (M:N) são convertidos em tabelas intermediárias que armazenam</text>
+  <text class="box-text" x="100" y="795" fill="#333">as chaves estrangeiras de ambas as entidades relacionadas, permitindo múltiplas ligações.</text>
+  
+  <text class="box-text-bold" x="100" y="830" fill="#333">Exemplos:</text>
+  <text class="text-code" x="100" y="855" fill="#333" style="font-size: 14px;">emprestimo(<tspan style="text-decoration: underline;">id_emprestimo</tspan> PK, <tspan style="text-decoration: underline;">matrícula</tspan> FK, <tspan style="text-decoration: underline;">cod_exemplar</tspan> FK, data_emprestimo)</text>
+  
+  <text class="text-code" x="100" y="880" fill="#333" style="font-size: 14px;">reserva(<tspan style="text-decoration: underline;">id_reserva</tspan> PK, <tspan style="text-decoration: underline;">matrícula</tspan> FK, <tspan style="text-decoration: underline;">isbn</tspan> FK, data_reserva, status)</text>
+  
+</svg>

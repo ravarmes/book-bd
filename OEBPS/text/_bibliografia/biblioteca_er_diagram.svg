@@ -1,0 +1,157 @@
+<svg viewBox="0 0 1400 900" xmlns="http://www.w3.org/2000/svg">
+  <!-- Define styles -->
+  <defs>
+    <style>
+      .entity-box { fill: #e1f5ff; stroke: #01579b; stroke-width: 2; }
+      .entity-title { fill: #01579b; font-weight: bold; font-size: 14px; }
+      .entity-attr { fill: #000; font-size: 12px; }
+      .pk { font-weight: bold; text-decoration: underline; }
+      .fk { font-style: italic; }
+      .relationship-text { fill: #d32f2f; font-size: 11px; font-weight: bold; }
+      .line { stroke: #333; stroke-width: 2; fill: none; }
+      .crow { stroke: #333; stroke-width: 2; fill: none; }
+    </style>
+  </defs>
+
+  <!-- ALUNO -->
+  <rect x="50" y="100" width="180" height="140" class="entity-box"/>
+  <text x="140" y="125" text-anchor="middle" class="entity-title">ALUNO</text>
+  <line x1="50" y1="135" x2="230" y2="135" stroke="#01579b" stroke-width="1"/>
+  <text x="60" y="155" class="entity-attr pk">id_aluno (PK)</text>
+  <text x="60" y="170" class="entity-attr">nome</text>
+  <text x="60" y="185" class="entity-attr">turma</text>
+  <text x="60" y="200" class="entity-attr">matricula</text>
+  <text x="60" y="215" class="entity-attr">email</text>
+
+  <!-- BIBLIOTECÁRIO -->
+  <rect x="50" y="350" width="180" height="120" class="entity-box"/>
+  <text x="140" y="375" text-anchor="middle" class="entity-title">BIBLIOTECÁRIO</text>
+  <line x1="50" y1="385" x2="230" y2="385" stroke="#01579b" stroke-width="1"/>
+  <text x="60" y="405" class="entity-attr pk">id_bibliotecario (PK)</text>
+  <text x="60" y="420" class="entity-attr">nome</text>
+  <text x="60" y="435" class="entity-attr">registro_funcional</text>
+  <text x="60" y="450" class="entity-attr">telefone</text>
+
+  <!-- LIVRO -->
+  <rect x="400" y="50" width="180" height="160" class="entity-box"/>
+  <text x="490" y="75" text-anchor="middle" class="entity-title">LIVRO</text>
+  <line x1="400" y1="85" x2="580" y2="85" stroke="#01579b" stroke-width="1"/>
+  <text x="410" y="105" class="entity-attr pk">id_livro (PK)</text>
+  <text x="410" y="120" class="entity-attr">titulo</text>
+  <text x="410" y="135" class="entity-attr">autor</text>
+  <text x="410" y="150" class="entity-attr">editora</text>
+  <text x="410" y="165" class="entity-attr">isbn</text>
+  <text x="410" y="180" class="entity-attr">ano_publicacao</text>
+
+  <!-- EXEMPLAR -->
+  <rect x="700" y="50" width="180" height="160" class="entity-box"/>
+  <text x="790" y="75" text-anchor="middle" class="entity-title">EXEMPLAR</text>
+  <line x1="700" y1="85" x2="880" y2="85" stroke="#01579b" stroke-width="1"/>
+  <text x="710" y="105" class="entity-attr pk">id_exemplar (PK)</text>
+  <text x="710" y="120" class="entity-attr">codigo</text>
+  <text x="710" y="135" class="entity-attr">localizacao</text>
+  <text x="710" y="150" class="entity-attr">status</text>
+  <text x="710" y="165" class="entity-attr fk">id_livro (FK)</text>
+  <text x="710" y="180" class="entity-attr">data_aquisicao</text>
+
+  <!-- EMPRÉSTIMO -->
+  <rect x="350" y="350" width="200" height="180" class="entity-box"/>
+  <text x="450" y="375" text-anchor="middle" class="entity-title">EMPRÉSTIMO</text>
+  <line x1="350" y1="385" x2="550" y2="385" stroke="#01579b" stroke-width="1"/>
+  <text x="360" y="405" class="entity-attr pk">id_emprestimo (PK)</text>
+  <text x="360" y="420" class="entity-attr">data_emprestimo</text>
+  <text x="360" y="435" class="entity-attr">data_prevista_dev</text>
+  <text x="360" y="450" class="entity-attr">data_devolucao</text>
+  <text x="360" y="465" class="entity-attr fk">id_aluno (FK)</text>
+  <text x="360" y="480" class="entity-attr fk">id_exemplar (FK)</text>
+  <text x="360" y="495" class="entity-attr fk">id_bibliotecario (FK)</text>
+  <text x="360" y="510" class="entity-attr">renovacoes</text>
+
+  <!-- RESERVA -->
+  <rect x="900" y="350" width="180" height="140" class="entity-box"/>
+  <text x="990" y="375" text-anchor="middle" class="entity-title">RESERVA</text>
+  <line x1="900" y1="385" x2="1080" y2="385" stroke="#01579b" stroke-width="1"/>
+  <text x="910" y="405" class="entity-attr pk">id_reserva (PK)</text>
+  <text x="910" y="420" class="entity-attr">data_reserva</text>
+  <text x="910" y="435" class="entity-attr">status</text>
+  <text x="910" y="450" class="entity-attr fk">id_aluno (FK)</text>
+  <text x="910" y="465" class="entity-attr fk">id_livro (FK)</text>
+
+  <!-- MULTA -->
+  <rect x="650" y="350" width="180" height="140" class="entity-box"/>
+  <text x="740" y="375" text-anchor="middle" class="entity-title">MULTA</text>
+  <line x1="650" y1="385" x2="830" y2="385" stroke="#01579b" stroke-width="1"/>
+  <text x="660" y="405" class="entity-attr pk">id_multa (PK)</text>
+  <text x="660" y="420" class="entity-attr">valor</text>
+  <text x="660" y="435" class="entity-attr">data_geracao</text>
+  <text x="660" y="450" class="entity-attr">status</text>
+  <text x="660" y="465" class="entity-attr fk">id_emprestimo (FK)</text>
+
+  <!-- AVALIAÇÃO -->
+  <rect x="1100" y="100" width="180" height="140" class="entity-box"/>
+  <text x="1190" y="125" text-anchor="middle" class="entity-title">AVALIAÇÃO</text>
+  <line x1="1100" y1="135" x2="1280" y2="135" stroke="#01579b" stroke-width="1"/>
+  <text x="1110" y="155" class="entity-attr pk">id_avaliacao (PK)</text>
+  <text x="1110" y="170" class="entity-attr">nota (1-5)</text>
+  <text x="1110" y="185" class="entity-attr">data_avaliacao</text>
+  <text x="1110" y="200" class="entity-attr">comentario</text>
+  <text x="1110" y="215" class="entity-attr fk">id_aluno (FK)</text>
+
+  <!-- RELACIONAMENTOS -->
+  <!-- Aluno -> Empréstimo (1:N) -->
+  <line x1="230" y1="170" x2="350" y2="430" class="line"/>
+  <circle cx="230" cy="170" r="3" fill="#333"/>
+  <circle cx="350" cy="430" r="5" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="270" y="295" class="relationship-text">realiza</text>
+
+  <!-- Aluno -> Reserva (1:N) -->
+  <line x1="230" y1="140" x2="900" y2="420" class="line"/>
+  <circle cx="230" cy="140" r="3" fill="#333"/>
+  <circle cx="900" cy="420" r="5" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="550" y="270" class="relationship-text">faz</text>
+
+  <!-- Aluno -> Avaliação (1:N) -->
+  <line x1="230" y1="170" x2="1100" y2="170" class="line"/>
+  <circle cx="230" cy="170" r="3" fill="#333"/>
+  <circle cx="1100" cy="170" r="5" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="650" y="160" class="relationship-text">deixa</text>
+
+  <!-- Bibliotecário -> Empréstimo (1:N) -->
+  <line x1="230" y1="410" x2="350" y2="430" class="line"/>
+  <circle cx="230" cy="410" r="3" fill="#333"/>
+  <circle cx="350" cy="430" r="5" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="270" y="425" class="relationship-text">registra</text>
+
+  <!-- Livro -> Exemplar (1:N) -->
+  <line x1="580" y1="130" x2="700" y2="130" class="line"/>
+  <circle cx="580" cy="130" r="3" fill="#333"/>
+  <circle cx="700" cy="130" r="5" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="630" y="120" class="relationship-text">possui</text>
+
+  <!-- Exemplar -> Empréstimo (1:N) -->
+  <line x1="790" y1="210" x2="500" y2="350" class="line"/>
+  <circle cx="790" cy="210" r="3" fill="#333"/>
+  <circle cx="500" cy="350" r="5" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="700" y="275" class="relationship-text">é_objeto_de</text>
+
+  <!-- Empréstimo -> Multa (1:N) -->
+  <line x1="550" y1="430" x2="650" y2="430" class="line"/>
+  <circle cx="550" cy="430" r="3" fill="#333"/>
+  <circle cx="650" cy="430" r="5" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="595" y="420" class="relationship-text">gera</text>
+
+  <!-- Livro -> Reserva (1:N) -->
+  <line x1="580" y1="80" x2="950" y2="350" class="line"/>
+  <circle cx="580" cy="80" r="3" fill="#333"/>
+  <circle cx="950" cy="350" r="5" fill="none" stroke="#333" stroke-width="2"/>
+  <text x="730" y="200" class="relationship-text">contém</text>
+
+  <!-- Legenda -->
+  <rect x="50" y="700" width="600" height="150" fill="#f5f5f5" stroke="#999" stroke-width="1" rx="5"/>
+  <text x="60" y="725" font-weight="bold" font-size="14">LEGENDA:</text>
+  <text x="60" y="750" font-size="12">PK = Primary Key (Chave Primária)</text>
+  <text x="60" y="770" font-size="12">FK = Foreign Key (Chave Estrangeira)</text>
+  <text x="60" y="790" font-size="12">— Relacionamento 1:N (um para muitos)</text>
+  <text x="60" y="810" font-size="12">● = lado "um" do relacionamento</text>
+  <text x="60" y="830" font-size="12">○ = lado "muitos" do relacionamento</text>
+</svg>

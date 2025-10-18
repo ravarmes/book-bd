@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="300" viewBox="0 0 1000 300">
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#555"/>
+    </marker>
+  </defs>
+  
+  <style>
+    .title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 22px; font-weight: 700; fill: #1a1a1a; }
+    .box-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 18px; font-weight: 600; fill: #1a1a1a; }
+    .box-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 14px; fill: #444; }
+    .box { fill: #f5f7fa; stroke: #2b7cff; stroke-width: 3; rx: 12; }
+    .arrow { stroke: #555; stroke-width: 2.5; fill: none; marker-end: url(#arrowhead); }
+    .example { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; fill: #333; font-style: italic; }
+  </style>
+  
+  <!-- Título principal -->
+  <text class="title" x="500" y="35" text-anchor="middle">Hierarquia D-I-C: Dados → Informação → Conhecimento</text>
+  
+  <!-- Caixa Dados -->
+  <rect class="box" x="50" y="70" width="240" height="120"/>
+  <text class="box-title" x="170" y="105" text-anchor="middle">Dados</text>
+  <text class="box-text" x="170" y="130" text-anchor="middle">Fatos brutos: nome, data, cidade</text>
+  <text class="box-text" x="170" y="155" text-anchor="middle">Sem interpretação</text>
+  
+  <!-- Seta 1 -->
+  <line class="arrow" x1="290" y1="130" x2="350" y2="130"/>
+  
+  <!-- Caixa Informação -->
+  <rect class="box" x="350" y="70" width="260" height="120"/>
+  <text class="box-title" x="480" y="105" text-anchor="middle">Informação</text>
+  <text class="box-text" x="480" y="130" text-anchor="middle">Dados organizados que fazem sentido</text>
+  <text class="box-text" x="480" y="155" text-anchor="middle">Apoiam decisão</text>
+  
+  <!-- Seta 2 -->
+  <line class="arrow" x1="610" y1="130" x2="670" y2="130"/>
+  
+  <!-- Caixa Conhecimento -->
+  <rect class="box" x="670" y="70" width="260" height="120"/>
+  <text class="box-title" x="800" y="105" text-anchor="middle">Conhecimento</text>
+  <text class="box-text" x="800" y="130" text-anchor="middle">Síntese e senso crítico</text>
+  <text class="box-text" x="800" y="155" text-anchor="middle">Regras, insights</text>
+  
+  <!-- Exemplo -->
+  <text class="example" x="50" y="240">Exemplo: "2013" + "Brasil" + "Copa das Confederações" → Informação</text>
+</svg>

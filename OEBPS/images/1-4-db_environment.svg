@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="450" viewBox="0 0 1000 450">
+  <defs>
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#666"/>
+    </marker>
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#5B8DEE;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4A7BDB;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad2" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#E8716D;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#D65F5C;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="grad3" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#50B498;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#42A085;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <style>
+    .title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 28px; font-weight: 700; fill: #1a1a1a; }
+    .box-title { font-family: 'Segoe UI', Arial, sans-serif; font-size: 22px; font-weight: 600; fill: #fff; }
+    .box-desc { font-family: 'Segoe UI', Arial, sans-serif; font-size: 15px; fill: #fff; opacity: 0.95; }
+    .arrow { stroke: #666; stroke-width: 3; fill: none; marker-end: url(#arrowhead); }
+    .icon { fill: #fff; opacity: 0.9; }
+  </style>
+  
+  <!-- Título -->
+  <text class="title" x="500" y="45" text-anchor="middle">Ambiente de Sistema de Banco de Dados</text>
+  
+  <!-- Aplicações / Usuários -->
+  <rect x="60" y="100" width="280" height="260" rx="12" fill="url(#grad1)"/>
+  <g class="icon">
+    <!-- Ícone de usuários (grupo de pessoas) -->
+    <circle cx="110" cy="140" r="15" stroke="#fff" stroke-width="2" fill="none"/>
+    <path d="M 95 165 Q 110 155 125 165" stroke="#fff" stroke-width="2" fill="none"/>
+    <circle cx="140" cy="145" r="12" stroke="#fff" stroke-width="2" fill="none"/>
+    <path d="M 128 165 Q 140 158 152 165" stroke="#fff" stroke-width="2" fill="none"/>
+  </g>
+  <text class="box-title" x="90" y="200">Aplicações / Usuários</text>
+  <text class="box-desc" x="90" y="230">• Consultas e relatórios</text>
+  <text class="box-desc" x="90" y="255">• Transações</text>
+  <text class="box-desc" x="90" y="280">• DBA</text>
+  <text class="box-desc" x="90" y="305">• Programadores</text>
+  <text class="box-desc" x="90" y="330">• Usuários finais</text>
+  
+  <!-- Seta 1 -->
+  <line class="arrow" x1="340" y1="230" x2="400" y2="230"/>
+  
+  <!-- SGBD -->
+  <rect x="400" y="100" width="260" height="260" rx="12" fill="url(#grad2)"/>
+  <g class="icon">
+    <!-- Ícone de engrenagens (processamento) -->
+    <circle cx="450" cy="140" r="18" stroke="#fff" stroke-width="2" fill="none"/>
+    <circle cx="450" cy="140" r="10" fill="#fff"/>
+    <rect x="441" y="122" width="18" height="4" fill="#fff"/>
+    <rect x="441" y="154" width="18" height="4" fill="#fff"/>
+    <rect x="432" y="131" width="4" height="18" fill="#fff"/>
+    <rect x="464" y="131" width="4" height="18" fill="#fff"/>
+    
+    <circle cx="485" cy="150" r="14" stroke="#fff" stroke-width="2" fill="none"/>
+    <circle cx="485" cy="150" r="8" fill="#fff"/>
+    <rect x="478" y="136" width="14" height="3" fill="#fff"/>
+    <rect x="478" y="161" width="14" height="3" fill="#fff"/>
+    <rect x="471" y="143" width="3" height="14" fill="#fff"/>
+    <rect x="496" y="143" width="3" height="14" fill="#fff"/>
+  </g>
+  <text class="box-title" x="430" y="200">SGBD</text>
+  <text class="box-desc" x="430" y="230">• Processador de consultas</text>
+  <text class="box-desc" x="430" y="255">• Gerenciador de transações</text>
+  <text class="box-desc" x="430" y="280">• Controle de segurança</text>
+  <text class="box-desc" x="430" y="305">• Catálogo de metadados</text>
+  <text class="box-desc" x="430" y="330">• Otimização</text>
+  
+  <!-- Seta 2 -->
+  <line class="arrow" x1="660" y1="230" x2="720" y2="230"/>
+  
+  <!-- Banco de Dados -->
+  <rect x="720" y="100" width="220" height="260" rx="12" fill="url(#grad3)"/>
+  <g class="icon">
+    <!-- Ícone de banco de dados (cilindros empilhados) -->
+    <ellipse cx="810" cy="140" rx="25" ry="10" fill="none" stroke="#fff" stroke-width="2"/>
+    <line x1="785" y1="140" x2="785" y2="155" stroke="#fff" stroke-width="2"/>
+    <line x1="835" y1="140" x2="835" y2="155" stroke="#fff" stroke-width="2"/>
+    <ellipse cx="810" cy="155" rx="25" ry="10" fill="none" stroke="#fff" stroke-width="2"/>
+    <ellipse cx="810" cy="155" rx="25" ry="10" fill="#fff" opacity="0.3"/>
+    
+    <line x1="785" y1="155" x2="785" y2="170" stroke="#fff" stroke-width="2"/>
+    <line x1="835" y1="155" x2="835" y2="170" stroke="#fff" stroke-width="2"/>
+    <ellipse cx="810" cy="170" rx="25" ry="10" fill="none" stroke="#fff" stroke-width="2"/>
+    <ellipse cx="810" cy="170" rx="25" ry="10" fill="#fff" opacity="0.3"/>
+  </g>
+  <text class="box-title" x="750" y="220">Banco de Dados</text>
+  <text class="box-desc" x="750" y="250">• Tabelas</text>
+  <text class="box-desc" x="750" y="275">• Índices</text>
+  <text class="box-desc" x="750" y="300">• Logs</text>
+  <text class="box-desc" x="750" y="325">• Dados persistentes</text>
+</svg>

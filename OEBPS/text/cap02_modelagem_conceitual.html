@@ -1,0 +1,498 @@
+<!doctype html>
+<html lang='pt-BR'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <title>Capítulo 2 — Modelagem Conceitual de Dados: O Blueprint do Banco</title>
+    <link rel='stylesheet' type='text/css' href='../css/style.css' />
+    <meta name="description" content="Modelo Entidade‑Relacionamento (ER), cardinalidades, participação, integridade, normalização inicial e prática no brModelo (diagramas ER/DER), com estudo de caso e exercícios." />
+</head>
+
+<body>
+    <div class='container'>
+
+        <header>
+            <h1 id='cap2'>CAPÍTULO 2 – Modelagem Conceitual de Dados: O <em>Blueprint</em> do Banco</h1>
+            <p class='lead'>Nesta etapa, é elaborado o <strong>modelo conceitual de dados</strong>, representado por
+                meio do <strong>Modelo Entidade‑Relacionamento (E‑R)</strong> proposto por Chen (1976).
+                Ao longo do capítulo, você aprenderá os elementos do <strong>ER</strong> — <em>entidades</em>,
+                <em>atributos</em> e <em>relacionamentos</em> —, as <strong>restrições</strong> de cardinalidade e
+                participação, regras de <strong>integridade</strong>, a <strong>normalização</strong> inicial até 3FN
+                e como construir <strong>diagramas ER</strong> no <strong>brModelo</strong>. Fechamos com um
+                <strong>Estudo de Caso</strong> e exercícios <strong>Complementares</strong> e <strong>Integrados</strong>.</p>
+        </header>
+        <hr />
+
+        <!-- Ferramenta utilizada (nota breve) -->
+        <table class="box-table tip-table">
+            <tr>
+                <td class="box-content tip definition" role="note" aria-labelledby="def-title-2-0">
+                    <div id="def-title-2-0" class="box-title"><img src="../images/icon-definicao.png" class="icon-img" alt="Definição"><strong>Ferramenta</strong></div>
+                    <div>
+                        <p><strong>brModelo (Web)</strong> — ferramenta CASE para criar <em>Diagramas ER</em>. É uma ferramenta de modelagem de banco de dados 
+                                100% online e gratuita. Ela permite criar e converter projetos nos níveis conceitual, lógico 
+                                e físico (SQL), sendo fácil de usar e com projetos acessíveis na nuvem. Além disso, é um projeto 
+                                open source.</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <section id='sec2-1'>
+            <h2>2.1 Entidades, Relacionamentos e Atributos</h2>
+            <p>O modelo ER descreve três conceitos principais: <strong>entidades</strong>, <strong>atributos</strong> e
+                <strong>relacionamentos</strong>.</p>
+
+            <h3>Entidades</h3>
+            <p>Uma <strong>entidade</strong> é uma coisa ou objeto no mundo real com existência independente (física ou
+                conceitual). Um <em>tipo de entidade</em> define uma coleção de entidades com os mesmos atributos; seu
+                conjunto é chamado <strong>conjunto da entidade</strong>. Nos diagramas ER, entidades são
+                <em>retângulos</em> com o nome.</p>
+
+            <h3>Atributos</h3>
+            <p><strong>Atributos</strong> descrevem propriedades de uma entidade e possuem um <strong>domínio</strong>
+                (conjunto de valores permitidos). Em diagramas ER, atributos são <em>ovais</em> ligados à entidade.</p>
+            <!-- Convenções de nomes -->
+            <table class="box-table warning-table">
+                <tr>
+                    <td class="box-content warning important" role="note" aria-labelledby="imp-title-2-1-nomes">
+                        <div id="imp-title-2-1-nomes" class="box-title"><img src="../images/icon-importante.png" class="icon-img" alt="Importante"><strong>Importante</strong></div>
+                        <div>
+                            <p>Existem diferentes <strong>padrões de nomenclatura</strong> para entidades, atributos e relacionamentos. Neste material <strong>adotaremos snake_case</strong> (minúsculas com underscore), <strong>sem acento</strong>, para todos os nomes no texto.</p>
+                            <p>Exemplos: <strong>snake_case</strong>: <code>data_nascimento</code>; <strong>camelCase</strong>: <code>dataNascimento</code>.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <ul>
+                <li><strong>Simples</strong> (atômicos — ex.: <em>matricula</em> de <em>aluno</em>) ou <strong>Compostos</strong> (decompostos — ex.: <em>endereco</em> em <em>logradouro</em>, <em>numero</em>, <em>bairro</em>).</li>
+                <li><strong>Valor‑único</strong> (ex.: <em>isbn</em> de <em>livro</em>) ou <strong>Multi‑valorados</strong> (ovais duplos — ex.: <em>autores</em> de um <em>livro</em>).</li>
+                <li><strong>Armazenados</strong> (ex.: <em>data_nascimento</em> de <em>aluno</em>) ou <strong>Derivados</strong> (calculáveis — ex.: <em>idade</em> a partir de <em>data_nascimento</em>).</li>
+            </ul>
+
+            <h3>Relacionamentos</h3>
+            <p>Um <strong>relacionamento</strong> é uma associação com significado entre duas ou mais entidades; o
+                conjunto correspondente é o <strong>conjunto do relacionamento</strong>. Em ER, relacionamentos são
+                <em>losangos</em> ligados às entidades participantes.</p>
+            <ul>
+                <li><strong>Grau</strong>: binário (2 entidades), ternário (3), etc.</li>
+                <li><strong>Papéis</strong> e <strong>recursividade</strong>: a mesma entidade pode participar mais de
+                    uma vez, em papéis distintos.</li>
+                <li><strong>Atributos de relacionamento</strong>: descrevem a associação (ex.: nota em uma oferta).</li>
+            </ul>
+
+            <figure>
+                <img src='../images/2-1-er_basics.svg'
+                    alt='Diagrama ER básico com aluno, livro e relacionamento empresta, com atributos-chave sublinhados.' />
+                <figcaption><strong>Figura 2.1 — </strong>Conceitos ER: entidades, atributos e relacionamento (caso Biblioteca).</figcaption>
+            </figure>
+
+            <!-- Definição de Mini‑mundo, antes de seu uso em 2.4 -->
+            <table class="box-table tip-table">
+                <tr>
+                    <td class="box-content tip definition" role="note" aria-labelledby="def-title-2-1-mm">
+                        <div id="def-title-2-1-mm" class="box-title"><img src="../images/icon-definicao.png" class="icon-img" alt="Definição"><strong>Definição</strong></div>
+                        <div>
+                            <p><strong>Mini‑mundo</strong>: recorte da realidade a ser representada pelo BD. Delimita
+                                <em>entidades</em>, <em>relacionamentos</em> e <em>regras</em> do escopo a modelar no ER.</p>
+                            <p>Neste material, o mini‑mundo é o <em>Sistema de Biblioteca Escolar</em> descrito no capítulo 1.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Quadro Importante: mini‑mundo × requisitos × escopo -->
+            <table class="box-table warning-table">
+                <tr>
+                    <td class="box-content warning important" role="note" aria-labelledby="imp-title-2-1-dica">
+                        <div id="imp-title-2-1-dica" class="box-title"><img src="../images/icon-importante.png" class="icon-img" alt="Importante"><strong>Importante</strong></div>
+                        <div>
+                            <p><strong>Mini‑mundo</strong>: narrativa do domínio (realidade recortada) que descreve entidades, relacionamentos e regras em linguagem natural.</p>
+                            <p><strong>Requisitos</strong>: o que o sistema precisa fazer (<em>funcionais</em>) e como deve se comportar (<em>não‑funcionais</em>), incluindo operações e restrições de negócio.</p>
+                            <p><strong>Escopo</strong>: limites do que será <em>modelado</em> e <em>entregue</em> nesta etapa (versão do ER e funcionalidades cobertas).</p>
+                            <p><strong>Como orienta o ER</strong>:
+                                usar o <em>mini‑mundo</em> para levantar <strong>entidades</strong> e <strong>relacionamentos</strong>;
+                                os <em>requisitos</em> para definir <strong>cardinalidades</strong>, <strong>participações</strong> e <strong>atributos de relacionamento</strong>;
+                                e o <em>escopo</em> para decidir fronteiras e priorizar a primeira versão do modelo <strong>ER</strong>.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <figure>
+                <img src='../images/2-2-der_before_after.svg'
+                    alt='Comparativo antes/depois no DER: endereco composto decomposto; autores multivalorados modelados via autor–escreve; recursivo subcategoria_de com papéis pai/filho.' />
+                <figcaption><strong>Figura 2.2 — </strong>Antes e Depois: como tratar compostos, multivalorados e recursivos no DER.</figcaption>
+            </figure>
+
+            <!-- Bloco de Definições chave -->
+            <table class="box-table tip-table">
+                <tr>
+                    <td class="box-content tip definition" role="note" aria-labelledby="def-title-2-1">
+                        <div id="def-title-2-1" class="box-title"><img src="../images/icon-definicao.png" class="icon-img" alt="Definição"><strong>Definição</strong></div>
+                        <div>
+                            <p><strong>Entidade</strong>: objeto independente (ex.: <em>aluno</em>, <em>livro</em> — Biblioteca).</p>
+                            <p><strong>Atributo</strong>: propriedade com <em>domínio</em> bem definido (ex.: simples <em>matricula</em>; composto <em>endereco</em>→<em>logradouro</em>, <em>numero</em>, <em>bairro</em>; derivado <em>idade</em> a partir de <em>data_nascimento</em>).</p>
+                            <p><strong>Relacionamento</strong>: associação entre entidades com grau e papéis (ex.: <em>empresta</em> entre <em>aluno</em> e <em>exemplar</em>; <em>reserva</em> entre <em>aluno</em> e <em>livro</em>).</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Bloco Importante -->
+            <table class="box-table warning-table">
+                <tr>
+                    <td class="box-content warning important" role="note" aria-labelledby="imp-title-2-1">
+                        <div id="imp-title-2-1" class="box-title"><img src="../images/icon-importante.png" class="icon-img" alt="Importante"><strong>Importante</strong></div>
+                        <div>
+                            <p>Resolva <strong>atributos compostos</strong> e <strong>multivalorados</strong> ainda no
+                                conceitual: decomponha compostos e modele multivalorados com entidades/relacionamentos
+                                adequados. Em relacionamentos <em>recursivos</em>, nomeie papéis (ex.: "Pai" e
+                                "Filho").</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec2-2'>
+            <h2>2.2 Cardinalidade, Participação e Regras de Integridade</h2>
+            <h3>Restrições Estruturais</h3>
+            <ul>
+                <li><strong>Taxa de Cardinalidade</strong> (máxima): 1:1, 1:N/N:1 e M:N em relacionamentos binários.
+                    Notação: traço para 1; pata de galinha para N.</li>
+                <li><strong>Participação</strong> (mínima): <em>total</em> (obrigatória, mínimo=1) ou <em>parcial</em>
+                    (opcional, mínimo=0). Representações variam (círculo, linhas duplas).</li>
+            </ul>
+
+            <h3>Regras de Integridade</h3>
+            <ul>
+                <li><strong>Atributos Chave</strong> (PK/Chaves candidatas): identificam unicamente cada entidade;
+                    sublinhados no diagrama.</li>
+                <li><strong>Entidades Fracas</strong>: sem chave própria; identificadas por relacionamento
+                    <em>identificador</em> com participação <strong>total</strong> e chave parcial.</li>
+                <li><strong>Integridade Referencial</strong>: garantida com FKs no modelo relacional (valor deve
+                    existir como PK na tabela referenciada).</li>
+            </ul>
+
+            <!-- Bloco Definição adicional -->
+            <table class="box-table tip-table">
+                <tr>
+                    <td class="box-content tip definition" role="note" aria-labelledby="def-title-2-2">
+                        <div id="def-title-2-2" class="box-title"><img src="../images/icon-definicao.png" class="icon-img" alt="Definição"><strong>Definição</strong></div>
+                        <div>
+                            <p><strong>Participação Total</strong>: a entidade <em>precisa</em> participar do
+                                relacionamento para existir (ex.: <em>exemplar</em> participa totalmente de <em>pertence_a</em> → <em>livro</em>);
+                                <br>
+                                <strong>Participação Parcial</strong>: pode existir sem participar (ex.: <em>aluno</em> pode existir sem participar de <em>empresta</em>).</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Bloco Importante sobre cardinalidade/participação -->
+            <table class="box-table warning-table">
+                <tr>
+                    <td class="box-content warning important" role="note" aria-labelledby="imp-title-2-2">
+                        <div id="imp-title-2-2" class="box-title"><img src="../images/icon-importante.png" class="icon-img" alt="Importante"><strong>Importante</strong></div>
+                        <div>
+                            <p>Documente <strong>cardinalidades</strong> e <strong>participações</strong> de forma
+                                explícita: elas guiam a transformação para o modelo lógico e evitam
+                                <em>anomalias</em> de atualização.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <figure>
+                <img src='../images/2-3-cardinality.svg'
+                    alt='Exemplos de cardinalidade (1:1, 1:N, M:N) e participação total/parcial anotadas.' />
+                <figcaption><strong>Figura 2.3 — </strong>Cardinalidades e participação com exemplos didáticos.</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec2-3'>
+            <h2>2.3 Normalização Inicial e Boas Práticas</h2>
+            <p>A <strong>normalização</strong> minimiza <em>redundância</em> e reduz anomalias (inserção, atualização,
+                exclusão). No conceitual, refine até pelo menos <strong>3FN</strong>.</p>
+            <h3>As Três Primeiras Formas Normais</h3>
+            <ol>
+                <li><strong>1FN</strong>: apenas dados <em>atômicos</em>; evitar compostos e multivalorados.</li>
+                <li><strong>2FN</strong>: 1FN e sem <em>dependência parcial</em> (em chaves compostas).</li>
+                <li><strong>3FN</strong>: 2FN e sem <em>dependência transitiva</em> (atributo não‑chave → não‑chave).</li>
+            </ol>
+            <p><strong>Boas práticas</strong>: defina PKs claras, garanta integridade referencial, e modele para
+                minimizar redundância; 3FN costuma ser suficiente.</p>
+
+            <figure>
+                <img src='../images/2-4-normalization.svg'
+                    alt='Esquema ilustrando 1FN, 2FN e 3FN com entidades separadas e dependências removidas.' />
+                <figcaption><strong>Figura 2.4 — </strong>Normalização inicial até 3FN (visão didática).</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec2-4'>
+            <h2>2.4 Construindo o modelo ER no brModelo</h2>
+            <p>A modelagem ER é um processo que transforma a descrição do <em>mini‑mundo</em> (a realidade a ser representada) em um esquema diagramático.</p>
+            <p>Passos típicos para a construção do modelo ER (aplicáveis em ferramentas como o brModelo):</p>
+            <ol>
+                <li><strong>Análise de Requisitos</strong>: entender o que armazenar e operações necessárias.</li>
+                <li><strong>Entidades</strong>: identificar objetos principais do sistema.</li>
+                <li><strong>Atributos e Chaves</strong>: definir propriedades, PKs e resolver compostos/multivalorados.</li>
+                <li><strong>Relacionamentos</strong>: definir associações lógicas e papéis.</li>
+                <li><strong>Restrições</strong>: atribuir cardinalidades e participações.</li>
+                <li><strong>Refinamento</strong>: entidades fracas, atributos de relacionamentos e normalização.</li>
+            </ol>
+        </section>
+
+        <section id='sec2-5'>
+            <h2>2.5 Estudo de Caso: Modelo ER da Biblioteca</h2>
+
+            <!-- Bloco Estudo de Caso (apenas enunciado + instruções) -->
+            <table class="box-table case-table">
+                <tr>
+                    <td class="box-content case" role="note" aria-labelledby="case-title-2-5">
+                        <div id="case-title-2-5" class="box-title"><img src="../images/icon-estudodecaso.png" class="icon-img" alt="Estudo de Caso"><strong>Estudo de Caso</strong></div>
+                        <div>
+                            <p>A Biblioteca Escolar pretende informatizar o controle do acervo e das operações de empréstimo, devolução e reserva de livros. O sistema deve permitir que alunos consultem os livros disponíveis, realizem reservas e deixem avaliações sobre os livros lidos.</p>
+                            <p>Para fins de cadastro e contato, o sistema deve registrar as informações de endereço e telefones dos alunos. Cada aluno reside em um único endereço e pode possuir vários telefones.</p>
+                            <p>Os bibliotecários serão responsáveis por registrar os empréstimos e as devoluções realizados pelos alunos. As multas são geradas automaticamente em caso de devolução em atraso.</p>
+                            <p>Cada livro é escrito por um ou mais autores e um autor pode ter escrito vários livros. Cada livro pode possuir vários exemplares físicos, identificados por código e localizados em prateleiras específicas. O sistema deverá controlar o status de cada exemplar (disponível, emprestado, reservado, extraviado).</p>
+                            <p>O sistema deve também gerar relatórios gerenciais, como listagem de livros mais emprestados, alunos com mais multas e histórico de movimentações.</p>
+
+                            <p><strong>Atividade</strong>:</p>
+                            <ul>
+                                <li>Identifique as <strong>entidades</strong> do domínio.</li>
+                                <li>Identifique os <strong>atributos</strong> de cada entidade.</li>
+                                <li>Identifique os <strong>relacionamentos</strong> e suas <strong>cardinalidades</strong>.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec2-6'>
+            <h2>2.6 Exercícios Complementares</h2>
+            <p>Fixação de Entidades, Atributos, Relacionamentos, Cardinalidade e Chaves.</p>
+
+            <!-- Bloco Exercícios Complementares -->
+            <table class="box-table complementary-table">
+                <tr>
+                    <td class="box-content complementary" role="note" aria-labelledby="comp-title-2-6">
+                        <div id="comp-title-2-6" class="box-title"><img src="../images/icon-complementar.png" class="icon-img" alt="Exercícios Complementares"><strong>Exercícios Complementares</strong></div>
+                        <div>
+                            <p><strong>Exercício 1: Barbearia</strong></p>
+                            <p>Uma barbearia oferece serviços como corte e barba com <em>agenda de horários</em>. Clientes realizam
+                                <em>agendamentos</em> escolhendo um <em>barbeiro</em>, data/hora e um ou mais <em>serviços</em>. O sistema registra
+                                <em>valor</em>, <em>duração</em> e <em>status</em> (agendado, concluído, cancelado). Cada barbeiro atende apenas um
+                                cliente por faixa de horário.</p>
+                            <p><strong>Atividade</strong>:</p>
+                            <ul>
+                                <li>Identifique as <strong>entidades</strong> do domínio.</li>
+                                <li>Identifique os <strong>atributos</strong> de cada entidade.</li>
+                                <li>Identifique os <strong>relacionamentos</strong> e suas <strong>cardinalidades</strong>.</li>
+                            </ul>
+                            <p><strong>Exercício 2: Empresa</strong></p>
+                            <p>A empresa organiza-se em <em>departamentos</em>, cada um podendo ter múltiplas <em>localizações</em>. <em>Empregados</em>
+                                pertencem a um departamento e podem participar de vários <em>projetos</em> com papel e horas alocadas. Há uma
+                                hierarquia de <em>supervisão</em> entre empregados. <em>Dependentes</em> são cadastrados para benefícios e não têm
+                                existência fora do empregado.</p>
+                            <p><strong>Atividade</strong>:</p>
+                            <ul>
+                                <li>Identifique as <strong>entidades</strong> do domínio.</li>
+                                <li>Identifique os <strong>atributos</strong> de cada entidade.</li>
+                                <li>Identifique os <strong>relacionamentos</strong> e suas <strong>cardinalidades</strong>.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec2-7'>
+            <h2>2.7 Exercícios Integrados</h2>
+            <p>Aplicação dos conceitos a estruturas do núcleo comum.</p>
+
+            <!-- Bloco Exercícios Integrados -->
+            <table class="box-table integrated-table">
+                <tr>
+                    <td class="box-content integrated" role="note" aria-labelledby="int-title-2-7">
+                        <div id="int-title-2-7" class="box-title"><img src="../images/icon-integrado.png" class="icon-img" alt="Exercícios Integrados"><strong>Exercícios Integrados</strong></div>
+                        <div>
+                            <p><strong>Exercício 1: Tabela Periódica (Química)</strong></p>
+                            <p>Cada <em>elemento químico</em> pertence a um único <em>grupo</em> (coluna) e a um único <em>período</em> (linha)
+                                da tabela periódica. Grupos e períodos organizam propriedades básicas dos elementos.</p>
+                            <p><strong>Atividade</strong>:</p>
+                            <ul>
+                                <li>Identifique as <strong>entidades</strong> do domínio.</li>
+                                <li>Identifique os <strong>atributos</strong> de cada entidade.</li>
+                                <li>Identifique os <strong>relacionamentos</strong> e suas <strong>cardinalidades</strong>.</li>
+                            </ul>
+                            <p><strong>Exercício 2: Estrutura Taxonômica (Biologia)</strong></p>
+                            <p>A classificação biológica organiza seres vivos em níveis hierárquicos (reino, filo, classe, ordem, família,
+                                gênero, espécie). Cada nível possui nome e pode ter <em>subníveis</em>, formando uma árvore.</p>
+                            <p><strong>Atividade</strong>:</p>
+                            <ul>
+                                <li>Identifique as <strong>entidades</strong> do domínio.</li>
+                                <li>Identifique os <strong>atributos</strong> de cada entidade.</li>
+                                <li>Identifique os <strong>relacionamentos</strong> e suas <strong>cardinalidades</strong>.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Gabaritos do Capítulo 2 -->
+        <section id='sec2-8'>
+            <h2>2.8 Gabaritos</h2>
+            <table class="box-table gabarito-table" role="note" aria-labelledby="answers-title-2">
+                <tr>
+                    <td class="box-content gabarito">
+                        <div id="answers-title-2" class="box-title"><img src="../images/icon-gabarito.png" class="icon-img" alt="Gabaritos"><strong>Gabaritos:</strong></div>
+                        <div>
+                            <p><strong>Estudo de Caso — Biblioteca (Gabarito)</strong>:</p>
+                            <h4>1 — Entidades</h4>
+                            <ul>
+                                <li>Aluno</li>
+                                <li>Bibliotecário</li>
+                                <li>Livro</li>
+                                <li>Autor</li>
+                                <li>Exemplar</li>
+                                <li>Empréstimo</li>
+                                <li>Devolução</li>
+                                <li>Reserva</li>
+                                <li>Multa</li>
+                                <li>Avaliação</li>
+                                <li>Endereço</li>
+                                <li>Telefone</li>
+                            </ul>
+                            <h4>2 — Atributos das entidades</h4>
+                            <ul>
+                                <li>Aluno (<code>id_aluno</code>, <code>nome</code>, <code>turma</code>, <code>matricula</code>, <code>id_endereco</code>)</li>
+                                <li>Bibliotecário (<code>id_bibliotecario</code>, <code>nome</code>, <code>registro_funcional</code>)</li>
+                                <li>Livro (<code>id_livro</code>, <code>titulo</code>, <code>editora</code>, <code>isbn</code>)</li>
+                                <li>Autor (<code>id_autor</code>, <code>nome</code>)</li>
+                                <li>Exemplar (<code>id_exemplar</code>, <code>codigo</code>, <code>localizacao</code>, <code>status</code>, <code>id_livro</code>)</li>
+                                <li>Empréstimo (<code>id_emprestimo</code>, <code>data_emprestimo</code>, <code>data_prevista</code>, <code>id_aluno</code>, <code>id_bibliotecario</code>, <code>id_exemplar</code>)</li>
+                                <li>Devolução (<code>id_devolucao</code>, <code>data_devolucao</code>, <code>id_emprestimo</code>, <code>id_bibliotecario</code>)</li>
+                                <li>Reserva (<code>id_reserva</code>, <code>data_reserva</code>, <code>status</code>, <code>id_aluno</code>, <code>id_livro</code>)</li>
+                                <li>Multa (<code>id_multa</code>, <code>valor</code>, <code>data_geracao</code>, <code>status</code>, <code>id_devolucao</code>)</li>
+                                <li>Avaliação (<code>id_avaliacao</code>, <code>nota</code>, <code>data_avaliacao</code>, <code>comentario</code>, <code>id_aluno</code>, <code>id_emprestimo</code>)</li>
+                                <li>Endereço (<code>id_endereco</code>, <code>rua</code>, <code>bairro</code>, <code>estado</code>)</li>
+                                <li>Telefone (<code>id_telefone</code>, <code>numero</code>, <code>tipo_telefone</code>, <code>id_aluno</code>)</li>
+                            </ul>
+                            <h4>3 — Relacionamentos</h4>
+                            <ul>
+                                <li>Aluno reside em Endereço (1:1)</li>
+                                <li>Aluno possui Telefone (1:N)</li>
+                                <li>Autor escreve Livro (N:N)</li>
+                                <li>Exemplar pertence a Livro (1:N)</li>
+                                <li>Aluno realiza Empréstimo (1:N)</li>
+                                <li>Empréstimo refere-se a Exemplar (1:1)</li>
+                                <li>Empréstimo gera Devolução (1:1)</li>
+                                <li>Devolução é registrada por Bibliotecário (1:N)</li>
+                                <li>Aluno realiza Reserva (1:N)</li>
+                                <li>Reserva refere-se a Livro (1:N)</li>
+                                <li>Multa está associada a Devolução (1:1)</li>
+                                <li>Avaliação está vinculada a Empréstimo (1:1) e a Aluno (1:N)</li>
+                            </ul>
+                            <hr />
+                            <p><strong>Exercícios Complementares — Gabarito</strong>:</p>
+                            <p><strong>Exercício 1: Barbearia</strong></p>
+                            <h4>1 — Entidades</h4>
+                            <ul>
+                                <li>Cliente</li>
+                                <li>Barbeiro</li>
+                                <li>Serviço</li>
+                                <li>Agendamento</li>
+                            </ul>
+                            <h4>2 — Atributos das entidades</h4>
+                            <ul>
+                                <li>Cliente (<code>id_cliente</code>, <code>nome</code>, <code>telefone</code>, <code>email</code>)</li>
+                                <li>Barbeiro (<code>id_barbeiro</code>, <code>nome</code>, <code>especialidade</code>)</li>
+                                <li>Serviço (<code>id_servico</code>, <code>nome</code>, <code>preco_base</code>, <code>duracao_padrao</code>)</li>
+                                <li>Agendamento (<code>id_agendamento</code>, <code>data</code>, <code>hora</code>, <code>status</code>, <code>valor_total</code>)</li>
+                            </ul>
+                            <h4>3 — Relacionamentos</h4>
+                            <ul>
+                                <li>Cliente realiza Agendamento (1:N)</li>
+                                <li>Barbeiro atende Agendamento (1:N)</li>
+                                <li>Agendamento inclui Serviço (N:M) — atributos do relacionamento: <code>quantidade</code>, <code>duracao</code>, <code>valor_servico</code></li>
+                                <li>Regra de agenda: um barbeiro não pode ter dois agendamentos no mesmo <em>data/hora</em> (restrição de integridade)</li>
+                            </ul>
+                            <hr />
+                            <p><strong>Exercício 2: Empresa</strong></p>
+                            <h4>1 — Entidades</h4>
+                            <ul>
+                                <li>Departamento</li>
+                                <li>Localização</li>
+                                <li>Empregado</li>
+                                <li>Projeto</li>
+                                <li>Dependente</li>
+                            </ul>
+                            <h4>2 — Atributos das entidades</h4>
+                            <ul>
+                                <li>Departamento (<code>id_dep</code>, <code>nome</code>)</li>
+                                <li>Localização (<code>id_loc</code>, <code>endereco</code>, <code>cidade</code>)</li>
+                                <li>Empregado (<code>id_emp</code>, <code>nome</code>, <code>cargo</code>, <code>salario</code>)</li>
+                                <li>Projeto (<code>id_proj</code>, <code>titulo</code>, <code>data_inicio</code>)</li>
+                                <li>Dependente (<code>id_dependente</code>, <code>nome</code>, <code>parentesco</code>, <code>data_nascimento</code>) — entidade fraca dependente de Empregado</li>
+                            </ul>
+                            <h4>3 — Relacionamentos</h4>
+                            <ul>
+                                <li>Departamento possui Localização (1:N)</li>
+                                <li>Empregado pertence a Departamento (N:1)</li>
+                                <li>Empregado participa de Projeto (N:M) — atributos: <code>papel</code>, <code>horas</code></li>
+                                <li>Empregado supervisiona Empregado (1:N) — relacionamento recursivo</li>
+                                <li>Empregado tem Dependente (1:N) — Dependente com identificação dependente de Empregado</li>
+                            </ul>
+                            <hr />
+                            <p><strong>Exercícios Integrados — Gabarito</strong>:</p>
+                            <p><strong>Exercício 1: Tabela Periódica (Química)</strong></p>
+                            <h4>1 — Entidades</h4>
+                            <ul>
+                                <li>Elemento</li>
+                                <li>Grupo</li>
+                                <li>Período</li>
+                            </ul>
+                            <h4>2 — Atributos das entidades</h4>
+                            <ul>
+                                <li>Elemento (<code>simbolo</code>, <code>nome</code>, <code>numero_atomico</code>, <code>massa_atomica</code>)</li>
+                                <li>Grupo (<code>num_grupo</code>, <code>nome_grupo</code>)</li>
+                                <li>Período (<code>num_periodo</code>)</li>
+                            </ul>
+                            <h4>3 — Relacionamentos</h4>
+                            <ul>
+                                <li>Elemento pertence a Grupo (N:1)</li>
+                                <li>Elemento está em Período (N:1)</li>
+                                <li>Grupo possui Elementos (1:N) e Período possui Elementos (1:N) — redundância apenas para leitura das cardinalidades</li>
+                            </ul>
+                            <hr />
+                            <p><strong>Exercício 2: Estrutura Taxonômica (Biologia)</strong></p>
+                            <h4>1 — Entidades</h4>
+                            <ul>
+                                <li>Categoria</li>
+                            </ul>
+                            <h4>2 — Atributos das entidades</h4>
+                            <ul>
+                                <li>Categoria (<code>id_categoria</code>, <code>nome</code>, <code>nivel</code>)</li>
+                            </ul>
+                            <h4>3 — Relacionamentos</h4>
+                            <ul>
+                                <li>Categoria possui Subcategoria (1:N) — auto‑relacionamento com papéis <em>pai</em>/<em>filho</em></li>
+                                <li>Participação: toda Subcategoria tem um <em>pai</em>; categorias de topo (ex.: <em>reino</em>) podem não ter pai</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <div class='page-foot'>Prof. Rafael Vargas Mesquita — Apostila: Banco de Dados • Capítulo 2</div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+# CAPÍTULO 2 – Modelagem Conceitual de Dados: O *Blueprint* do Banco
+
+O **Modelo Entidade-Relacionamento (ER)** é um modelo conceitual popular de alto nível, frequentemente empregado no projeto conceitual de aplicações de banco de dados. A modelagem conceitual é a primeira etapa do projeto de BD e deve ser de **alto nível**, ou seja, próxima da realidade do usuário e de fácil entendimento. O modelo conceitual serve como uma descrição precisa dos dados, omitindo detalhes de implementação, e é um meio de comunicação não ambíguo entre usuários e desenvolvedores.
+
+🧩 **Ferramenta:** brModelo (Web)
+(O processo de modelagem é comum a diversas ferramentas CASE — Computer-Aided Software Engineering — que auxiliam na criação de modelos ER, como o MySQL Workbench e o ERDPlus. O `brModelo` é uma dessas ferramentas.)
+
+## 2.1 Entidades, Relacionamentos e Atributos.
+
+O modelo ER descreve três conceitos principais: entidades, atributos e relacionamentos.
+
+### Entidades
+Uma **entidade** é definida como uma coisa ou objeto no mundo real com uma existência independente. Entidades podem ter existência física (ex: pessoa, carro) ou conceitual (ex: curso, projeto).
+
+Um **tipo de entidade** define uma coleção (ou conjunto) de entidades que compartilham os mesmos atributos. A coleção de todos os elementos de um tipo de entidade é chamada de **conjunto da entidade**.
+
+Nos diagramas ER, o tipo de entidade é representado graficamente como um **retângulo** encapsulando seu nome.
+
+### Atributos
+**Atributos** são as propriedades que descrevem uma entidade. Para cada atributo, existe um **domínio** (conjunto de valores) que especifica os valores que podem ser atribuídos a ele (e.g., o domínio do atributo *salário* de um professor é o conjunto de números decimais não-negativos). Os nomes dos atributos são representados em forma **oval** e conectados à entidade.
+
+Tipos de atributos:
+1.  **Simples (Atômicos) ou Compostos:** Atributos **compostos** podem ser divididos em subpartes menores (e.g., o endereço pode ser subdividido em rua, número, cidade). Atributos que não podem ser divididos são **simples**.
+2.  **Valor-Único ou Multi-Valorados:** A maioria dos atributos possui um valor único (*monovalorado*). Atributos que podem ter um **conjunto de valores** para a mesma entidade (e.g., um professor pode ter várias titulações ou telefones) são **multi-valorados**. Atributos multi-valorados são representados por **ovais duplos**.
+3.  **Armazenados ou Derivados:** O atributo **derivado** é aquele cujo valor pode ser calculado (derivável) a partir de outro atributo **armazenado** (e.g., *idade* pode ser derivada de *data de nascimento*).
+
+### Relacionamentos
+Um **relacionamento** é uma associação entre duas ou mais entidades com um significado específico. O conjunto de todos os elementos de um tipo de relacionamento é chamado **conjunto do relacionamento**.
+
+Nos diagramas ER, os tipos de relacionamentos são representados como **losangos** conectados por linhas retas às entidades participantes.
+
+*   **Grau do Relacionamento:** É o número de entidades que participam do relacionamento. O relacionamento de grau dois é chamado **binário** (o mais comum), e o de grau três, **ternário**.
+*   **Papéis e Recursividade:** Cada entidade participante tem um **papel** (e.g., empregado, empregador). Um relacionamento é **recursivo** quando a mesma entidade participa mais de uma vez, mas em papéis distintos (e.g., <em>disciplina</em> participa em <em>prerequisito</em> como "depende de" e "é necessária para").
+*   **Atributos de Relacionamentos:** Relacionamentos também podem ter atributos descritivos que descrevem a associação em si (e.g., a *Nota* que um aluno obteve em uma *Oferta* de disciplina).
+
+## 2.2 Cardinalidade, Participação e Regras de Integridade.
+
+Relacionamentos em um ER possuem **restrições estruturais**, que limitam o número de entidades que podem participar.
+
+### Restrições Estruturais (Cardinalidade e Participação)
+1.  **Taxa de Cardinalidade (Máxima):** Representa o número máximo de instâncias de um relacionamento em que uma entidade pode participar. Para relacionamentos binários, as taxas são:
+    *   **1:1 (Um para Um):** Uma instância de E1 se relaciona a, no máximo, uma instância de E2, e vice-versa (e.g., *DEPARTAMENTO OFERECE CURSO*).
+    *   **1:N ou N:1 (Um para Muitos/Muitos para Um):** Uma instância de E1 pode se relacionar a N instâncias de E2, mas uma instância de E2 se relaciona a, no máximo, uma de E1 (e.g., *DEPARTAMENTO TRABALHA PROFESSOR*).
+    *   **M:N (Muitos para Muitos):** Uma instância de E1 pode se relacionar a N instâncias de E2, e vice-versa (e.g., *CURSO CONTEM DISCIPLINA*).
+    A notação gráfica usa um traço para indicar participação individual (1) e uma ponta tripla (pata de galinha) para indicar participação de N elementos.
+
+2.  **Restrições de Participação (Mínima):** Especifica o número mínimo de entidades que devem participar do relacionamento, determinando se a participação é obrigatória.
+    *   **Participação Total (Obrigatória):** A existência de uma entidade *depende* de sua participação no relacionamento (mínimo = 1). Ex: Se todo PROFESSOR tem que trabalhar para um DEPARTAMENTO, a participação de PROFESSOR em TRABALHA é total.
+    *   **Participação Parcial (Opcional):** A entidade pode existir sem participar do relacionamento (mínimo = 0). Ex: Um DEPARTAMENTO pode ou não OFERECER um CURSO.
+    Graficamente, a participação total é representada por um **círculo** (ou linha dupla em algumas notações) e a parcial, por um **traço**.
+
+### Regras de Integridade
+*   **Atributos Chave:** São atributos ou conjuntos de atributos que devem ser distintos para cada registro, utilizados para identificar uma entidade unicamente. O atributo chave é sublinhado no diagrama ER. A chave primária (PK) é a chave candidata escolhida para identificar unicamente a entidade.
+
+*   **Entidades Fracas:** São entidades que **não possuem atributos chave próprios**. Elas são identificadas em combinação com a chave primária de sua **entidade proprietaria** e sua **chave parcial**.
+    *   O relacionamento que conecta a entidade fraca à proprietária é o **relacionamento identificador**.
+    *   Uma entidade fraca sempre tem **participação total** no relacionamento identificador.
+    *   Entidades fracas e seus relacionamentos identificadores são representados por **linhas duplas** no retângulo e no losango. Ex: <em>dependente</em> é uma entidade fraca de <em>professor</em>.
+
+*   **Integridade Referencial:** É garantida pelo uso de **Chaves Estrangeiras (FK)** no modelo relacional subsequente. Essa restrição assegura que o valor de um atributo em uma tabela que faz referência a outra (FK) exista como chave primária na tabela referenciada (PK).
+
+## 2.3 Normalização Inicial e Boas Práticas de Modelagem.
+
+A **normalização** é o processo de análise de esquemas relacionais para minimizar a **redundância** de dados e reduzir **anomalias** (de inserção, atualização e exclusão). A redundância desperdiça espaço de armazenamento e leva à inconsistência se os dados não forem atualizados em todos os locais onde estão armazenados.
+
+As **Formas Normais (FNs)** são regras que avaliam se a estrutura do BD está bem delineada. Geralmente, o projeto conceitual é refinado até atingir a Terceira Forma Normal (3FN).
+
+### As Três Primeiras Formas Normais
+1.  **Primeira Forma Normal (1FN):** Uma tabela está na 1FN se todos os atributos contiverem apenas **dados atômicos**. Isso significa que não deve haver atributos multivalorados ou compostos. Para resolver atributos multivalorados, cria-se uma nova tabela que armazena os valores repetidos e se relaciona com a tabela original.
+2.  **Segunda Forma Normal (2FN):** Uma tabela deve estar na 1FN e **não possuir dependência funcional parcial**. Isso se aplica a tabelas com chaves primárias compostas. Se um atributo não-chave depender de apenas uma parte da chave primária composta, a tabela não está na 2FN. A solução é isolar os atributos com dependência parcial em novas tabelas.
+3.  **Terceira Forma Normal (3FN):** Uma tabela deve estar na 2FN e **não possuir dependência funcional transitiva**. Dependência transitiva ocorre quando um atributo não-chave depende de outro atributo não-chave (que não é a chave primária). A solução é criar uma nova tabela para o atributo e a coluna de dependência.
+
+### Boas Práticas de Modelagem
+É essencial garantir a unicidade de registros (Chaves Primárias) e a integridade referencial através dos relacionamentos (Chaves Estrangeiras). Embora existam modelos de normalização mais avançados (4FN e 5FN), a 3FN é frequentemente suficiente para a maioria dos projetos.
+
+## 2.4 Construindo o Diagrama Entidade-Relacionamento (ER) no brModelo.
+
+A modelagem ER é um processo que transforma a descrição do **mini-mundo** (a realidade a ser representada) em um esquema diagramático.
+
+**Passos típicos para a construção do DER (aplicáveis em ferramentas como o brModelo):**
+
+1.  **Análise de Requisitos:** Entender o mini-mundo, identificando o que deve ser armazenado e quais são as operações necessárias.
+2.  **Identificação dos Tipos de Entidade:** Encontrar os "objetos" principais (substantivos) do sistema.
+3.  **Definição de Atributos e Chaves:** Atribuir propriedades (ovais) a cada entidade (retângulo) e definir a chave primária (atributo sublinhado). Resolver atributos compostos e multivalorados, se necessário.
+4.  **Identificação dos Relacionamentos:** Definir as associações lógicas (losangos) entre as entidades.
+5.  **Definição das Restrições Estruturais:** Atribuir as cardinalidades (1:1, 1:N, M:N) e as participações (parcial/total).
+6.  **Refinamento:** Identificar e modelar entidades fracas, atributos de relacionamentos, e garantir que o modelo reflita as regras de negócio e minimize a redundância (Normalização Inicial).
+
+## 2.5 Estudo de Caso (E.C.): ER da Biblioteca
+
+O sistema de biblioteca é um domínio clássico de BD que envolve a gestão de livros, usuários (alunos/clientes) e empréstimos.
+
+**Requisitos essenciais para o ER da biblioteca:**
+*   A biblioteca mantém o cadastro de <em>livro</em>.
+*   Os <em>aluno</em> estão cadastrados como usuários da biblioteca.
+*   Deve-se registrar o relacionamento <em>emprestimo</em> de livros por alunos.
+
+**Modelagem Conceitual:**
+1.  **Entidades Principais:**
+    *   <strong>livro</strong> (<u>cod_livro</u>, titulo, autor, edicao).
+    *   <strong>aluno</strong> (<u>matricula</u>, nome, telefone, endereco).
+2.  **Relacionamento:**
+    *   <strong>empresta</strong> (entre <em>livro</em> e <em>aluno</em>).
+3.  **Cardinalidade e Participação:**
+    *   Um <em>aluno</em> pode emprestar <strong>M</strong> (muitos) livros.
+    *   Um <em>livro</em> pode ser emprestado por <strong>N</strong> (muitos) <em>alunos</em> (ao longo do tempo).
+    *   Portanto, a cardinalidade é **M:N**.
+    *   O relacionamento <em>empresta</em> deve ter atributos descritivos: <code>data_emprestimo</code>, <code>data_devolucao_prevista</code>, <code>data_devolucao_efetiva</code>.
+
+**Esboço do ER da biblioteca (conceitual):**
+(aluno) --- (M) -- <empresta> -- (N) --- (livro)
+*O relacionamento M:N <code>empresta</code> pode ser transformado em uma tabela associativa no modelo lógico, contendo as chaves primárias de <em>aluno</em> e <em>livro</em> como chaves estrangeiras, mais os atributos descritivos do empréstimo.*
+
+## 2.6 EXERCÍCIOS COMPLEMENTARES (E.C.): Modelagem de problemas de baixa complexidade (Ex: Barbearia).
+
+Estes exercícios visam fixar os conceitos de Entidades, Atributos, Relacionamentos, Cardinalidade e Chaves em diferentes domínios.
+
+**Exemplo 1: Sistema para barbearia**
+Modele o sistema de uma barbearia que precisa gerenciar:
+1.  <strong>cliente</strong> (nome, telefone, historico_cortes, cpf).
+2.  <strong>barbeiro</strong> (nome, especialidade, salario).
+3.  <strong>servico</strong> (nome, preco, duracao).
+4.  <strong>agendamento</strong> (data, hora).
+*   *Desafio de modelagem:* defina como os clientes se relacionam com os barbeiros e os serviços através do agendamento, e defina as cardinalidades (ex.: um cliente pode ser atendido por vários barbeiros? um barbeiro pode realizar vários serviços?).
+
+**Exemplo 2: Modelo de banco de dados empresa**
+Modele o sistema de uma empresa, conforme os seguintes requisitos:
+1.  A empresa é organizada em <strong>departamento</strong> (nome unico, numero unico).
+2.  Um departamento é gerenciado por um <strong>empregado</strong> (armazenar a data de inicio da gerencia).
+3.  Um departamento pode ter várias <strong>localizacoes</strong> (atributo multivalorado).
+4.  Um departamento controla vários <strong>projeto</strong> (nome unico, numero unico, localizacao unica).
+5.  O BD armazena dados de <strong>empregado</strong> (nome, cpf, endereco, salario, genero, data_nascimento).
+6.  Um empregado trabalha em um departamento e em vários projetos (mantendo as horas por semana).
+7.  Cada empregado tem um <strong>supervisor</strong> (que é outro empregado) (relacionamento recursivo).
+8.  Dependentes de empregados (nome, genero, data_nascimento, relacionamento com o empregado) devem ser modelados como <strong>entidade fraca</strong>.
+
+## 2.7 EXERCÍCIOS INTEGRADOS (E.I.): Modelagem da Tabela Periódica (Química) e Estrutura Taxonômica (Biologia).
+
+Estes exercícios aplicam os conceitos de modelagem de dados a estruturas de disciplinas do núcleo comum.
+
+**E.I. 1: Modelagem da tabela periodica (quimica)**
+Projete um ER para armazenar dados da tabela periodica:
+1.  **Entidades:**
+    *   <strong>elemento</strong>: armazena as propriedades básicas (<u>simbolo</u>, nome, numero_atomico, massa_atomica).
+    *   <strong>grupo</strong>: armazena informações sobre as famílias (<u>num_grupo</u>, nome_grupo).
+    *   <strong>periodo</strong>: armazena o período (<u>num_periodo</u>).
+2.  **Relacionamentos e Cardinalidades:**
+    *   <strong>pertence_a_grupo</strong> (elemento e grupo): 1 elemento pertence a 1 grupo, mas 1 grupo contém N elementos (1:N).
+    *   <strong>esta_no_periodo</strong> (elemento e periodo): 1 elemento está em 1 periodo, mas 1 periodo contém N elementos (1:N).
+
+**E.I. 2: Estrutura taxonomica (biologia)**
+Modele a hierarquia biológica (reino, filo, classe, ordem, familia, genero, especie).
+1.  **Entidades:** É possível modelar cada nível (reino, filo, classe, etc.) como uma entidade, ou utilizar uma abordagem de auto-relacionamento (recursiva) para representar a estrutura hierárquica.
+2.  **Abordagem 1 (Entidades separadas):**
+    *   Crie entidades para os níveis: <strong>reino</strong>, <strong>filo</strong>, <strong>classe</strong>, <strong>ordem</strong>, <strong>familia</strong>, <strong>genero</strong>, <strong>especie</strong> (cada uma com atributos como <u>codigo</u>, nome).
+    *   Defina relacionamentos 1:N em cadeia (ex.: <em>reino contem n filos</em>, <em>filo contem n classes</em>, etc.).
+3.  **Abordagem 2 (Recursiva/Generalização):**
+    *   Crie uma entidade genérica <strong>categoria</strong> (<u>id_categoria</u>, nome, nivel_taxonomico: {reino, filo, ...}).
+    *   Use um <strong>auto_relacionamento</strong> (recursivo) para ligar uma categoria a sua "categoria pai" (ex.: uma ordem é pai de N familias). Defina o papel de "pai" e "filho" na relação.

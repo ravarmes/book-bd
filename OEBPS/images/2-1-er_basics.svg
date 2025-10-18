@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" role="img" aria-label="Diagrama ER básico com ALUNO, LIVRO e relacionamento EMPRESTA">
+  <defs>
+    <style>
+      .box { fill:#eef6ff; stroke:#1e5aa6; stroke-width:2; }
+      .title { font: 700 18px 'Segoe UI', Arial, sans-serif; fill:#0b3d91; }
+      .label { font: 600 16px 'Segoe UI', Arial, sans-serif; fill:#08345e; }
+      .attr { fill:#fff; stroke:#4677c1; stroke-width:1.8; }
+      .attr-text { font: 500 14px 'Segoe UI', Arial, sans-serif; fill:#08345e; }
+      .diamond { fill:#fff9e6; stroke:#b36b00; stroke-width:2; }
+      .line { stroke:#3a4e67; stroke-width:2; }
+      .caption { font: 500 14px 'Segoe UI', Arial, sans-serif; fill:#3a4e67; }
+    </style>
+  </defs>
+
+  <!-- Entidade ALUNO -->
+  <rect class="box" x="60" y="60" width="180" height="70" rx="8"/>
+  <text class="title" x="150" y="102" text-anchor="middle">ALUNO</text>
+  <!-- atributo Matricula -->
+  <ellipse class="attr" cx="150" cy="155" rx="90" ry="26"/>
+  <text class="attr-text" x="150" y="160" text-anchor="middle">Matricula</text>
+  <!-- underline visual para chave -->
+  <line class="line" x1="95" y1="166" x2="205" y2="166"/>
+
+  <!-- Entidade LIVRO -->
+  <rect class="box" x="560" y="60" width="180" height="70" rx="8"/>
+  <text class="title" x="650" y="102" text-anchor="middle">LIVRO</text>
+  <!-- atributo CodLivro -->
+  <ellipse class="attr" cx="650" cy="155" rx="90" ry="26"/>
+  <text class="attr-text" x="650" y="160" text-anchor="middle">CodLivro</text>
+  <!-- underline visual para chave -->
+  <line class="line" x1="595" y1="166" x2="705" y2="166"/>
+
+  <!-- Relacionamento EMPRESTA -->
+  <polygon class="diamond" points="360,130 420,95 480,130 420,165"/>
+  <text class="label" x="420" y="132" text-anchor="middle">EMPRESTA</text>
+
+  <!-- Conexões -->
+  <line class="line" x1="240" y1="95" x2="360" y2="130"/>
+  <line class="line" x1="480" y1="130" x2="560" y2="95"/>
+
+  <!-- Atributos do relacionamento -->
+  <ellipse class="attr" cx="420" cy="220" rx="120" ry="24"/>
+  <text class="attr-text" x="420" y="224" text-anchor="middle">DataEmprestimo</text>
+  <ellipse class="attr" cx="420" cy="270" rx="135" ry="24"/>
+  <text class="attr-text" x="420" y="274" text-anchor="middle">DataDevolucaoPrevista</text>
+  <ellipse class="attr" cx="420" cy="320" rx="130" ry="24"/>
+  <text class="attr-text" x="420" y="324" text-anchor="middle">DataDevolucaoEfetiva</text>
+
+  <!-- Legenda M:N -->
+  <text class="caption" x="420" y="190" text-anchor="middle">Cardinalidade: M:N</text>
+
+  <!-- Rodapé -->
+  <text class="caption" x="400" y="400" text-anchor="middle">ER básico (Biblioteca) — chaves sublinhadas; atributos do relacionamento em ovals</text>
+</svg>

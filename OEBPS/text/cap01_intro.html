@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang='pt-BR'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <title>Capítulo 1 — Introdução a Bancos de Dados e a Necessidade de Estrutura</title>
+    <link rel='stylesheet' type='text/css' href='../css/style.css' />
+</head>
+
+<body>
+    <div class='container'>
+
+        <header>
+            <h1 id='cap1'>CAPÍTULO 1 – Introdução a Bancos de Dados e a Necessidade de Estrutura</h1>
+            <p class='lead'>Neste capítulo, você entenderá por que organizamos dados em bancos de dados, os problemas de
+                armazenar informações sem estrutura e como os SGBDs resolvem esses desafios. Ao final, modelaremos um
+                Estudo de Caso (Biblioteca Escolar) e faremos exercícios de fixação.</p>
+        </header>
+        <hr />
+
+        <p>Os Sistemas de Banco de Dados (BD) são um componente essencial da vida na sociedade moderna. Diversas tarefas
+            cotidianas, como fazer um depósito bancário, reservar um voo ou realizar uma compra em um supermercado,
+            envolvem a interação com um banco de dados. Sistemas de informações, mesmo os mais simples, necessitam
+            armazenar dados para que possam recuperá-los e/ou alterá-los quando necessário.</p>
+
+        <section id='sec1-1'>
+            <h2>1.1 Dados, Informação e Conhecimento</h2>
+            <p>Para compreendermos o universo dos bancos de dados, é fundamental distinguir entre dado, informação e
+                conhecimento.</p>
+            <p>O <strong>Dado</strong> é o componente básico de um arquivo. Por dados, entende-se fatos conhecidos que
+                podem ser armazenados e que possuem um significado implícito. Os dados são identificados em sua forma
+                bruta e, por si sós, não levam à compreensão de um fato ou situação. Exemplos típicos de dados incluem
+                nome, sobrenome, cidade ou bairro.</p>
+            <p>Um conjunto de dados que estão relacionados entre si é chamado de <strong>Fato</strong>. O
+                <strong>Metadado</strong> é um dado sobre dado, fornecendo uma descrição das características do dado e
+                do conjunto de relacionamentos que o ligam aos demais dados no BD.
+            </p>
+            <p>A <strong>Informação</strong> é gerada após a interpretação ou o processamento dos dados. Ela é um
+                agrupamento organizado de dados que faz sentido, gera conhecimento e auxilia na tomada de decisões em
+                uma empresa. Por exemplo, o valor "2013" é um dado; ao combiná-lo com "Brasil", "1º Lugar" e "Copa das
+                Confederações", obtém-se a informação de que "O Brasil foi campeão da Copa das Confederações do ano de
+                2013".</p>
+            <p>Um <strong>Registro</strong> é uma sequência de dados juntos que fornecem uma informação completa. Por
+                exemplo, a ficha de um cliente contendo nome, CPF, RG e endereço.</p>
+            <p>O <strong>Conhecimento</strong> representa o discernimento obtido por meio de critérios e da apreciação
+                dos dados e informações.</p>
+
+            <!-- Bloco de Definições chave -->
+            <table class="box-table tip-table">
+                <tr>
+                    <td class="box-content tip" role="note" aria-labelledby="def-title-1">
+                        <div id="def-title-1" class="box-title"><img src="../images/icon-definicao.png" class="icon-img" alt="Definição"><strong>Definição</strong></div>
+                        <div>
+                            <p><strong>Dado</strong>: registro bruto sem contexto (ex.: "2013").</p>
+                            <p><strong>Informação</strong>: dados organizados que respondem “quem/quando/onde” (ex.: "Brasil campeão em 2013").</p>
+                            <p><strong>Conhecimento</strong>: insight aplicável para decidir/agir.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <!-- Bloco Importante com síntese didática -->
+            <table class="box-table warning-table">
+                <tr>
+                    <td class="box-content warning" role="note" aria-labelledby="imp-title-1">
+                        <div id="imp-title-1" class="box-title"><img src="../images/icon-importante.png" class="icon-img" alt="Importante"><strong>Importante</strong></div>
+                        <div>
+                            <p>Dados <em>isolados</em> não são informação: a <strong>interpretação</strong> e o <strong>contexto</strong> transformam dados em informação útil (analogia: dados são ingredientes, informação é a receita pronta).</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure>
+                <img src='../images/1-1-dic_hierarchy.svg' alt='Hierarquia D-I-C: Dados, Informação e Conhecimento' />
+                <figcaption><strong>Figura 1.1 - </strong>Hierarquia D-I-C: progressão de dados → informação →
+                    conhecimento.
+                </figcaption>
+            </figure>
+            <p><strong>Sugestão de Figura:</strong><br />Figura 1.1: Diagrama de Hierarquia D-I-C (Dados, Informação e
+                Conhecimento).<br />Legenda: Representação visual da progressão, onde o dado é a matéria-prima, que é
+                processada para gerar informação, e a informação é analisada para construir conhecimento.</p>
+        </section>
+
+        <section id='sec1-2'>
+            <h2>1.2 O Problema do Armazenamento: Da Planilha Simples (Dataset) e suas Falhas (Redundância) ao SGBD</h2>
+            <p>Começar com planilhas é comum, mas, conforme o volume e a colaboração aumentam, surgem problemas:</p>
+            <ul>
+                <li><strong>Redundância</strong>: o mesmo dado aparece em vários lugares (ex.: nome do aluno repetido em
+                    múltiplas guias), dificultando manutenção.</li>
+                <li><strong>Inconsistência</strong>: versões diferentes do mesmo dado (ex.: turma do aluno divergente
+                    entre planilhas).</li>
+                <li><strong>Concorrência</strong>: edições simultâneas geram conflitos e perda de dados.</li>
+                <li><strong>Segurança e auditoria</strong>: controle de acesso fraco e histórico de alterações
+                    inexistente.</li>
+                <li><strong>Consultas e relatórios</strong>: limitações para responder perguntas rapidamente e com
+                    precisão.</li>
+            </ul>
+            <p><strong>Abordagem tradicional de arquivos</strong>: cada aplicação define seus próprios arquivos;
+                mudanças na estrutura exigem alterações em todos os programas — gerando forte acoplamento.</p>
+            <p>A redundância implica <em>duplicação de esforço</em>, <em>desperdício de espaço</em> e risco de
+                <em>inconsistências</em> entre cópias.
+            </p>
+            <p>Os <strong>SGBDs</strong> tratam esses problemas oferecendo estrutura, regras de integridade, controle
+                transacional e linguagens de consulta padronizadas.</p>
+            <p>Planilhas são úteis no início, mas <strong>não escalam</strong> bem para colaboração, auditoria e grande
+                volume.</p>
+
+            <!-- Bloco Importante: quando migrar do spreadsheet para SGBD -->
+            <table class="box-table warning-table">
+                <tr>
+                    <td class="box-content warning" role="note" aria-labelledby="imp-title-2">
+                        <div id="imp-title-2" class="box-title"><img src="../images/icon-importante.png" class="icon-img" alt="Importante"><strong>Importante</strong></div>
+                        <div>
+                            <p>Migre para um <strong>SGBD</strong> quando houver <em>múltiplos usuários</em>, necessidade de <strong>histórico/auditoria</strong>, <strong>acesso granular</strong> por papéis ou quando surgirem <strong>inconsistências</strong> e <strong>conflitos</strong> nas planilhas.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <ul>
+                <li><strong>Anomalias de operação</strong>: inserção/atualização/remoção inconsistentes por falta de
+                    normalização.</li>
+                <li><strong>Concorrência</strong>: ausência de bloqueios e controle transacional resulta em perdas e
+                    conflitos.</li>
+                <li><strong>Governança</strong>: controle de acesso, histórico e trilhas de auditoria são limitados.
+                </li>
+            </ul>
+            <p><strong>Sinais de migração</strong>: múltiplos usuários editando ao mesmo tempo, relatórios lentos ou
+                divergentes, necessidade de segurança/granularidade de acesso, e integração com outras aplicações.</p>
+            <p><em>Exemplo (Biblioteca)</em>: duplicação de alunos entre guias e contagem de empréstimos por turma
+                divergente — no SGBD, chaves e consultas eliminam essas inconsistências.</p>
+            <p>Antes do advento dos sistemas de banco de dados, as empresas mantinham as informações em arquivos
+                físicos, como fichas de papel em arquivos de aço. Embora a migração para <strong>arquivos
+                    digitais</strong> (ou planilhas simples/datasets) tenha facilitado e agilizado o manuseio dos dados,
+                essa <strong>abordagem tradicional de processamento de arquivos</strong> possuía graves falhas.</p>
+            <p>Nessa abordagem, cada usuário definia e implementava os arquivos necessários para o seu software, e os
+                programas eram construídos para trabalhar com uma única base de dados específica. Isso levava a um forte
+                acoplamento: qualquer mudança na estrutura de um arquivo exigia alterações em todos os programas que o
+                acessavam.</p>
+            <p>A principal falha era a <strong>redundância</strong>. A redundância ocorre quando a mesma informação é
+                armazenada em múltiplos locais. A abordagem de processamento de arquivos resultava em desperdício de
+                armazenamento e duplicação de esforço para manter os dados atualizados.</p>
+            <p>A redundância acarreta três grandes problemas:</p>
+            <ol>
+                <li><strong>Duplicação de Esforço:</strong> Uma única atualização lógica precisava ser realizada várias
+                    vezes, uma para cada arquivo onde o dado estava gravado.</li>
+                <li><strong>Desperdício de Espaço:</strong> O mesmo dado armazenado mais de uma vez consome espaço
+                    desnecessário, o que é crítico em bases de dados grandes.</li>
+                <li><strong>Inconsistência de Dados:</strong> Arquivos que representam os mesmos dados podem se tornar
+                    inconsistentes se forem atualizados de forma desigual (por exemplo, se uma cópia for atualizada e
+                    outra for esquecida).</li>
+            </ol>
+            <p>A <strong>abordagem de Banco de Dados</strong> resolve esses problemas ao utilizar um repositório único
+                para manter os dados, os quais são definidos apenas uma vez. O objetivo ideal é ter um projeto que
+                armazene cada item lógico de dado em apenas um lugar, o que é conhecido como <strong>controle de
+                    redundância</strong> ou <strong>normalização de dados</strong>.</p>
+        </section>
+
+        <section id='sec1-3'>
+            <h2>1.3 Sistemas de Gerenciamento de Banco de Dados (SGBDs): Funções e Componentes</h2>
+            <p>Um SGBD fornece mecanismos para:</p>
+            <ul>
+                <li><strong>Definição e manipulação</strong> de dados (DDL/DML) e <strong>consulta</strong> (SQL).</li>
+                <li><strong>Transações</strong> com propriedades ACID (Atomicidade, Consistência, Isolamento e
+                    Durabilidade).</li>
+                <li><strong>Controle de concorrência</strong> e <strong>bloqueios</strong> para edições simultâneas.
+                </li>
+                <li><strong>Gerenciamento de armazenamento</strong>, <strong>otimização de consultas</strong> e
+                    <strong>recuperação</strong> (logs, backups).
+                </li>
+            </ul>
+
+            <!-- Bloco Importante: propriedades ACID e concorrência -->
+            <table class="box-table warning-table">
+                <tr>
+                    <td class="box-content warning" role="note" aria-labelledby="imp-title-3">
+                        <div id="imp-title-3" class="box-title"><img src="../images/icon-importante.png" class="icon-img" alt="Importante"><strong>Importante</strong></div>
+                        <div>
+                            <p><strong>ACID</strong> garante transações confiáveis: Atomicidade (<em>tudo-ou-nada</em>), Consistência (<em>regras sempre válidas</em>), Isolamento (<em>sem interferência</em>) e Durabilidade (<em>persistem após falhas</em>). Sem ACID, alterações concorrentes podem gerar <strong>perda</strong> ou <strong>corrupção</strong> de dados.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 1 - </strong>Criação de tabela e consulta simples (SQL)
+                </figcaption>
+                <pre class='code sql'>
+-- Exemplo simples para contextualizar
+CREATE TABLE Aluno (
+    id INTEGER PRIMARY KEY,
+    nome TEXT NOT NULL,
+    turma TEXT
+);
+
+INSERT INTO Aluno (id, nome, turma) VALUES ( 1, 'Ana', '3A' );
+
+-- Consulta básica
+SELECT nome, turma FROM Aluno WHERE id = 1;
+</pre>
+            </figure>
+            <figure>
+                <img src='../images/1-3-sgbd_architecture.svg'
+                    alt='Arquitetura típica de um SGBD (componentes principais)' />
+                <figcaption><strong>Figura 1.3 - </strong>Arquitetura típica de um SGBD: processador de consultas,
+                    gerenciador de transações, buffer/cache e armazenamento.</figcaption>
+            </figure>
+            <p>Componentes típicos: <strong>Parser/Executor</strong> (interpreta e executa consultas),
+                <strong>Otimização</strong> (escolha de planos eficientes), <strong>Gerenciador de Transações</strong>
+                (ACID, isolamento), <strong>Controle de Concorrência</strong> (bloqueios/MVCC),
+                <strong>Buffer/Cache</strong> (desempenho) e <strong>Armazenamento</strong> (arquivos, índices e logs).
+            </p>
+            <ul>
+                <li><strong>Logs e recuperação</strong>: garantem durabilidade e restauração após falhas.</li>
+                <li><strong>Índices</strong>: aceleram buscas por chaves e campos consultados.</li>
+                <li><strong>Segurança</strong>: papéis, permissões e visões limitam o acesso a dados sensíveis.</li>
+            </ul>
+            <p><strong>Natureza auto-descritiva</strong>: além dos dados, o SGBD mantém um <em>catálogo de
+                    metadados</em> que descreve estruturas, tipos e restrições, permitindo conhecer e validar o BD.</p>
+            <p><strong>Componentes de um sistema de BD</strong>: Dados; Software (SGBD, aplicativos); Hardware; Usuários
+                (DBA, programadores, usuários finais).</p>
+            <ul>
+                <li><strong>Isolamento programa–dados</strong>: alterações na estrutura não quebram a maioria das
+                    aplicações.</li>
+                <li><strong>Múltiplas visões</strong>: diferentes perfis acessam subconjuntos dos dados.</li>
+                <li><strong>Controle de concorrência</strong>: atualizações simultâneas com segurança.</li>
+                <li><strong>Segurança</strong>: autorização e restrições de acesso.</li>
+                <li><strong>Backup e recuperação</strong>: restauração após falhas.</li>
+                <li><strong>Integridade</strong>: regras de consistência (tipos, chaves, referencial).</li>
+            </ul>
+            <p>Um <strong>Sistema de Gerenciamento de Banco de Dados (SGBD)</strong> é um sistema computadorizado ou
+                conjunto de programas que permite ao usuário criar e manter um banco de dados. Trata-se de um software
+                de propósito geral que facilita o processo de definir, construir, manipular e compartilhar bancos de
+                dados entre vários usuários e aplicações.</p>
+            <!-- Bloco Definição: o que é SGBD -->
+            <table class="box-table tip-table">
+                <tr>
+                    <td class="box-content tip" role="note" aria-labelledby="def-title-3">
+                        <div id="def-title-3" class="box-title"><img src="../images/icon-definicao.png" class="icon-img" alt="Definição"><strong>Definição</strong></div>
+                        <div>
+                            <p><strong>SGBD</strong>: software que gerencia dados de forma segura, consistente e compartilhada, oferecendo <em>consultas</em>, <em>transações</em> e <em>controle de acesso</em>; reduz acoplamento via <em>catálogo de metadados</em> e <em>SQL padronizado</em>.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <p>O uso de um SGBD é essencial, pois ele retira da aplicação-cliente a complexidade de gerenciar o acesso,
+                a manipulação e a organização dos dados. Além disso, proporciona suporte indispensável à medida que o
+                volume de dados e o número de usuários crescem.</p>
+            <p><strong>Funções e Capacidades de um SGBD</strong></p>
+            <ul>
+                <li><strong>Definição do BD:</strong> Especificar os tipos de dados, estruturas e restrições.</li>
+                <li><strong>Construção do BD:</strong> O processo de armazenar os dados em um meio controlado pelo SGBD.
+                </li>
+                <li><strong>Manipulação do BD:</strong> Inclui funções como consultar (recuperar dados), atualizar
+                    (alterar) e gerar relatórios. Um programa de aplicação acessa o BD enviando consultas (para
+                    recuperação) ou transações (que podem alterar os dados).</li>
+                <li><strong>Compartilhamento:</strong> Permite que múltiplos usuários e programas acessem o BD
+                    simultaneamente.</li>
+            </ul>
+            <p>Um sistema de banco de dados é composto pelo BD juntamente com seu sistema gerenciador. Os quatro
+                componentes básicos de um Sistema de Banco de Dados são:</p>
+            <ol>
+                <li><strong>Dados:</strong> A coleção de registros armazenados.</li>
+                <li><strong>Software:</strong> O SGBD, os programas aplicativos e os softwares de acesso aos dados.</li>
+                <li><strong>Hardware:</strong> A máquina física, servidores ou dispositivos que processam e armazenam os
+                    dados.</li>
+                <li><strong>Usuários:</strong> Incluindo o Administrador de Banco de Dados (DBA), Programadores de
+                    Aplicativos e Usuários Finais.</li>
+            </ol>
+            <figure>
+                <img src='../images/1-4-db_environment.svg' alt='Ambiente simplificado de um sistema de banco de dados' />
+                <figcaption><strong>Figura 1.4 - </strong>Ambiente de Sistema de BD: usuários/aplicações → SGBD →
+                    Banco de Dados.</figcaption>
+            </figure>
+            <p><strong>Sugestão de Figura:</strong><br />Figura 1.2: Ambiente simplificado de um sistema de banco de
+                dados.<br />Legenda: Diagrama ilustrando como as Aplicações/Usuários interagem com o Banco de Dados,
+                tendo o SGBD como intermediário que gerencia o acesso e a manipulação.</p>
+            <p><strong>Componente Essencial: Meta-dados e Catálogo</strong></p>
+            <p>Uma característica fundamental do SGBD é sua <strong>natureza auto-descritiva</strong>. Um sistema de
+                banco de dados não contém apenas os dados, mas também uma definição completa da estrutura do BD e suas
+                restrições, armazenada em um <strong>catálogo de meta-dados</strong>. O SGBD utiliza esses meta-dados
+                para conhecer a estrutura dos arquivos, incluindo o tipo e o formato dos dados que serão acessados.</p>
+            <p>O SGBD também proporciona diversas vantagens, incluindo:</p>
+            <ul>
+                <li><strong>Isolamento entre Programa e Dados:</strong> Mudanças na estrutura de dados não exigem
+                    alterações na maioria das aplicações que os acessam.</li>
+                <li><strong>Suporte a Múltiplas Visões:</strong> O SGBD permite que diferentes usuários vejam diferentes
+                    subconjuntos ou visões virtuais dos dados, conforme sua necessidade.</li>
+                <li><strong>Controle de Concorrência:</strong> Implementa mecanismos para garantir que, quando múltiplos
+                    usuários tentam atualizar os mesmos dados, isso seja feito de forma controlada.</li>
+                <li><strong>Restrição ao Acesso Não-Autorizado:</strong> Provisão de um subsistema de segurança e
+                    autorização para especificar restrições de acesso a dados confidenciais.</li>
+                <li><strong>Backup e Recuperação:</strong> Mecanismos para recuperar de falhas de software ou hardware,
+                    restaurando o BD a um estado consistente anterior à falha.</li>
+                <li><strong>Impor Restrições de Integridade:</strong> Capacidade de definir e aplicar regras de
+                    consistência, como tipos de dados, restrições de chave (unicidade) e integridade referencial
+                    (relacionamento entre registros em diferentes arquivos).</li>
+            </ul>
+        </section>
+
+        <section id='sec1-4'>
+            <h2>1.4 Modelos de dados e Arquitetura de Três Esquemas</h2>
+            <p>Os <strong>modelos de dados</strong> descrevem como representamos entidades e relações (conceitual,
+                lógico e físico). Na <strong>Arquitetura de Três Esquemas</strong> temos:</p>
+            <!-- Lista removida por redundância: níveis Externo, Conceitual e Interno já apresentados na tabela -->
+            <p>O <strong>Modelo de Dados</strong> é um conjunto de ferramentas que permite a descrição dos dados, sua
+                semântica, relações e restrições de consistência. Ele é essencial para a definição da estrutura de um
+                Banco de Dados.</p>
+            <p>Os modelos de dados são a base para a <strong>Abstração dos Dados</strong>, que é a capacidade do SGBD de
+                esconder os detalhes da implantação da forma como os dados são armazenados e mantidos. Essa abstração é
+                organizada através da <strong>Arquitetura de Três Esquemas (ou Níveis de Abstração)</strong>.</p>
+            <!-- Bloco Importante: independência de dados e múltiplas visões -->
+            <table class="box-table warning-table">
+                <tr>
+                    <td class="box-content warning" role="note" aria-labelledby="imp-title-4">
+                        <div id="imp-title-4" class="box-title"><img src="../images/icon-importante.png" class="icon-img" alt="Importante"><strong>Importante</strong></div>
+                        <div>
+                            <p><strong>Independência de dados</strong>: mude detalhes físicos (arquivos/índices) sem quebrar aplicações/visões. <strong>Múltiplas visões</strong>: cada perfil vê só o que precisa.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <table class='content-table'>
+                <caption><strong>Tabela 1.1 - </strong>Níveis de Abstração de Dados.</caption>
+                <thead>
+                    <tr>
+                        <th>Nível de Abstração</th>
+                        <th>Descrição Principal</th>
+                        <th>Modelo/Foco</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Nível Físico (Interno)</strong></td>
+                        <td>Descreve <strong>como os dados estão armazenados fisicamente</strong> no computador. É o
+                            nível mais baixo de abstração, detalhando estruturas de armazenamento, tipos de campo e
+                            eficiência dos recursos.</td>
+                        <td><strong>Projeto Físico</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nível Lógico (Conceitual)</strong></td>
+                        <td>Descreve <strong>quais dados estão armazenados</strong> e <strong>como eles se
+                                relacionam</strong>. É a visão geral do BD, contendo a estrutura e os relacionamentos. É
+                            independente do SGBD específico.</td>
+                        <td><strong>Modelo Conceitual</strong></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Nível de Visão (Externo)</strong></td>
+                        <td>Descreve apenas <strong>partes dos dados</strong>. É o nível mais próximo do usuário,
+                            mostrando apenas o que ele necessita e escondendo os detalhes da organização interna.</td>
+                        <td><strong>Visões Específicas</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+            <figure>
+                <img src='../images/1-5-three_schemas.svg'
+                    alt='Arquitetura de Três Esquemas: Externo, Conceitual e Interno' />
+                <figcaption><strong>Figura 1.5 - </strong>Arquitetura de Três Esquemas: separação entre visões externas,
+                    o esquema
+                    conceitual e a implementação interna.</figcaption>
+            </figure>
+            <p>A arquitetura de três esquemas promove <strong>independência de dados</strong> — mudar estruturas físicas
+                sem afetar as visões dos usuários.</p>
+            <!-- Lista removida por redundância: detalhamento dos níveis já coberto na tabela e no texto -->
+            <p><strong>Fluxo de projeto</strong>: Modelo Conceitual (ER) → Projeto Lógico (relacional/tabelas) → Projeto
+                Físico (tipos, índices), dependente do SGBD escolhido.</p>
+            <p><em>Exemplo</em>: adicionar um índice no campo <strong>data_emprestimo</strong> melhora relatórios sem
+                mudar formulários dos usuários.</p>
+            <p>O <strong>Modelo Conceitual</strong> (frequentemente usando o Modelo Entidade-Relacionamento) deve ser de
+                alto nível, sendo de fácil entendimento para o usuário final. Ele descreve os objetos (entidades) e como
+                eles se relacionam, omitindo detalhes de implementação. O <strong>Projeto Lógico</strong> transforma o
+                modelo conceitual em um modelo mais próximo da implementação, como o Modelo Relacional (tabelas). Já o
+                <strong>Projeto Físico</strong> é um refinamento do modelo lógico, dependente do SGBD escolhido (por
+                exemplo, definindo tipos de dados como <code>VARCHAR(45)</code>).
+            </p>
+            <!-- Figura removida por duplicação: Arquitetura de Três Esquemas -->
+            <p><strong>Sugestão de Figura:</strong><br />Figura 1.3: Níveis de Abstração de Dados (Arquitetura de Três
+                Esquemas).<br />Legenda: Representação dos três níveis: Nível Físico (detalhes de armazenamento), Nível
+                Lógico (estrutura completa dos dados e relações) e Múltiplas Visões (subconjuntos de dados vistos pelos
+                usuários).</p>
+        </section>
+
+        <section id="sec1-5">
+            <h2>1.5 Estudo de Caso: Biblioteca</h2>
+            <table class="box-table case-table" role="note" aria-labelledby="case-title-x">
+                <tr>
+                    <td class="box-content case">
+                        <div id="case-title-x" class="box-title"><img src="../images/icon-estudodecaso.png"
+                                class="icon-img" alt="Estudo de Caso"><strong>Estudo de Caso:</strong></div>
+                        <div>
+                            <p>Domínio: <strong>Sistema de Biblioteca Escolar</strong>. Objetivo principal: controlar a circulação do acervo e apoiar relatórios gerenciais. Perfis: <strong>alunos</strong> (reservas, empréstimos e <em>avaliações de livros</em>), <strong>bibliotecarios</strong> (registro de empréstimos/devoluções, multas).</p>
+                            <p>Este texto descreve o <strong>mini‑mundo</strong> da biblioteca que será modelado nos próximos capítulos.</p>
+                            <p>Entidades iniciais: <strong>aluno</strong> (nome, turma, matricula), <strong>livro</strong> (titulo, autor, editora, isbn), <strong>exemplar</strong> (codigo, localizacao, status), <strong>emprestimo</strong> (data_emprestimo, data_prevista, data_devolucao), <strong>reserva</strong>, <strong>multa</strong>, <strong>avaliacao</strong> (nota 1–5, data, comentario opcional; vinculo ao emprestimo e ao aluno).</p>
+                            <p>Regras de negócio exemplares: limite de <strong>3 empréstimos</strong> simultâneos por aluno; reservas <strong>máx. 2 ativas</strong>; atrasos geram <strong>multa</strong>; aluno com multa não paga <strong>não pode</strong> novo empréstimo; <strong>cada empréstimo pode receber 1 avaliação</strong> de <strong>1 a 5</strong> feita pelo aluno, preferencialmente após a devolução; bibliotecário registra operações e auditoria.</p>
+                            <p>Ao longo do livro, cada capítulo trará uma prática relacionada ao conteúdo (modelagem conceitual, lógica e física; integridade; consultas; transações). Até o final, o aluno terá <strong>modelado e implementado</strong> o sistema completo da biblioteca.</p>
+                            <hr />
+                            <p><strong>Prática do Capítulo:</strong></p>
+                            <ul>
+                                <li>Liste 8–12 <strong>dados brutos</strong> relevantes (ex.: aluno.nome, livro.isbn, emprestimo.data).</li>
+                                <li>Converta 3 conjuntos de dados em <strong>informações</strong> úteis (ex.: empréstimos por turma nos últimos 30 dias).</li>
+                                <li>Derive 2 <strong>conhecimentos</strong> a partir das informações (ex.: políticas que reduzem atrasos).</li>
+                                <li>Esboce 3 <strong>consultas</strong> que respondam perguntas do domínio (texto livre, sem SQL obrigatório).</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            
+        </section>
+
+        <section id="sec1-6">
+            <h2>1.6 Exercícios Complementares</h2>
+
+            <table class="box-table complementary-table" role="note" aria-labelledby="ex-comp-title-x">
+                <tr>
+                    <td class="box-content complementary">
+                        <div id="ex-comp-title-x" class="box-title"><img src="../images/icon-complementar.png"
+                                class="icon-img" alt="Exercícios Complementares"><strong>Exercícios
+                                Complementares:</strong></div>
+                        <div>
+                            <ol>
+                                <li>Barbearia: liste 6–8 <strong>dados</strong> (cliente, serviço, agenda) e derive 3 <strong>informações</strong> úteis (ex.: serviços mais frequentes no mês).</li>
+                                <li>Academia: defina 5 campos (aluno, plano, frequência) e escreva 2 <strong>consultas</strong> que respondam perguntas do gestor (texto livre).</li>
+                                <li>Locadora de carros: indique 3 <strong>chaves</strong> e 3 <strong>regras de integridade</strong> simples (ex.: devolução exige contrato).</li>
+                                <li>Explique Dado × Informação × Conhecimento com um exemplo do seu cotidiano (qualquer contexto) e 1 insight acionável.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="sec1-7">
+            <h2>1.7 Exercícios Integrados</h2>
+            <table class="box-table integrated-table" role="note" aria-labelledby="ex-int-title-x">
+                <tr>
+                    <td class="box-content integrated">
+                        <div id="ex-int-title-x" class="box-title"><img src="../images/icon-integrado.png"
+                                class="icon-img" alt="Exercícios Integrados"><strong>Exercícios Integrados:</strong>
+                        </div>
+                        <div>
+                            <ol>
+                                <li><strong>Biologia</strong>: modele uma coleta de espécies (espécie, local, data, observador) e descreva 2 consultas científicas (ex.: ocorrências por bioma).</li>
+                                <li><strong>Química</strong>: registre experimentos (reagentes, procedimentos, resultados) e indique 2 regras de integridade/ACID aplicáveis (ex.: logs de resultados).</li>
+                                <li><strong>História</strong>: defina um acervo (documento, período, temática) e proponha 2 visões diferentes (por período; por tema) com consultas ilustrativas.</li>
+                                <li><strong>Geografia</strong>: modele indicadores por município (população, IDH, área) e sugira 2 índices/consultas por região (ex.: top 10 por IDH na região).</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <!-- Gabaritos do Capítulo 1 -->
+        <section id="sec1-8">
+            <h2>1.8 Gabaritos</h2>
+            <table class="box-table gabarito-table" role="note" aria-labelledby="answers-title-1">
+                <tr>
+                    <td class="box-content gabarito">
+                        <div id="answers-title-1" class="box-title"><img src="../images/icon-gabarito.png" class="icon-img" alt="Gabaritos"><strong>Gabaritos:</strong></div>
+                        <div>
+                            <p><strong>Estudo de Caso — possíveis respostas:</strong></p>
+                            <ul>
+                                <li><strong>Dados</strong> (exemplos): aluno.nome, aluno.matrícula, livro.ISBN, livro.título, exemplar.código, exemplar.status, empréstimo.data_empréstimo, empréstimo.data_devolução, <strong>avaliação.nota</strong> (1–5), avaliação.data, reserva.data, multa.valor.</li>
+                                <li><strong>Informações</strong>: empréstimos por turma nos últimos 30 dias; livros mais reservados por série; taxa de atraso por mês; <strong>média de avaliação</strong> por livro.</li>
+                                <li><strong>Conhecimentos</strong>: política de enviar lembrete 2 dias antes reduz atrasos; ampliar exemplares de títulos com alta reserva diminui fila; <strong>títulos com média ≥ 4</strong> merecem recomendação em destaque/acervo ampliado.</li>
+                                <li><strong>Consultas</strong>: “Top 10 livros por reservas no trimestre”; “Empréstimos por turma e mês”; “Alunos com multa ativa”; <strong>“Livros com média de avaliação ≥ 4 e ao menos 5 avaliações”</strong>.</li>
+                            </ul>
+                            <hr />
+                            <p><strong>Exercícios Complementares — possíveis respostas:</strong></p>
+                            <ol>
+                                <li>Barbearia: dados possíveis — cliente.nome, serviço.tipo, agenda.data; informações — serviços mais frequentes, pico de horários; consultas — “serviços por semana”.</li>
+                                <li>Academia: campos — aluno.id, plano.tipo, frequência.mensal; consultas — “alunos com frequência &lt; 2/semana”, “planos com maior retenção”.</li>
+                                <li>Locadora: chaves — carro.id, contrato.id, cliente.id; regras — devolução exige contrato ativo; multa aplica regras por atraso &gt;= 1 dia.</li>
+                                <li>Dado × Informação × Conhecimento: exemplo — registros de compras → ticket médio mensal → decisão de oferecer desconto progressivo.</li>
+                            </ol>
+                            <hr />
+                            <p><strong>Exercícios Integrados — possíveis respostas:</strong></p>
+                            <ol>
+                                <li>Biologia: consultas por bioma e período; integridade — ocorrência precisa de espécie válida e coordenadas.</li>
+                                <li>Química: ACID — logs imutáveis de resultados; integridade — reagente deve existir no catálogo e quantidades consistentes.</li>
+                                <li>História: visões — por período e por tema; consultas — “documentos por década”, “temas mais frequentes”.</li>
+                                <li>Geografia: índices — top 10 IDH por região; consultas — “municípios por área &gt; X com densidade &lt; Y”.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <div class='page-foot'>Prof. Rafael Vargas Mesquita — Apostila: Banco de Dados • Capítulo 1</div>
+
+    </div>
+</body>
+
+</html>

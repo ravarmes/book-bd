@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="300" viewBox="0 0 800 300" role="img" aria-label="Arquitetura de Três Esquemas - Melhorada">
+  <title>Arquitetura de Três Esquemas</title>
+  <desc>Níveis Externo, Conceitual e Interno com ícones, descrições e separadores indicando independência de dados</desc>
+  <rect x="0" y="0" width="800" height="300" fill="#ffffff" />
+  <defs>
+    <style><![CDATA[
+      .box { fill: #f9f9f9; stroke: #333; stroke-width: 1.5; border-radius: 10px; }
+      .label { font-family: sans-serif; font-size: 18px; fill: #111; font-weight: 700; }
+      .sub { font-family: sans-serif; font-size: 14px; fill: #333; }
+      .icon { fill: none; stroke: #007bff; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .arrow { stroke: #007bff; stroke-width: 3; marker-end: url(#arrowhead); fill: none; }
+      .sep { stroke: #ccc; stroke-width: 2; stroke-dasharray: 6 6; }
+      .caption { font-family: sans-serif; font-size: 14px; fill: #555; font-weight: 500; }
+    ]]></style>
+    <marker id="arrowhead" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#007bff" />
+    </marker>
+
+    <g id="icon-external">
+      <rect x="2" y="10" width="46" height="30" rx="4" />
+      <line x1="2" y1="40" x2="48" y2="40" />
+      <circle cx="15" cy="23" r="4" fill="#007bff" />
+      <path d="M 25 32 C 25 28 30 28 30 32" stroke-width="2" />
+    </g>
+
+    <g id="icon-conceptual">
+      <circle cx="25" cy="25" r="23" />
+      <line x1="2" y1="25" x2="48" y2="25" />
+      <line x1="25" y1="2" x2="25" y2="48" />
+      <circle cx="25" cy="25" r="5" fill="#007bff" />
+      <circle cx="5" cy="5" r="3" fill="#007bff" />
+      <circle cx="45" cy="5" r="3" fill="#007bff" />
+      <circle cx="5" cy="45" r="3" fill="#007bff" />
+      <circle cx="45" cy="45" r="3" fill="#007bff" />
+    </g>
+
+    <g id="icon-internal">
+      <rect x="5" y="5" width="40" height="20" rx="3" />
+      <line x1="5" y1="12" x2="45" y2="12" stroke-width="1.5" stroke-dasharray="3 3" />
+      <rect x="5" y="25" width="40" height="20" rx="3" />
+      <line x1="5" y1="32" x2="45" y2="32" stroke-width="1.5" stroke-dasharray="3 3" />
+      <circle cx="10" cy="17" r="1.5" fill="#007bff" />
+      <circle cx="10" cy="37" r="1.5" fill="#007bff" />
+    </g>
+  </defs>
+
+  <line class="sep" x1="270" y1="20" x2="270" y2="250" />
+  <line class="sep" x1="530" y1="20" x2="530" y2="250" />
+
+  <rect class="box" x="40" y="50" width="220" height="150" rx="10" />
+  <use href="#icon-external" class="icon" x="125" y="65" width="50" height="50" />
+  <text class="label" x="150" y="130" text-anchor="middle">Externo</text>
+  <text class="sub" x="150" y="155" text-anchor="middle">Visões dos usuários</text>
+  <text class="sub" x="150" y="175" text-anchor="middle">Relatórios / Formulários</text>
+
+  <rect class="box" x="290" y="50" width="220" height="150" rx="10" />
+  <use href="#icon-conceptual" class="icon" x="375" y="65" width="50" height="50" />
+  <text class="label" x="400" y="130" text-anchor="middle">Conceitual</text>
+  <text class="sub" x="400" y="155" text-anchor="middle">Estrutura global</text>
+  <text class="sub" x="400" y="175" text-anchor="middle">Entidades / Relacionamentos</text>
+
+  <rect class="box" x="540" y="50" width="220" height="150" rx="10" />
+  <use href="#icon-internal" class="icon" x="625" y="65" width="50" height="50" />
+  <text class="label" x="650" y="130" text-anchor="middle">Interno</text>
+  <text class="sub" x="650" y="155" text-anchor="middle">Armazenamento físico</text>
+  <text class="sub" x="650" y="175" text-anchor="middle">Arquivos / Índices</text>
+
+  <line class="arrow" x1="260" y1="125" x2="290" y2="125" />
+  <line class="arrow" x1="510" y1="125" x2="540" y2="125" />
+
+  <text class="caption" x="400" y="260" text-anchor="middle">
+    Independência de dados: mudanças no nível interno não afetam visões externas
+  </text>
+</svg>

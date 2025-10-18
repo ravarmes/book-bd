@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Título do Seu Capítulo</title>
+    <link rel="stylesheet" type="text/css" href="../css/style.css" />
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <h1 id="capx">CAPÍTULO X – Título do Capítulo</h1>
+            <p class="lead">Breve resumo ou lead do capítulo.</p>
+        </header>
+
+        <hr />
+
+        <section id="secx-1">
+            <h2>X.1 Título da Primeira Seção</h2>
+            <p>Conteúdo da seção...</p>
+
+            <table class="box-table tip-table">
+                <tr>
+                    <td class="box-content tip" role="note" aria-labelledby="tip-title-x">
+                        <div id="tip-title-x" class="box-title"><img src="../images/icon-definicao.png" class="icon-img"
+                                alt="Definição"><strong>Definição</strong></div>
+                        <div>
+                            <p>Este é um bloco de para definição de conceitos.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="box-table warning-table">
+                <tr>
+                    <td class="box-content warning" role="note" aria-labelledby="warn-title-x">
+                        <div id="warn-title-x" class="box-title"><img src="../images/icon-importante.png"
+                                class="icon-img" alt="Importante"><strong>Importante</strong></div>
+                        <div>
+                            <p>Este é um bloco de avisos importantes.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </section>
+
+        <section id="secx-2">
+            <h2>X.2 Título da Segunda Seção</h2>
+            <p>Conteúdo da seção...</p>
+
+            <figure>
+                <img src='../images/report-frequency.svg'
+                    alt='Gráfico de barras: frequência de empréstimos por turma' />
+                <figcaption><strong>Figura 1.1 - </strong>Gráfico ilustrativo da frequência de
+                    empréstimos por turma.
+                </figcaption>
+            </figure>
+
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 1 - </strong>Criação de tabela e consulta simples (SQL)
+                </figcaption>
+                <pre class='code sql'>
+-- Exemplo simples para contextualizar
+CREATE TABLE Aluno (
+    id INTEGER PRIMARY KEY,
+    nome TEXT NOT NULL,
+    turma TEXT
+);
+
+INSERT INTO Aluno (id, nome, turma) VALUES ( 1, 'Ana', '3A' );
+
+-- Consulta básica
+SELECT nome, turma FROM Aluno WHERE id = 1;
+                </pre>
+            </figure>
+
+            <table class="content-table">
+                <caption><strong>Tabela 1.1 - </strong>Alunos (Exemplo).</caption>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nome</th>
+                        <th>Turma</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Ana</td>
+                        <td>3A</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Bruno</td>
+                        <td>2B</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </section>
+
+        <section id="secx-3">
+            <h2>X.3 Estudo de Caso: Biblioteca</h2>
+            <table class="box-table case-table" role="note" aria-labelledby="case-title-x">
+                <tr>
+                    <td class="box-content case">
+                        <div id="case-title-x" class="box-title"><img src="../images/icon-estudodecaso.png"
+                                class="icon-img" alt="Estudo de Caso"><strong>Estudo de Caso:</strong></div>
+                        <div>
+                            <p>Texto do Estudo de Caso. Este é um exemplo simples.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </section>
+
+
+        <section id="secx-4">
+            <h2>X.4 Exercícios Complementares</h2>
+
+            <table class="box-table complementary-table" role="note" aria-labelledby="ex-comp-title-x">
+                <tr>
+                    <td class="box-content complementary">
+                        <div id="ex-comp-title-x" class="box-title"><img src="../images/icon-complementar.png"
+                                class="icon-img" alt="Exercícios Complementares"><strong>Exercícios
+                                Complementares:</strong></div>
+                        <div>
+                            <ol>
+                                <li>Explique um conceito-chave do capítulo com um exemplo prático.</li>
+                                <li>Liste vantagens e desvantagens do uso de planilhas versus SGBD.</li>
+                                <li>Desenhe um diagrama simples com entidades e relacionamentos do seu caso.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id="secx-5">
+            <h2>X.5 Exercícios Integrados</h2>
+            <table class="box-table integrated-table" role="note" aria-labelledby="ex-int-title-x">
+                <tr>
+                    <td class="box-content integrated">
+                        <div id="ex-int-title-x" class="box-title"><img src="../images/icon-integrado.png"
+                                class="icon-img" alt="Exercícios Integrados"><strong>Exercícios Integrados:</strong>
+                        </div>
+                        <div>
+                            <ol>
+                                <li>Defina um relatório integrando múltiplas tabelas e descreva os dados necessários.
+                                </li>
+                                <li>Proponha regras para evitar conflitos de atualização e garantir consistência.</li>
+                                <li>Indique como calcular atrasos ou métricas de desempenho relacionadas ao tema.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+
+
+        <div class="page-foot">Prof. Rafael Vargas Mesquita — Apostila: Banco de Dados • Capítulo X</div>
+
+    </div>
+</body>
+
+</html>

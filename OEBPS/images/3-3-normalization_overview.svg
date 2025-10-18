@@ -1,0 +1,171 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1180 520" width="1180" height="520">
+  <defs>
+    <style>
+      .title-main { font: 700 36px 'Segoe UI', Arial, sans-serif; fill:#1a1a1a; }
+      .title-sub { font: 500 16px 'Segoe UI', Arial, sans-serif; fill:#666; }
+      .step-title { font: 700 20px 'Segoe UI', Arial, sans-serif; fill:white; }
+      .step-label { font: 600 14px 'Segoe UI', Arial, sans-serif; fill:white; opacity:0.9; }
+      .step-text { font: 500 15px 'Segoe UI', Arial, sans-serif; fill:white; }
+      .step-text-bold { font: 600 15px 'Segoe UI', Arial, sans-serif; fill:white; }
+      .arrow-line { stroke:#2c3e50; stroke-width:3; fill:none; }
+      .arrow-head { fill:#2c3e50; }
+      .step-1fn { fill:#5B7C99; stroke:#3D4F5F; stroke-width:2; }
+      .step-2fn { fill:#E67E22; stroke:#C85A0A; stroke-width:2; }
+      .step-3fn { fill:#27AE60; stroke:#1B5E20; stroke-width:2; }
+      .legend-box { fill:#f9f9f9; stroke:#ddd; stroke-width:1.5; }
+      .legend-text { font: 500 13px 'Segoe UI', Arial, sans-serif; fill:#333; }
+      .legend-label { font: 600 13px 'Segoe UI', Arial, sans-serif; fill:#333; }
+    </style>
+    
+    <!-- Ícones representativos -->
+    <g id="icon-1fn">
+      <!-- Átomo/partícula -->
+      <circle cx="0" cy="0" r="3" fill="white"/>
+      <circle cx="-5" cy="-5" r="2.5" fill="white" opacity="0.8"/>
+      <circle cx="5" cy="-4" r="2.5" fill="white" opacity="0.8"/>
+      <circle cx="-4" cy="5" r="2" fill="white" opacity="0.8"/>
+      <circle cx="5" cy="4" r="2" fill="white" opacity="0.8"/>
+      <line x1="0" y1="0" x2="-5" y2="-5" stroke="white" stroke-width="0.8" opacity="0.6"/>
+      <line x1="0" y1="0" x2="5" y2="-4" stroke="white" stroke-width="0.8" opacity="0.6"/>
+      <line x1="0" y1="0" x2="-4" y2="5" stroke="white" stroke-width="0.8" opacity="0.6"/>
+      <line x1="0" y1="0" x2="5" y2="4" stroke="white" stroke-width="0.8" opacity="0.6"/>
+    </g>
+    
+    <g id="icon-2fn">
+      <!-- Engrenagem/múltiplas partes -->
+      <circle cx="0" cy="0" r="7" fill="none" stroke="white" stroke-width="1.2"/>
+      <circle cx="-4" cy="-4" r="2.5" fill="white" opacity="0.7"/>
+      <circle cx="4" cy="-4" r="2.5" fill="white" opacity="0.7"/>
+      <circle cx="-5" cy="3" r="2" fill="white" opacity="0.7"/>
+      <circle cx="5" cy="3" r="2" fill="white" opacity="0.7"/>
+      <line x1="-3" y1="-3" x2="3" y2="3" stroke="white" stroke-width="1.2" opacity="0.6"/>
+    </g>
+    
+    <g id="icon-3fn">
+      <!-- Corrente/ligação entre elementos -->
+      <rect x="-2" y="-6" width="4" height="4" fill="white" rx="0.5"/>
+      <rect x="-2" y="2" width="4" height="4" fill="white" rx="0.5"/>
+      <rect x="-6" y="-1" width="4" height="2" fill="white" opacity="0.6"/>
+      <rect x="2" y="-1" width="4" height="2" fill="white" opacity="0.6"/>
+      <line x1="-2" y1="-4" x2="-2" y2="2" stroke="white" stroke-width="1.5" stroke-dasharray="1,1" opacity="0.8"/>
+      <line x1="2" y1="-4" x2="2" y2="2" stroke="white" stroke-width="1.5" stroke-dasharray="1,1" opacity="0.8"/>
+    </g>
+    
+    <!-- Marcador de seta -->
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#2c3e50"/>
+    </marker>
+  </defs>
+  
+  <!-- Título -->
+  <text class="title-main" x="600" y="50" text-anchor="middle">Normalização de Banco de Dados</text>
+  <text class="title-sub" x="600" y="75" text-anchor="middle">1ª, 2ª e 3ª Formas Normais (1FN, 2FN, 3FN)</text>
+  
+  <!-- ========== 1FN ========== -->
+  <g id="step1fn">
+    <!-- Caixa 1FN -->
+    <rect class="step-1fn" x="40" y="120" width="330" height="380" rx="12"/>
+    
+    <!-- Número do passo -->
+    <circle cx="75" cy="155" r="22" fill="white" opacity="0.3"/>
+    <text style="font: 700 28px 'Segoe UI', Arial, sans-serif; fill:white;" x="75" y="168" text-anchor="middle">1</text>
+    
+    <!-- Ícone -->
+    <use href="#icon-1fn" x="205" y="155"/>
+    
+    <!-- Título -->
+    <text class="step-title" x="205" y="210" text-anchor="middle">Primeira Forma</text>
+    <text class="step-title" x="205" y="235" text-anchor="middle">Normal</text>
+    <text class="step-label" x="205" y="255" text-anchor="middle">(1FN)</text>
+    
+    <!-- Separador -->
+    <line x1="55" y1="270" x2="355" y2="270" stroke="white" stroke-width="1" opacity="0.3"/>
+    
+    <!-- Conteúdo -->
+    <text class="step-text-bold" x="205" y="295" text-anchor="middle">Objetivo:</text>
+    <text class="step-text" x="205" y="315" text-anchor="middle">Eliminar atributos</text>
+    <text class="step-text" x="205" y="333" text-anchor="middle">multivalorados e compostos</text>
+    
+    <text class="step-text-bold" x="205" y="362" text-anchor="middle">Regra:</text>
+    <text class="step-text" x="205" y="382" text-anchor="middle">Todos os dados devem</text>
+    <text class="step-text" x="205" y="400" text-anchor="middle">ser atômicos (indivisíveis)</text>
+    
+    <text class="step-text-bold" x="205" y="429" text-anchor="middle">Exemplo:</text>
+    <text class="step-text" x="205" y="449" text-anchor="middle">✗ Telefones múltiplos no aluno</text>
+    <text class="step-text" x="205" y="467" text-anchor="middle">✔ Tabela separada `telefone_aluno`</text>
+  </g>
+  
+    <!-- Seta 1FN → 2FN -->
+  <line class="arrow-line" x1="370" y1="310" x2="420" y2="310" marker-end="url(#arrowhead)"/>
+  
+  <!-- ========== 2FN ========== -->
+  <g id="step2fn">
+    <!-- Caixa 2FN -->
+    <rect class="step-2fn" x="420" y="120" width="330" height="380" rx="12"/>
+    
+    <!-- Número do passo -->
+    <circle cx="485" cy="155" r="22" fill="white" opacity="0.3"/>
+    <text style="font: 700 28px 'Segoe UI', Arial, sans-serif; fill:white;" x="485" y="168" text-anchor="middle">2</text>
+    
+    <!-- Ícone -->
+    <use href="#icon-2fn" x="585" y="155"/>
+    
+    <!-- Título -->
+    <text class="step-title" x="585" y="210" text-anchor="middle">Segunda Forma</text>
+    <text class="step-title" x="585" y="235" text-anchor="middle">Normal</text>
+    <text class="step-label" x="585" y="255" text-anchor="middle">(2FN)</text>
+    
+    <!-- Separador -->
+    <line x1="435" y1="270" x2="735" y2="270" stroke="white" stroke-width="1" opacity="0.3"/>
+    
+    <!-- Conteúdo -->
+    <text class="step-text-bold" x="585" y="295" text-anchor="middle">Objetivo:</text>
+    <text class="step-text" x="585" y="315" text-anchor="middle">Eliminar dependências</text>
+    <text class="step-text" x="585" y="333" text-anchor="middle">parciais</text>
+    
+    <text class="step-text-bold" x="585" y="362" text-anchor="middle">Regra:</text>
+    <text class="step-text" x="585" y="382" text-anchor="middle">Atributo não-chave deve</text>
+    <text class="step-text" x="585" y="400" text-anchor="middle">depender da chave inteira</text>
+    
+    <text class="step-text-bold" x="585" y="429" text-anchor="middle">Exemplo:</text>
+    <text class="step-text" x="585" y="449" text-anchor="middle">✗ `nome_aluno` em `emprestimo`</text>
+    <text class="step-text" x="585" y="467" text-anchor="middle">✔ Tabela `aluno` com vínculo</text>
+  </g>
+  
+  <!-- Seta 2FN → 3FN -->
+  <line class="arrow-line" x1="750" y1="310" x2="800" y2="310" marker-end="url(#arrowhead)"/>
+  
+  <!-- ========== 3FN ========== -->
+  <g id="step3fn">
+    <!-- Caixa 3FN -->
+    <rect class="step-3fn" x="800" y="120" width="330" height="380" rx="12"/>
+    
+    <!-- Número do passo -->
+    <circle cx="895" cy="155" r="22" fill="white" opacity="0.3"/>
+    <text style="font: 700 28px 'Segoe UI', Arial, sans-serif; fill:white;" x="895" y="168" text-anchor="middle">3</text>
+    
+    <!-- Ícone -->
+    <use href="#icon-3fn" x="965" y="155"/>
+    
+    <!-- Título -->
+    <text class="step-title" x="965" y="210" text-anchor="middle">Terceira Forma</text>
+    <text class="step-title" x="965" y="235" text-anchor="middle">Normal</text>
+    <text class="step-label" x="965" y="255" text-anchor="middle">(3FN)</text>
+    
+    <!-- Separador -->
+    <line x1="815" y1="270" x2="1115" y2="270" stroke="white" stroke-width="1" opacity="0.3"/>
+    
+    <!-- Conteúdo -->
+    <text class="step-text-bold" x="965" y="295" text-anchor="middle">Objetivo:</text>
+    <text class="step-text" x="965" y="315" text-anchor="middle">Eliminar dependências</text>
+    <text class="step-text" x="965" y="333" text-anchor="middle">transitivas</text>
+    
+    <text class="step-text-bold" x="965" y="362" text-anchor="middle">Regra:</text>
+    <text class="step-text" x="965" y="382" text-anchor="middle">Atributo não-chave não</text>
+    <text class="step-text" x="965" y="400" text-anchor="middle">depende de outro não-chave</text>
+    
+    <text class="step-text-bold" x="965" y="429" text-anchor="middle">Exemplo:</text>
+    <text class="step-text" x="965" y="449" text-anchor="middle">✗ `nome_aluno` em `avaliacao`</text>
+    <text class="step-text" x="965" y="467" text-anchor="middle">✔ Só referência à matrícula</text>
+  </g>
+</svg>

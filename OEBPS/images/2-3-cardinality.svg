@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" role="img" aria-label="Exemplos de cardinalidade e participação">
+  <defs>
+    <style>
+      .box { fill:#eef6ff; stroke:#1e5aa6; stroke-width:2; }
+      .title { font: 700 16px 'Segoe UI', Arial, sans-serif; fill:#0b3d91; }
+      .label { font: 600 14px 'Segoe UI', Arial, sans-serif; fill:#08345e; }
+      .line { stroke:#3a4e67; stroke-width:2; }
+      .crow { fill:none; stroke:#3a4e67; stroke-width:2; }
+      .caption { font: 500 14px 'Segoe UI', Arial, sans-serif; fill:#3a4e67; }
+    </style>
+  </defs>
+
+  <!-- Linha 1: 1:1 -->
+  <rect class="box" x="60" y="40" width="160" height="60" rx="8"/>
+  <text class="title" x="140" y="78" text-anchor="middle">PESSOA</text>
+  <rect class="box" x="580" y="40" width="160" height="60" rx="8"/>
+  <text class="title" x="660" y="78" text-anchor="middle">CPF</text>
+  <line class="line" x1="220" y1="70" x2="580" y2="70"/>
+  <text class="label" x="400" y="64" text-anchor="middle">1:1</text>
+
+  <!-- Linha 2: 1:N -->
+  <rect class="box" x="60" y="150" width="160" height="60" rx="8"/>
+  <text class="title" x="140" y="188" text-anchor="middle">DEPARTAMENTO</text>
+  <rect class="box" x="580" y="150" width="160" height="60" rx="8"/>
+  <text class="title" x="660" y="188" text-anchor="middle">FUNCIONÁRIO</text>
+  <line class="line" x1="220" y1="180" x2="520" y2="180"/>
+  <!-- Crow's foot simplificado -->
+  <polyline class="crow" points="520,180 580,160 580,200 520,180"/>
+  <text class="label" x="400" y="174" text-anchor="middle">1:N</text>
+  <text class="caption" x="140" y="225" text-anchor="middle">Participação: Total em FUNCIONÁRIO</text>
+
+  <!-- Linha 3: M:N -->
+  <rect class="box" x="60" y="260" width="160" height="60" rx="8"/>
+  <text class="title" x="140" y="298" text-anchor="middle">ALUNO</text>
+  <rect class="box" x="580" y="260" width="160" height="60" rx="8"/>
+  <text class="title" x="660" y="298" text-anchor="middle">LIVRO</text>
+  <line class="line" x1="220" y1="290" x2="580" y2="290"/>
+  <text class="label" x="400" y="284" text-anchor="middle">M:N</text>
+  <text class="caption" x="400" y="330" text-anchor="middle">Resolver como entidade associativa (EMPRESTIMO) no modelo lógico</text>
+
+  <!-- Rodapé -->
+  <text class="caption" x="400" y="400" text-anchor="middle">Cardinalidade máxima (1:1, 1:N, M:N) e participação mínima indicada</text>
+</svg>

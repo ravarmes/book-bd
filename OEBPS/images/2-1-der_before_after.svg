@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520" role="img" aria-label="Antes e Depois de um DER resolvendo atributos compostos/multivalorados e relacionamento recursivo">
+  <defs>
+    <style>
+      .panel-title { font: 700 18px 'Segoe UI', Arial, sans-serif; fill:#1e5aa6; }
+      .box { fill:#eef6ff; stroke:#1e5aa6; stroke-width:2; }
+      .title { font: 700 16px 'Segoe UI', Arial, sans-serif; fill:#0b3d91; }
+      .label { font: 600 14px 'Segoe UI', Arial, sans-serif; fill:#08345e; }
+      .attr { fill:#fff; stroke:#4677c1; stroke-width:1.8; }
+      .attr2 { fill:#fff; stroke:#4677c1; stroke-width:3; } /* oval duplo para multivalorado */
+      .attr-text { font: 500 13px 'Segoe UI', Arial, sans-serif; fill:#08345e; }
+      .diamond { fill:#fff9e6; stroke:#b36b00; stroke-width:2; }
+      .line { stroke:#3a4e67; stroke-width:2; }
+      .caption { font: 500 13px 'Segoe UI', Arial, sans-serif; fill:#3a4e67; }
+      .role { font: 600 12px 'Segoe UI', Arial, sans-serif; fill:#b36b00; }
+    </style>
+  </defs>
+
+  <!-- Títulos dos painéis -->
+  <text class="panel-title" x="160" y="30" text-anchor="middle">Antes</text>
+  <text class="panel-title" x="740" y="30" text-anchor="middle">Depois</text>
+
+  <!-- Painel ANTES -->
+  <!-- ALUNO com Endereco composto -->
+  <rect class="box" x="60" y="60" width="180" height="60" rx="8"/>
+  <text class="title" x="150" y="95" text-anchor="middle">ALUNO</text>
+  <ellipse class="attr" cx="150" cy="150" rx="80" ry="24"/>
+  <text class="attr-text" x="150" y="154" text-anchor="middle">Endereco</text>
+  <!-- subatributos do composto -->
+  <ellipse class="attr" cx="90" cy="190" rx="60" ry="20"/>
+  <text class="attr-text" x="90" y="194" text-anchor="middle">Logradouro</text>
+  <ellipse class="attr" cx="150" cy="210" rx="55" ry="18"/>
+  <text class="attr-text" x="150" y="214" text-anchor="middle">Número</text>
+  <ellipse class="attr" cx="210" cy="190" rx="55" ry="18"/>
+  <text class="attr-text" x="210" y="194" text-anchor="middle">Bairro</text>
+  <line class="line" x1="150" y1="174" x2="90" y2="170"/>
+  <line class="line" x1="150" y1="174" x2="150" y2="192"/>
+  <line class="line" x1="150" y1="174" x2="210" y2="170"/>
+
+  <!-- LIVRO com Autores multivalorados -->
+  <rect class="box" x="300" y="60" width="180" height="60" rx="8"/>
+  <text class="title" x="390" y="95" text-anchor="middle">LIVRO</text>
+  <ellipse class="attr2" cx="390" cy="150" rx="90" ry="26"/>
+  <text class="attr-text" x="390" y="154" text-anchor="middle">Autores</text>
+
+  <!-- CATEGORIA com relacionamento recursivo (sem papéis) -->
+  <rect class="box" x="60" y="280" width="180" height="60" rx="8"/>
+  <text class="title" x="150" y="315" text-anchor="middle">CATEGORIA</text>
+  <polygon class="diamond" points="170,360 210,330 250,360 210,390"/>
+  <text class="label" x="210" y="362" text-anchor="middle">SUBCATEGORIA_DE</text>
+  <line class="line" x1="240" y1="360" x2="240" y2="310"/>
+  <line class="line" x1="180" y1="330" x2="180" y2="360"/>
+
+  <!-- Painel DEPOIS -->
+  <!-- ALUNO com atributos atômicos -->
+  <rect class="box" x="600" y="60" width="180" height="60" rx="8"/>
+  <text class="title" x="690" y="95" text-anchor="middle">ALUNO</text>
+  <ellipse class="attr" cx="630" cy="150" rx="100" ry="24"/>
+  <text class="attr-text" x="630" y="154" text-anchor="middle">Logradouro</text>
+  <ellipse class="attr" cx="690" cy="190" rx="70" ry="22"/>
+  <text class="attr-text" x="690" y="194" text-anchor="middle">Número</text>
+  <ellipse class="attr" cx="760" cy="150" rx="70" ry="22"/>
+  <text class="attr-text" x="760" y="154" text-anchor="middle">Bairro</text>
+  <line class="line" x1="690" y1="120" x2="630" y2="146"/>
+  <line class="line" x1="690" y1="120" x2="690" y2="168"/>
+  <line class="line" x1="690" y1="120" x2="760" y2="146"/>
+
+  <!-- LIVRO com entidade AUTOR e relacionamento ESCREVE (M:N) -->
+  <rect class="box" x="520" y="280" width="180" height="60" rx="8"/>
+  <text class="title" x="610" y="315" text-anchor="middle">LIVRO</text>
+  <rect class="box" x="780" y="280" width="180" height="60" rx="8"/>
+  <text class="title" x="870" y="315" text-anchor="middle">AUTOR</text>
+  <polygon class="diamond" points="700,320 740,295 780,320 740,345"/>
+  <text class="label" x="740" y="322" text-anchor="middle">ESCREVE</text>
+  <line class="line" x1="700" y1="320" x2="700" y2="310"/>
+  <line class="line" x1="780" y1="320" x2="780" y2="310"/>
+  <text class="caption" x="740" y="370" text-anchor="middle">Cardinalidade: M:N</text>
+
+  <!-- CATEGORIA com recursivo anotado (papéis Pai/Filho) -->
+  <rect class="box" x="600" y="420" width="180" height="60" rx="8"/>
+  <text class="title" x="690" y="455" text-anchor="middle">CATEGORIA</text>
+  <polygon class="diamond" points="740,460 780,435 820,460 780,485"/>
+  <text class="label" x="780" y="462" text-anchor="middle">SUBCATEGORIA_DE</text>
+  <line class="line" x1="820" y1="460" x2="820" y2="450"/>
+  <line class="line" x1="720" y1="435" x2="720" y2="460"/>
+  <text class="role" x="725" y="438">Pai</text>
+  <text class="role" x="815" y="448">Filho</text>
+
+  <!-- Rodapé explicativo -->
+  <text class="caption" x="450" y="505" text-anchor="middle">Antes: composto e multivalorado direto na entidade; recursivo sem papéis. Depois: composto decomposto em atômicos; multivalorado modelado via entidade/relacionamento; recursivo com papéis nomeados.</text>
+</svg>

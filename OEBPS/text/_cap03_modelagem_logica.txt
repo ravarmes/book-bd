@@ -1,0 +1,189 @@
+### CAPÍTULO 3 – Modelo Lógico Relacional: A Estrutura Formal do Banco
+
+O Modelo Lógico é o nível de abstração que descreve quais dados estão armazenados no computador e como eles se relacionam, representando a realidade do problema com uma visão geral dos principais dados e relacionamentos. Ele deve ser uma visão abstrata apropriada para a equipe de desenvolvimento. Um modelo lógico eficiente precisa estar normalizado e ter as chaves estrangeiras criadas corretamente. O modelo lógico mais utilizado é o **Modelo Relacional**, que classifica os dados em tabelas compostas por colunas e linhas que possuem relacionamentos.
+
+🧩 **Ferramenta:** brModelo (Web)
+
+Embora o brModelo não seja detalhado nas fontes, ferramentas CASE (Computer Aided Software Engineering) como o **ERDPlus** e o **MySQL Workbench** são mencionadas como manipuladoras de modelos ER capazes de gerar automaticamente um BD relacional.
+
+## 3.1 Transformação do Modelo Conceitual em Relacional.
+
+A modelagem lógica consiste na transformação do Modelo Conceitual (geralmente Modelo Entidade-Relacionamento – MER) em um modelo lógico, que no nosso contexto é o modelo relacional. O Modelo Relacional representa os dados em uma coleção de tabelas, onde as linhas são chamadas de *tuplas* ou *registros* e as colunas são *atributos* ou *campos*.
+
+A conversão do Modelo ER para o Modelo Relacional é crucial.
+
+## 3.4 Regras de Mapeamento e Convenções.
+
+A transformação do Modelo Entidade-Relacionamento para o Modelo Relacional segue um algoritmo que define as regras para a criação das tabelas (relações), colunas (atributos) e chaves.
+
+As principais regras de mapeamento (Algoritmo de Mapeamento ER-Relacional) são:
+
+1.  **Mapeamento de Tipos de Entidade Regulares:** Para cada tipo de entidade forte $E$ no modelo ER, cria-se uma relação $R$. Esta relação $R$ inclui todos os atributos de $E$. Atributos compostos devem ter um atributo criado para cada um de seus componentes. Um dos atributos chave da entidade é escolhido para ser a **chave primária (PK)** de $R$.
+2.  **Mapeamento de Tipos de Entidades Fracas:** Para cada entidade fraca $W$ com entidade proprietária $E$, cria-se uma relação $R$. $R$ deve incluir todos os atributos de $W$, além da **chave primária** da entidade proprietária $E$ como uma **chave estrangeira (FK)** em $R$. A chave primária de $R$ será a combinação da chave estrangeira da entidade proprietária e sua chave parcial.
+3.  **Mapeamento de Tipos de Relacionamentos Binários 1:1:** Escolhe-se uma das entidades ($E1$) e inclui-se a chave primária da outra entidade ($E2$) como chave estrangeira em $E1$. É recomendado escolher para $E1$ a entidade com **participação total** no relacionamento. Quaisquer atributos do relacionamento são incluídos em $E1$.
+4.  **Mapeamento de Tipos de Relacionamentos Binários 1:N (ou N:1):** A chave primária da relação do lado "1" é incluída como **chave estrangeira** na relação do lado "**N**". Quaisquer atributos do relacionamento também são incluídos na relação do lado "N".
+5.  **Mapeamento de Tipos de Relacionamentos Binários M:N (Muitos para Muitos):** Cria-se uma **nova relação** para representar o relacionamento. As chaves primárias de ambas as entidades participantes ($R1$ e $R2$) são incluídas como chaves estrangeiras na nova relação. A chave primária da nova relação será composta pela combinação das chaves estrangeiras de $R1$ e $R2$. Atributos do relacionamento, se houver, também são incluídos nessa nova relação.
+6.  **Mapeamento de Atributos Multi-Valorados:** Cria-se uma **nova relação** $R$ para o atributo multi-valorado $A$. Esta relação conterá um atributo relacionado a $A$ e a chave primária da entidade à qual pertence, como chave estrangeira. A chave primária de $R$ pode ser a combinação desses atributos.
+7.  **Mapeamento de Tipos de Relacionamentos N-ários (N > 2):** Cria-se uma relação $R$ para representá-lo. A chave primária de cada entidade participante é incluída como chave estrangeira em $R$. A chave primária de $R$ é a combinação das chaves estrangeiras dos tipos de entidade participantes.
+
+## 3.2 Chaves Primárias, Estrangeiras e Integridade Referencial.
+
+No Modelo Relacional, as chaves são fundamentais para a identificação única dos registros e para estabelecer conexões.
+
+**Chaves Primárias (Primary Keys – PK)**
+Um atributo chave (ou identificador de entidade) é um conjunto de um ou mais atributos cujos valores servem para distinguir unicamente uma ocorrência de uma entidade das demais ocorrências da mesma entidade. Toda entidade deve possuir um identificador. Ao criar uma tabela, a chave primária é especificada com a declaração `PRIMARY KEY`. A chave primária é projetada para não permitir ocorrências múltiplas e nem valores nulos (restrição `NOT NULL` é obrigatória para chaves primárias).
+
+**Chaves Estrangeiras (Foreign Keys – FK)**
+Uma chave estrangeira é uma ou mais colunas de uma tabela cujos valores devem estar fundamentalmente presentes como chave primária de outra tabela. A chave estrangeira é o mecanismo que permite a **implantação de relacionamentos** em um banco de dados relacional.
+
+No SQL, a chave estrangeira é definida usando a declaração `FOREIGN KEY` e indicando, via `REFERENCES`, a tabela e o atributo ao qual ela se refere. O valor da chave estrangeira deve ser um valor que já tenha sido cadastrado na chave primária da tabela correspondente, ou um valor nulo.
+
+**Integridade Referencial**
+A chave estrangeira garante a **integridade referencial** do modelo relacional. Esta é uma restrição de integridade mais complexa, especificando que um registro em um arquivo deve estar relacionado a registros em outros arquivos. A integridade referencial garante que o valor associado a um campo que seja uma chave estrangeira esteja cadastrado na tabela de referência, evitando inconsistências.
+
+Ao definir uma chave estrangeira, podem ser especificadas ações para exclusão (`ON DELETE`) ou atualização (`ON UPDATE`) do registro referenciado na tabela de origem (pai), afetando os registros na tabela que contém a chave estrangeira (filha):
+*   **CASCADE:** Realiza a exclusão ou atualização em todas as tabelas filhas que possuam o valor da chave que será excluída/atualizada na tabela pai.
+*   **RESTRICT:** Não permite a exclusão na tabela pai de um registro cuja chave primária exista em alguma tabela filha (opção padrão/default).
+*   **SET NULL:** Atribui o valor NULO nas colunas das tabelas filha que contenham o valor da chave que será excluída na tabela pai.
+
+## 3.3 Normalização Detalhada: Primeira, Segunda e Terceira Formas Normais (1FN, 2FN, 3FN).
+
+A normalização é o processo de análise realizado sobre esquemas relacionais para conseguir características desejáveis, como a minimização de redundância de dados e a consequente redução de anomalias de inserção, atualização e exclusão. O processo segue uma cadeia de avaliação top-down, verificando se cada relação satisfaz as formas normais.
+
+**Primeira Forma Normal (1FN)**
+Uma tabela está na **1FN** se e somente se não possuir **atributo multivalorado** ou **atributo composto**. Este procedimento elimina tabelas aninhadas. Ou seja, todos os atributos devem conter apenas dados atômicos (cada atributo deve ter apenas um valor por registro).
+*   **Exemplo:** Se um atributo `Telefone` é multivalorado, deve-se criar uma nova tabela para conter o atributo multivalorado, relacionando-a à tabela original via chave estrangeira. Atributos compostos são resolvidos inserindo os atributos atômicos base diretamente na tabela, eliminando o atributo composto.
+
+**Segunda Forma Normal (2FN)**
+Uma tabela está na **2FN** se estiver na 1FN e **não possuir dependência funcional parcial**. A 2FN só é aplicável a tabelas que possuem uma **chave primária composta** e outros atributos que não façam parte da chave primária.
+*   A **dependência parcial** ocorre quando um ou mais atributos não chave não dependem de **toda** a chave primária composta.
+*   Se houver dependência parcial, a solução é criar novas tabelas para armazenar os dados dos campos redundantes, onde seus valores apresentam repetição, e remover esses campos da tabela original. Em seguida, criam-se chaves primárias nas novas tabelas (baseadas na parte da chave composta de que dependiam) e relações 1:N com a tabela original.
+
+**Terceira Forma Normal (3FN)**
+Uma tabela está na **3FN** se estiver na 2FN e **não possuir nenhuma dependência funcional transitiva**.
+*   A **dependência transitiva** ocorre quando um atributo não chave depende de outro atributo não chave.
+*   **Exemplo:** Se em uma tabela `Departamento` (chave `Cod_departamento`), o atributo `Nome_gerente` depende do atributo `Cod_gerente`, e `Cod_gerente` não é a chave primária, ocorre uma dependência transitiva.
+*   A solução é semelhante à da 2FN: cria-se uma nova tabela (ex: `tbGerente`) para isolar a dependência funcional, contendo o atributo dependente e o atributo do qual ele depende (`Cod_gerente` e `Nome_gerente`), e a tabela original mantém uma chave estrangeira para essa nova tabela.
+
+Atingir a 3FN é geralmente satisfatório para a maioria dos projetos.
+
+## 3.5 Exportando o Código DDL SQL no brModelo.
+
+Após a modelagem lógica relacional e a normalização, a próxima etapa é a implementação do modelo lógico no SGBD. Isso envolve a utilização da **Linguagem de Definição de Dados (DDL)** da SQL.
+
+Ferramentas CASE, como o MySQL Workbench, auxiliam nesse processo, gerando automaticamente os comandos SQL a partir do modelo visual.
+
+O comando principal da DDL para criar a estrutura do banco de dados relacional é o `CREATE TABLE`.
+
+A sintaxe básica para criação de uma tabela inclui a especificação de:
+
+1.  **Nome da Tabela** (`<nome-tabela>`).
+2.  **Definição dos Atributos** (`<nome-coluna> <tipo-dado>`). Tipos de dados comuns incluem `INT`, `VARCHAR(N)`, `DATE`, `DECIMAL`.
+3.  **Restrição NOT NULL** (para campos obrigatórios, especialmente a chave primária).
+4.  **Chave Primária** (`PRIMARY KEY (<nome-coluna-chave>)`).
+5.  **Chave Estrangeira** (se houver, definindo a integridade referencial):
+    `FOREIGN KEY (<nome-coluna-chave-estrangeira>) REFERENCES <nome-tabela-origem> ON DELETE [RESTRICT | CASCADE | SET NULL]`.
+
+Ao utilizar uma ferramenta visual (como o conceito do brModelo ou MySQL Workbench), o comando DDL é gerado, permitindo a exportação do *script* SQL que pode ser executado diretamente no SGBD.
+
+## 3.6 ESTUDO DE CASO (E.C.): Modelo Lógico da Biblioteca. (Prática relacionada ao conteúdo do capítulo no contexto do sistema da biblioteca.)
+
+Considerando o contexto de um sistema de biblioteca, que armazena informações sobre livros, nomes de alunos e solicitações, e o objetivo de desenvolver um sistema para gerenciar locação e devolução de filmes (similar a um sistema de empréstimo), o mapeamento para o Modelo Lógico Relacional (exemplo baseado nas regras 3.4) pode incluir:
+
+| Entidade ER (Conceitual) | Atributos Chave / Relacionamento | Mapeamento (Modelo Lógico Relacional) | Chaves | Regra Aplicada |
+| :--- | :--- | :--- | :--- | :--- |
+| **LIVRO** (Entidade Regular) | Código (PK), Título, Autor | Tabela `LIVRO` | `Codigo` (PK) | Regra 1 |
+| **ALUNO** (Entidade Regular) | Matrícula (PK), Nome, Endereço | Tabela `ALUNO` | `Matricula` (PK) | Regra 1 |
+| **EMPRÉSTIMO** (Relação N:M entre ALUNO e LIVRO) | Data Empréstimo, Data Devolução | Tabela `EMPRESTIMO` | `Matricula_Aluno` (FK, PK parcial), `Codigo_Livro` (FK, PK parcial) | Regra 5 |
+| **TELEFONES** (Atributo Multi-valorado de ALUNO) | Telefone | Tabela `TELEFONE_ALUNO` | `Matricula_Aluno` (FK, PK parcial), `Telefone` (PK parcial) | Regra 6 |
+
+**Convenções (Exemplo de Estrutura SQL DDL):**
+
+```sql
+-- Criação de Tabela de Entidade Regular
+CREATE TABLE ALUNO (
+    Matricula INT NOT NULL,
+    Nome VARCHAR(100) NOT NULL,
+    Endereco VARCHAR(100),
+    PRIMARY KEY (Matricula)
+);
+
+-- Criação de Tabela de Mapeamento M:N (EMPRÉSTIMO)
+CREATE TABLE EMPRESTIMO (
+    Matricula_Aluno INT NOT NULL,
+    Codigo_Livro INT NOT NULL,
+    Data_Emprestimo DATE NOT NULL,
+    Data_Devolucao DATE,
+    PRIMARY KEY (Matricula_Aluno, Codigo_Livro),
+    FOREIGN KEY (Matricula_Aluno) REFERENCES ALUNO(Matricula) ON DELETE CASCADE,
+    FOREIGN KEY (Codigo_Livro) REFERENCES LIVRO(Codigo) ON DELETE RESTRICT
+);
+```
+
+## 3.7 EXERCÍCIOS COMPLEMENTARES (E.C.): Normalização de tabelas em domínios de varejo (Ex: Supermercado). (Exercícios para fixação de conceitos e exercícios práticos do capítulo sobre outros domínios de problemas.)
+
+O domínio de varejo (Supermercado/Loja) é um cenário comum para exemplificar problemas de modelagem e anomalias.
+
+**Objetivo:** Fixar os conceitos de 1FN, 2FN e 3FN.
+
+**Cenário de Varejo (Exemplo Adaptado de Normalização):**
+
+Considere a tabela inicial de vendas de um supermercado que não foi normalizada:
+
+| Cliente\_ID | Nome\_Cliente | Endereço | Telefone(s) | Código\_Gerente | Nome\_Gerente | Item\_ID | Quantidade |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | João Silva | Rua A, Bairro X | 9999-1111, 8888-2222 | 10 | Maria Lima | 50 | 2 |
+
+#### **Passo 1: Adequação à Primeira Forma Normal (1FN)**
+
+**Problema:**
+1. O atributo `Endereço` é composto (Rua, Bairro).
+2. O atributo `Telefone(s)` é multivalorado.
+
+**Ações (Regras 1FN):**
+1. **Atributo Composto:** Decompor `Endereço` em atributos atômicos (`Rua`, `Bairro`).
+2. **Atributo Multivalorado:** Criar uma nova tabela, `TELEFONES`, com a chave primária da tabela original (`Cliente_ID`) como FK, e o atributo `Telefone`.
+
+#### **Passo 2: Adequação à Segunda Forma Normal (2FN)**
+
+*Assumindo uma chave primária composta: (Cliente\_ID, Item\_ID)*
+
+**Problema (Se fosse aplicável):** Se houvesse dependência funcional parcial (por exemplo, `Nome_Cliente` depende apenas de `Cliente_ID`, e não de `Item_ID`).
+
+**Ações (Regras 2FN):**
+1. Criar uma nova tabela (`CLIENTE`) contendo os atributos que dependem apenas de `Cliente_ID` (`Nome_Cliente`, `Rua`, `Bairro`).
+2. A tabela original (`VENDA_ITEM`) manteria apenas os atributos dependentes da chave composta (`Quantidade`) e as chaves estrangeiras (`Cliente_ID`, `Item_ID`).
+
+#### **Passo 3: Adequação à Terceira Forma Normal (3FN)**
+
+*Considerando a tabela Cliente (após 2FN) ou a tabela original (após 1FN) se a 2FN não fosse aplicável.*
+
+**Problema:** Existe dependência funcional transitiva entre atributos não chave: `Nome_Gerente` depende funcionalmente de `Código_Gerente`, e `Código_Gerente` não é chave primária.
+
+**Ações (Regras 3FN):**
+1. Criar uma nova tabela (`GERENTE`) contendo a chave não primária que determina a dependência (`Código_Gerente`) e o atributo determinado (`Nome_Gerente`).
+2. O atributo `Código_Gerente` se torna a chave primária da nova tabela `GERENTE`.
+3. A tabela original (`CLIENTE`) mantém `Código_Gerente` como chave estrangeira, removendo o atributo `Nome_Gerente`.
+
+## 3.8 EXERCÍCIOS INTEGRADOS (E.I.): Mapeamento de Frequência de Práticas Corporais (Educação Física). (Exercícios que relacionam o conteúdo do capítulo com disciplinas do núcleo comum.)
+
+Para um exercício integrado envolvendo Educação Física e Mapeamento Relacional, considere um sistema que registra a frequência e o tipo de práticas corporais realizadas por Alunos ao longo do tempo.
+
+**Objetivo:** Aplicar as regras de mapeamento ER-Relacional (Seção 3.4) no domínio da Educação Física.
+
+**Modelo Conceitual Simplificado:**
+
+*   **Entidades:** `ALUNO`, `PRÁTICA_CORPORAL` (Ex: Natação, Futebol).
+*   **Relacionamento:** `REGISTRA` (Associação entre ALUNO e PRÁTICA\_CORPORAL), com atributos descritivos `Data`, `Duração`.
+*   **Cardinalidade:** Um `ALUNO` pode `REGISTRAR` muitas `PRÁTICAS_CORPORAIS`, e uma `PRÁTICA_CORPORAL` pode ser registrada por muitos `ALUNOS`. (N:M).
+*   **Atributo Chave:** `ALUNO` (`Matricula`), `PRÁTICA_CORPORAL` (`ID_Pratica`).
+
+**Mapeamento para o Modelo Lógico Relacional:**
+
+| Entidade ER | Mapeamento MR (Tabela) | Chaves e Atributos | Regra Aplicada |
+| :--- | :--- | :--- | :--- |
+| **ALUNO** (Regular) | `TB_ALUNO` | `Matricula` (PK), Nome, DataNasc. | Regra 1 |
+| **PRÁTICA\_CORPORAL** (Regular) | `TB_PRATICA` | `ID_Pratica` (PK), Descricao, Tipo. | Regra 1 |
+| **REGISTRA** (N:M) | `TB_REGISTRO_PRATICA` | `Matricula_Aluno` (FK, PK parcial), `ID_Pratica` (FK, PK parcial), `Data`, `Duração`. | Regra 5 |
+
+O relacionamento N:M (`REGISTRA`) é mapeado para uma nova tabela (`TB_REGISTRO_PRATICA`), onde as chaves primárias das entidades `ALUNO` e `PRÁTICA_CORPORAL` são combinadas para formar a chave primária da nova tabela e manter a integridade referencial, conforme a regra 5 do mapeamento M:N.

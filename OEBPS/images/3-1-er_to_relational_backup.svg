@@ -1,0 +1,50 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="300" viewBox="0 0 860 300" role="img" aria-labelledby="title desc">
+  <title id="title">Visão geral: ER para Relacional</title>
+  <desc id="desc">Fluxo didático mostrando entidades e relacionamentos mapeando para tabelas, chaves primárias e estrangeiras e tabelas associativas.</desc>
+  <style>
+    .box{stroke:#333;stroke-width:1.2px;rx:8;ry:8}
+    .er{fill:#e3f2fd}
+    .rel{fill:#e8f5e9}
+    .assoc{fill:#fff3e0}
+    .label{font-family:Arial, Helvetica, sans-serif;font-size:14px;fill:#222}
+    .title{font-size:16px;font-weight:bold}
+    .arrow{stroke:#555;stroke-width:2;marker-end:url(#arrowhead)}
+  </style>
+  <defs>
+    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#555" />
+    </marker>
+  </defs>
+  <!-- ER lado esquerdo -->
+  <rect x="40" y="40" width="220" height="70" class="box er" />
+  <text x="50" y="60" class="label title">Modelo ER</text>
+  <text x="50" y="85" class="label">• entidades</text>
+  <text x="160" y="85" class="label">• atributos</text>
+  <text x="50" y="105" class="label">• relacionamentos</text>
+
+  <rect x="40" y="140" width="220" height="110" class="box er" />
+  <text x="50" y="165" class="label">Exemplos:</text>
+  <text x="60" y="190" class="label">aluno(<tspan font-style="italic">matricula</tspan>, nome)</text>
+  <text x="60" y="210" class="label">livro(<tspan font-style="italic">isbn</tspan>, titulo)</text>
+  <text x="60" y="230" class="label">empresta(aluno, exemplar, data)</text>
+
+  <!-- Setas para Relacional -->
+  <line x1="270" y1="85" x2="590" y2="85" class="arrow" />
+  <line x1="270" y1="195" x2="590" y2="195" class="arrow" />
+
+  <!-- Relacional lado direito -->
+  <rect x="590" y="40" width="230" height="70" class="box rel" />
+  <text x="600" y="60" class="label title">Modelo Relacional</text>
+  <text x="600" y="85" class="label">• tabelas • PK • FK</text>
+
+  <rect x="540" y="130" width="330" height="140" class="box rel" />
+  <text x="550" y="155" class="label">aluno(<tspan font-style="italic">matricula</tspan> PK, nome)</text>
+  <text x="550" y="175" class="label">livro(<tspan font-style="italic">isbn</tspan> PK, titulo)</text>
+  <text x="550" y="195" class="label">emprestimo(matricula FK, cod_exemplar FK, data)</text>
+  <text x="550" y="215" class="label">telefone_aluno(matricula FK, telefone)</text>
+  <text x="550" y="235" class="label">→ relacionamentos M:N viram tabela associativa</text>
+
+  <!-- Destaque Associativa -->
+  <rect x="520" y="245" width="360" height="40" class="box assoc" />
+  <text x="530" y="270" class="label">Ex.: registro_pratica(matricula_aluno, id_pratica, data, duracao)</text>
+</svg>
