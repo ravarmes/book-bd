@@ -1,0 +1,92 @@
+### CAPÍTULO 7 – Integração Web e *Business Intelligence* (BI)
+
+Em um Sistema de Banco de Dados (SBD), a informação armazenada é essencial para o desenvolvimento de aplicações e é um bem precioso que deve ser guardado de forma coerente e adequada. A capacidade de manipular os dados para gerar relatórios e extrair conhecimento é o principal objetivo do BD, apoiando a **tomada de decisão** em empresas e governos.
+
+🌐 **Ferramentas:** Supabase e Power BI
+
+## 7.1 Introdução ao Business Intelligence (BI): A Análise Visual de Dados.
+
+O *Business Intelligence* (BI) refere-se ao processo de coleta, organização, análise, compartilhamento e monitoramento de informações que oferecem suporte à gestão de negócios. O principal propósito é transformar grandes volumes de **dados brutos** em **informação organizada** que gere **conhecimento** e auxilie na tomada de decisões.
+
+Embora os Sistemas Gerenciadores de Banco de Dados (SGBD) provejam os mecanismos de controle de dados e consulta (DQL/SELECT), as ferramentas de BI atuam no nível de abstração mais alto, o **Nível de Visão**, apresentando os dados de forma personalizada e visual.
+
+A análise visual de dados, central ao BI, depende das seguintes capacidades do SGBD:
+
+1.  **Múltiplas Visões dos Dados:** O SGBD suporta múltiplas visões dos dados, permitindo que cada tipo de usuário ou aplicação veja apenas o subconjunto de dados de seu interesse.
+2.  **Consultas Complexas:** A capacidade de executar consultas (DQL) de forma eficiente, utilizando cláusulas como `JOIN`, `GROUP BY` e funções de agregação (`SUM`, `AVG`, `COUNT`), é fundamental para sumarizar e consolidar os dados antes da visualização.
+
+## 7.2 Publicando o Banco no Supabase (DBaaS).
+
+A integração de um BD com a Web e ferramentas de BI frequentemente utiliza uma **Arquitetura Cliente-Servidor de Três Camadas**, onde o servidor de dados é isolado por uma camada intermediária (servidor de aplicação ou Web).
+
+Um serviço de *Database as a Service* (DBaaS), como o Supabase, fornece a infraestrutura necessária para hospedar o banco de dados (que pode ser PostgreSQL, conforme a ferramenta deste capítulo) e automatiza a camada de negócio. O SGBD, seja ele em um PC, numa grande rede de computadores, ou em um serviço em nuvem, utiliza interfaces para interpretar as informações do aplicativo.
+
+Nesta arquitetura de três camadas, o DBaaS atua como:
+
+*   **Camada de Dados (Servidor de Dados):** Mantém os dados, servindo como repositório e executando as solicitações da camada de negócio.
+*   **Camada de Negócio (Servidor de Aplicação):** Implementa as regras de negócio e armazena funções, agindo como intermediário que acessa os dados e aplica a segurança.
+
+## 7.3 API REST do Supabase: Acesso ao Banco via Web.
+
+Para permitir que aplicações web, mobile ou ferramentas de BI se conectem ao banco de dados hospedado (DBaaS), é utilizada uma **API (Interface de Programação de Aplicativos)**.
+
+A API REST, gerada automaticamente pelo Supabase (ou ferramenta similar), cumpre o papel de interface, permitindo que clientes (incluindo o Power BI, neste contexto) solicitem, manipulem e consultem dados.
+
+*   **Função da API:** A API recebe as solicitações da camada de apresentação (o cliente/usuário) e as envia para o SGBD. Ela lida com a complexidade do acesso, manipulação e organização dos dados, traduzindo as requisições HTTP em comandos SQL (DQL/DML) que o banco de dados executa.
+*   **Segurança (DCL):** O DBA (ou, neste caso, a plataforma DBaaS) utiliza comandos DCL (Linguagem de Controle de Dados) para criar regras de segurança, assegurando que a API apenas permita o acesso adequado, restringindo o acesso não-autorizado.
+
+## 7.4 Conexão com Power BI e Análise Descritiva de Dados.
+
+O Power BI (como ferramenta de BI) conecta-se à fonte de dados (o SGBD PostgreSQL, seja diretamente ou via API REST do Supabase) para realizar a análise descritiva.
+
+1.  **Extração de Dados (SELECT):** A ferramenta utiliza consultas `SELECT` para extrair os registros necessários. Para análise, é comum utilizar o `SELECT` em conjunto com funções de agregação, como `AVG` (média) e `SUM` (soma), e junções (`JOIN`) para ligar informações de tabelas distribuídas.
+2.  **Otimização:** Para que a extração de dados seja eficiente, o SGBD deve prover estruturas de busca adequadas. A otimização através de **índices** acelera a busca.
+3.  **Filtragem e Agrupamento:** A análise descritiva frequentemente emprega a cláusula `GROUP BY` para particionar os dados em subgrupos, e a cláusula `HAVING` para impor condições sobre esses grupos, permitindo, por exemplo, analisar o somatório de vendas apenas para clientes que ultrapassaram um certo limite.
+
+## 7.5 Criando Dashboards e Relatórios Visuais.
+
+Dashboards e relatórios visuais são a materialização do **Nível de Visão**. Eles apresentam os dados armazenados no BD, de acordo com a necessidade do usuário.
+
+*   **Vantagem da Visualização:** O relatório visual simplifica a interação com o sistema e permite que o usuário veja apenas o que é necessário.
+*   **Views (Visões):** Antes da visualização, pode-se usar o comando `CREATE VIEW` para salvar uma consulta complexa como uma tabela virtual. Isso simplifica as consultas subsequentes que a ferramenta de BI fará, pois ela irá consultar a *view* ao invés de refazer toda a lógica de `JOINs` e agrupamentos. Uma *view* pode descrever apenas partes dos dados, oferecendo uma versão personalizada das tabelas.
+
+## 7.6 ESTUDO DE CASO: Painel de Empréstimos da Biblioteca e Visualização no Power BI. (Prática relacionada ao conteúdo do capítulo no contexto do sistema da biblioteca.)
+
+No contexto da Biblioteca, o Painel de Empréstimos (Dashboard) visa fornecer informações cruciais para a gestão, como quais são os livros mais populares e o histórico de atrasos.
+
+**1. Preparação dos Dados (Consultas SQL/Views):**
+O SGBD executa consultas complexas baseadas no Modelo Relacional da Biblioteca:
+
+*   **Relatório de Popularidade (Funções de Agregação):** Uma consulta contaria (`COUNT`) o número de vezes que cada livro foi emprestado, agrupando pelo título do livro, como visto anteriormente no Capítulo 5.
+    ```sql
+    -- Exemplo Conceitual de View para Popularidade
+    CREATE VIEW V_LIVROS_POPULARES AS
+    SELECT L.Titulo, COUNT(E.Codigo_Livro) AS Total_Emprestimos
+    FROM LIVRO AS L JOIN EMPRESTIMO AS E ON L.Codigo = E.Codigo_Livro
+    GROUP BY L.Titulo;
+    ```
+*   **Relatório de Atrasos (Filtragem e Junção):** Uma consulta identificaria os registros na tabela `EMPRESTIMO` onde a data de devolução real é posterior à data prevista (ou quando a data prevista já passou e a data real é nula).
+
+**2. Conexão e Análise (Power BI):**
+A ferramenta Power BI se conecta à fonte de dados (PostgreSQL/Supabase) e consome os resultados dessas consultas (diretamente ou via `VIEWs`).
+
+**3. Visualização (Dashboard):**
+O painel visualizaria os dados:
+
+*   **Gráfico de Barras:** Exibindo os livros mais populares, baseando-se na `V_LIVROS_POPULARES` e ordenados de forma descendente.
+*   **Cartões (Cards):** Mostrando a média (`AVG`) de dias de atraso ou o número total (`COUNT`) de atrasos no mês, utilizando funções de agregação.
+
+Este painel fornece aos administradores do sistema da biblioteca a **informação** necessária para apoiar a decisão sobre recompra de títulos ou alteração de políticas de empréstimo.
+
+## 7.7 EXERCÍCIOS COMPLEMENTARES: Conexão com Power BI usando dados de um domínio complementar. (Exercícios para fixação de conceitos e exercícios práticos do capítulo sobre outros domínios de problemas.)
+
+Utilizando o domínio de **Análise de Vendas de um E-commerce** (conforme os exemplos do Capítulo 5), realize as seguintes práticas:
+
+1.  **Criação de View para Análise de Alto Valor:**
+    Crie uma *VIEW* (Visão) chamada `V_CLIENTES_VALOR` que liste o nome, CPF e o valor total (`SUM`) gasto por cada cliente, mas **apenas** para aqueles clientes que gastaram mais de R$ 5.000,00 (`HAVING`).
+
+2.  **Simulação de Visualização:**
+    Explique como uma ferramenta de BI (Power BI) usaria esta *VIEW* para criar um gráfico de rosca que exiba a proporção de gasto de cada cliente de alto valor em relação ao total gasto por todos os clientes de alto valor.
+
+3.  **Índices e Performance (Modelo Físico):**
+    Assumindo que a tabela `CLIENTE` possui milhões de registros e a filtragem da `VIEW` (pelo CPF) está lenta. Proponha um ajuste no **Modelo Físico** (Capítulo 6) para otimizar o desempenho de consulta dessa *VIEW*, utilizando o comando DDL adequado.

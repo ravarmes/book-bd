@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang='pt-BR'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <title>Capítulo 7 — Integração Web e Business Intelligence (BI)</title>
+    <link rel='stylesheet' type='text/css' href='../css/style.css' />
+    <meta name='description' content='Integração Web com Supabase (DBaaS), API REST, conexão com Power BI, análise descritiva (SELECT, JOIN, GROUP BY, HAVING), views, painel (dashboard), estudo de caso Biblioteca e exercícios complementares com gabaritos.' />
+</head>
+
+<body>
+    <div class='container'>
+
+        <header>
+            <h1 id='cap7'>CAPÍTULO 7 – Integração Web e <em>Business Intelligence</em> (BI)</h1>
+            <p class='lead'>Como transformar <strong>dados brutos</strong> em <strong>informação visual</strong> que apoia a
+               <strong>tomada de decisão</strong>. Integração com <strong>Supabase</strong> (DBaaS), acesso via <strong>API REST</strong>,
+               conexão com <strong>Power BI</strong> e organização de consultas com <strong>views</strong>.</p>
+        </header>
+        <hr />
+
+        <!-- Ferramentas -->
+        <table class='box-table tip-table'>
+            <tr>
+                <td class='box-content tip definition' role='note' aria-labelledby='def-title-7-0'>
+                    <div id='def-title-7-0' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Definição'><strong>Ferramentas</strong></div>
+                    <div>
+                        <p><strong>Supabase</strong> (PostgreSQL gerenciado, API REST automática) e <strong>Power BI</strong> (visualização).
+                           A arquitetura utilizada é <em>Cliente–Servidor em Três Camadas</em> (dados, negócio, apresentação).</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <section id='sec7-1'>
+            <h2>7.1 Introdução ao Business Intelligence (BI): A Análise Visual de Dados</h2>
+            <p>O <strong>BI</strong> organiza, analisa e compartilha informações para suportar a gestão.
+               Ferramentas de BI operam no <strong>Nível de Visão</strong>, onde os dados já foram filtrados,
+               agregados e relacionados conforme o interesse dos usuários.</p>
+            <ul>
+                <li><strong>Múltiplas visões dos dados</strong>: cada perfil vê apenas o subconjunto relevante.</li>
+                <li><strong>Consultas complexas</strong>: uso de <code>JOIN</code>, <code>GROUP BY</code>, funções de agregação (<code>SUM</code>, <code>AVG</code>, <code>COUNT</code>) e filtros por grupos (<code>HAVING</code>).</li>
+            </ul>
+            <figure>
+                <img src='../images/report-frequency.svg' alt='Resumo por grupos (contagem e média) para visualização.' />
+                <figcaption class='tight-caption'><strong>Figura 7.1 — </strong>Agregações e agrupamentos: base para visualizações.</figcaption>
+            </figure>
+            <table class='content-table'>
+                <caption><strong>Tabela 7.1 - </strong>Componentes de BI com apoio do SQL</caption>
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Objetivo</th>
+                        <th>SQL de Base</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Resumo</td><td>Sintetiza grande volume</td><td><code>GROUP BY</code> + agregações</td></tr>
+                    <tr><td>Segmentação</td><td>Filtra por perfis/grupos</td><td><code>WHERE</code> / <code>HAVING</code></td></tr>
+                    <tr><td>Relacionamento</td><td>Combina tabelas</td><td><code>JOIN</code></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id='sec7-2'>
+            <h2>7.2 Publicando o Banco no Supabase (DBaaS)</h2>
+            <p>Serviços de <strong>Database as a Service</strong> (DBaaS), como o Supabase, hospedam o banco
+               (PostgreSQL) e automatizam a camada de negócio. A arquitetura de <strong>Três Camadas</strong> organiza o acesso.</p>
+            <table class='box-table important-table'>
+                <tr>
+                    <td class='box-content important' role='note' aria-labelledby='imp-title-7-2'>
+                        <div id='imp-title-7-2' class='box-title'><img src='../images/icon-importante.png' class='icon-img' alt='Importante'><strong>Arquitetura de Três Camadas</strong></div>
+                        <div>
+                            <ul>
+                                <li><strong>Dados</strong> (Servidor de Dados): repositório e execução das consultas.</li>
+                                <li><strong>Negócio</strong> (Servidor de Aplicação): regras de negócio e segurança.</li>
+                                <li><strong>Apresentação</strong> (Cliente): dashboards, relatórios e interface do usuário.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure>
+                <img src='../images/1-3-sgbd_architecture.svg' alt='Visão de alto nível da arquitetura Cliente–Servidor.' />
+                <figcaption><strong>Figura 7.2 — </strong>Arquitetura Cliente–Servidor aplicada ao DBaaS.</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec7-3'>
+            <h2>7.3 API REST do Supabase: Acesso ao Banco via Web</h2>
+            <p>A <strong>API REST</strong> do Supabase disponibiliza endpoints para inserção, consulta e atualização,
+               traduzindo requisições HTTP em comandos SQL executados pelo SGBD.</p>
+            <table class='box-table important-table'>
+                <tr>
+                    <td class='box-content important' role='note' aria-labelledby='imp-title-7-3'>
+                        <div id='imp-title-7-3' class='box-title'><img src='../images/icon-observacao.png' class='icon-img' alt='Observação'><strong>Segurança (DCL)</strong></div>
+                        <div>
+                            <p>Regras de acesso e filtros são definidos na camada de negócio e configurados via <strong>DCL</strong>
+                               (controle de acesso). A API deve expor apenas o necessário.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <h3>Filtros comuns (PostgREST)</h3>
+            <table class='content-table'>
+                <caption><strong>Tabela 7.3.1 - </strong>Operadores de filtro na API REST</caption>
+                <thead>
+                    <tr>
+                        <th>Operador</th>
+                        <th>Exemplo</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>eq</code></td><td><code>?cpf=eq.12345678900</code></td><td>Igualdade</td></tr>
+                    <tr><td><code>ilike</code></td><td><code>?nome=ilike.*silva*</code></td><td>Busca textual (case-insensitive)</td></tr>
+                    <tr><td><code>gt / gte</code></td><td><code>?total=gt.100</code></td><td>Maior / maior ou igual</td></tr>
+                    <tr><td><code>lt / lte</code></td><td><code>?quantidade=lte.10</code></td><td>Menor / menor ou igual</td></tr>
+                    <tr><td><code>in</code></td><td><code>?status=in.("novo","pago")</code></td><td>Pertence ao conjunto</td></tr>
+                    <tr><td><code>is</code></td><td><code>?data_entrega=is.null</code></td><td>Nulidade / booleanos</td></tr>
+                </tbody>
+            </table>
+
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 7.2 — </strong>Consultas REST (conceito)</figcaption>
+                <pre class='code http'>
+GET /rest/v1/cliente?cpf=eq.12345678900
+GET /rest/v1/produto?nome=ilike.*sensor*&order=preco.desc&limit=20
+GET /rest/v1/pedido?status=in.("novo","pago")&select=id,cliente_id,total&range=0-99
+                </pre>
+            </figure>
+
+            <h3>Ordenação e Paginação</h3>
+            <ul>
+                <li><strong>Ordenação</strong>: <code>order=coluna.asc</code> ou <code>order=coluna.desc</code></li>
+                <li><strong>Limite</strong>: <code>limit=100</code>, <strong>offset</strong>: <code>offset=200</code></li>
+                <li><strong>Faixa</strong>: cabeçalho <code>Range: 0-99</code> ou parâmetro <code>range=0-99</code></li>
+            </ul>
+            <p class='small'>Fonte: <a href='https://supabase.com/docs/guides/api' target='_blank' rel='noopener'>Supabase — API REST</a> · <a href='https://postgrest.org/en/stable/api.html' target='_blank' rel='noopener'>PostgREST</a>.</p>
+        </section>
+
+        <section id='sec7-4'>
+            <h2>7.4 Conexão com Power BI e Análise Descritiva de Dados</h2>
+            <p>O Power BI conecta-se ao PostgreSQL (direto ou via API REST do Supabase) para <strong>extrair</strong>
+               e <strong>resumir</strong> dados:</p>
+            <ol>
+                <li><strong>Extração</strong>: consultas <code>SELECT</code> com <code>JOIN</code> e agregações (<code>SUM</code>, <code>AVG</code>, <code>COUNT</code>).</li>
+                <li><strong>Otimização</strong>: <strong>índices</strong> aceleram filtros e ordenações.</li>
+                <li><strong>Filtragem e Agrupamento</strong>: <code>GROUP BY</code> e <code>HAVING</code> para analisar subgrupos.</li>
+            </ol>
+            <figure>
+                <img src='../images/4-5-select_basic.svg' alt='Extrair com SELECT e preparar dados para análises.' />
+                <figcaption><strong>Figura 7.3 — </strong>Camadas SQL: da extração à agregação para visualização.</figcaption>
+            </figure>
+
+            <h3>Modos de conexão do Power BI</h3>
+            <table class='content-table'>
+                <caption><strong>Tabela 7.4.1 - </strong>Import vs DirectQuery vs Live Connection</caption>
+                <thead>
+                    <tr>
+                        <th>Modo</th>
+                        <th>Características</th>
+                        <th>Quando usar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Import</strong></td><td>Copia dados para o modelo do Power BI; desempenho alto; recursos completos</td><td>Datasets moderados; atualização periódica</td></tr>
+                    <tr><td><strong>DirectQuery</strong></td><td>Consulta diretamente a origem; dados sempre atualizados; algumas limitações de modelagem/transformação</td><td>Grandes volumes; requisito de dados em tempo quase real</td></tr>
+                    <tr><td><strong>Live Connection</strong></td><td>Conecta-se a modelos externos (p.ex. Analysis Services); sem importação local</td><td>Governança centralizada; compartilhamento de semântica corporativa</td></tr>
+                </tbody>
+            </table>
+            <p class='small'>Fonte: <a href='https://learn.microsoft.com/power-bi/connect-data/desktop-directquery-about' target='_blank' rel='noopener'>Microsoft Learn — DirectQuery</a> · <a href='https://learn.microsoft.com/power-bi/connect-data/service-live-connect-power-bi-datasets' target='_blank' rel='noopener'>Live Connection</a>.</p>
+        </section>
+
+        <section id='sec7-5'>
+            <h2>7.5 Criando Dashboards e Relatórios Visuais</h2>
+            <p>Dashboards materializam o <strong>Nível de Visão</strong>, apresentando apenas o que importa ao usuário.</p>
+            <ul>
+                <li><strong>Vantagem</strong>: simplifica a interação e foca no objetivo.</li>
+                <li><strong>Views</strong>: <code>CREATE VIEW</code> salva consultas complexas como tabelas virtuais,
+                    reduzindo esforço nas requisições do BI.</li>
+            </ul>
+            <table class='content-table'>
+                <caption><strong>Tabela 7.2 - </strong>Elementos usuais de um Dashboard</caption>
+                <thead>
+                    <tr>
+                        <th>Elemento</th>
+                        <th>Uso</th>
+                        <th>Origem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Gráfico de Barras</td><td>Comparar volumes</td><td>Agregação com <code>GROUP BY</code></td></tr>
+                    <tr><td>Gráfico de Rosca</td><td>Proporções</td><td>Agregação + percentual</td></tr>
+                    <tr><td>Cartão (Card)</td><td>Valor único (KPIs)</td><td>Agregação (<code>SUM</code>, <code>AVG</code>)</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id='sec7-6'>
+            <h2>7.6 ESTUDO DE CASO: Painel de Empréstimos da Biblioteca</h2>
+            <table class='box-table case-table'>
+                <tr>
+                    <td class='box-content case' role='note' aria-labelledby='case-title-7-6'>
+                        <div id='case-title-7-6' class='box-title'><img src='../images/icon-estudodecaso.png' class='icon-img' alt='Estudo de Caso'><strong>Contexto</strong></div>
+                        <div>
+                            <p>O painel apresenta <strong>popularidade</strong> dos livros e o <strong>histórico de atrasos</strong> nos empréstimos.</p>
+                            <ul>
+                                <li><strong>Popularidade</strong> (<code>COUNT</code> por título) — quantas vezes cada livro foi emprestado.</li>
+                                <li><strong>Atrasos</strong> (comparação de datas) — devolução posterior à <em>data prevista</em> ou não devolvido com prazo excedido.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 7.1 — </strong>View de Popularidade de Empréstimos</figcaption>
+                <pre class='code sql'>
+-- Exemplo conceitual de view para popularidade
+CREATE VIEW V_LIVROS_POPULARES AS
+SELECT L.titulo, COUNT(E.codigo_livro) AS total_emprestimos
+FROM LIVRO AS L
+JOIN EMPRESTIMO AS E ON L.codigo = E.codigo_livro
+GROUP BY L.titulo;
+                </pre>
+            </figure>
+            <ul>
+                <li><strong>Gráfico de Barras</strong>: usa <code>V_LIVROS_POPULARES</code> e ordena por <code>total_emprestimos</code> desc.</li>
+                <li><strong>Cards</strong>: média de dias de atraso (<code>AVG</code>) e total de atrasos (<code>COUNT</code>).</li>
+            </ul>
+        </section>
+
+        <section id='sec7-7'>
+            <h2>7.7 EXERCÍCIOS COMPLEMENTARES: E-commerce</h2>
+            <table class='box-table complementary-table'>
+                <tr>
+                    <td class='box-content complementary' role='note' aria-labelledby='comp-title-7-7'>
+                        <div id='comp-title-7-7' class='box-title'><img src='../images/icon-complementar.png' class='icon-img' alt='Exercícios Complementares'><strong>Práticas</strong></div>
+                        <div>
+                            <ol>
+                                <li><strong>View de Alto Valor</strong>: crie a <em>VIEW</em> <code>V_CLIENTES_VALOR</code> listando nome, CPF e <code>SUM</code> gasto por cliente, apenas para quem superou R$ 5.000,00 (<code>HAVING</code>).</li>
+                                <li><strong>Visualização</strong>: explique como o Power BI construiria um <em>gráfico de rosca</em> mostrando a proporção de gasto de cada cliente de alto valor em relação ao total do grupo.</li>
+                                <li><strong>Índices e Performance</strong>: assumindo milhões de registros em <code>CLIENTE</code>, a filtragem da <em>VIEW</em> por CPF está lenta. Proponha um ajuste no <strong>Modelo Físico</strong> (Cap. 6) e forneça o <strong>DDL</strong> adequado.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec7-8'>
+            <h2>7.8 Gabaritos</h2>
+            <table class='box-table gabarito-table'>
+                <tr>
+                    <td class='box-content gabarito' role='note' aria-labelledby='gab-title-7-8'>
+                        <div id='gab-title-7-8' class='box-title'><img src='../images/icon-gabarito.png' class='icon-img' alt='Gabaritos'><strong>Gabaritos</strong></div>
+                        <div>
+                            <p><strong>Complementares (E-commerce)</strong></p>
+
+                            <h4>1) View de Alto Valor (V_CLIENTES_VALOR)</h4>
+                            <ul>
+                                <li><strong>JOINs</strong>: junte <code>CLIENTE</code> com vendas/pedidos (p.ex. <code>PEDIDO</code> / <code>ITEM</code>) para somar valores.</li>
+                                <li><strong>Agregação</strong>: <code>SUM(total)</code> por cliente; agrupe por <code>nome</code> e <code>cpf</code>.</li>
+                                <li><strong>Filtro por grupo</strong>: <code>HAVING SUM(total) &gt; 5000</code> (apenas alto valor).</li>
+                                <li><strong>Ordenação</strong>: opcional, p.ex. <code>ORDER BY SUM(total) DESC</code>.</li>
+                                <li><strong>Exemplo</strong>: <code>CREATE VIEW V_CLIENTES_VALOR AS SELECT C.nome, C.cpf, SUM(P.total) AS total_gasto FROM CLIENTE C JOIN PEDIDO P ON P.id_cliente = C.id GROUP BY C.nome, C.cpf HAVING SUM(P.total) &gt; 5000;</code></li>
+                            </ul>
+
+                            <h4>2) Visualização no Power BI (Gráfico de Rosca)</h4>
+                            <ul>
+                                <li><strong>Fonte</strong>: conecte-se à <code>V_CLIENTES_VALOR</code>.</li>
+                                <li><strong>Categoria</strong>: <code>nome</code> ou <code>cpf</code> do cliente.</li>
+                                <li><strong>Valor</strong>: <code>total_gasto</code>; utilize agregação <em>sum</em> e formatação de moeda.</li>
+                                <li><strong>Proporção</strong>: o gráfico calcula automaticamente a contribuição de cada cliente no total de alto valor.</li>
+                                <li><strong>Segmentação</strong>: use filtros por período, categoria ou faixa de valor conforme necessário.</li>
+                            </ul>
+
+                            <h4>3) Índices e Performance (Modelo Físico – DDL)</h4>
+                            <ul>
+                                <li><strong>Problema</strong>: filtragem por <code>CPF</code> está lenta em uma tabela com milhões de registros.</li>
+                                <li><strong>Ajuste físico</strong>: crie um índice no campo <code>CPF</code> para acelerar <code>WHERE cpf = ...</code>.</li>
+                                <li><strong>DDL</strong>: <code>CREATE INDEX idx_cliente_cpf ON CLIENTE (cpf);</code></li>
+                                <li><strong>Se CPF for único</strong>: prefira <code>CREATE UNIQUE INDEX idx_cliente_cpf_uq ON CLIENTE (cpf);</code>.</li>
+                                <li><strong>Observações</strong>: o índice <em>btree</em> padrão é apropriado para igualdade; avalie índices parciais ou materializações conforme o caso.</li>
+                            </ul>
+
+                            <p><strong>Estudo de Caso (Biblioteca)</strong></p>
+
+                            <h4>Relatório de Popularidade</h4>
+                            <ul>
+                                <li><strong>Estratégia</strong>: <code>JOIN</code> entre <code>LIVRO</code> e <code>EMPRESTIMO</code>, agregação por <code>titulo</code>.</li>
+                                <li><strong>Filtro</strong>: opcional por período (p.ex. mês) usando datas de <code>EMPRESTIMO</code>.</li>
+                                <li><strong>Visual</strong>: gráfico de barras ordenado por <code>total_emprestimos</code> (desc).</li>
+                            </ul>
+
+                            <h4>Relatório de Atrasos</h4>
+                            <ul>
+                                <li><strong>Regra</strong>: atraso quando <code>data_real &gt; data_prevista</code> ou <code>data_prevista &lt; hoje AND data_real IS NULL</code>.</li>
+                                <li><strong>Saídas</strong>: total de atrasos, média de dias e lista de casos críticos.</li>
+                                <li><strong>Visual</strong>: cards (KPIs) e tabela detalhada.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <footer>
+            <hr />
+            <p>Capítulo 7 — Integração Web e BI · Apostila de Banco de Dados</p>
+        </footer>
+
+    </div>
+</body>
+
+</html>

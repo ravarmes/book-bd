@@ -1,0 +1,33 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 800 280' role='img' aria-label='Fluxo DDL: CREATE, ALTER e DROP atualizam o dicionário de dados'>
+  <style>
+    .box { fill:#e6f2ff; stroke:#1f5b7f; stroke-width:2; rx:8; ry:8; }
+    .obj { fill:#fff; stroke:#4a90e2; stroke-width:2; rx:6; ry:6; }
+    .txt { font-family:system-ui,Segoe UI,Arial,sans-serif; font-size:20px; fill:#0b3147; font-weight:600; }
+    .sm { font-size:16px; font-weight:500; }
+    .arrow { stroke:#1f5b7f; stroke-width:2; marker-end:url(#m); }
+  </style>
+  <defs>
+    <marker id='m' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='8' markerHeight='8' orient='auto-start-reverse'>
+      <path d='M 0 0 L 10 5 L 0 10 z' fill='#1f5b7f'/>
+    </marker>
+  </defs>
+
+  <rect x='40' y='20' width='720' height='50' class='box'/>
+  <text x='60' y='52' class='txt'>Comandos DDL — CREATE • ALTER • DROP</text>
+
+  <rect x='60' y='100' width='200' height='60' class='obj'/>
+  <text x='90' y='135' class='txt sm'>Tabela</text>
+
+  <rect x='300' y='100' width='200' height='60' class='obj'/>
+  <text x='330' y='135' class='txt sm'>Índice</text>
+
+  <rect x='540' y='100' width='200' height='60' class='obj'/>
+  <text x='560' y='135' class='txt sm'>Demais objetos</text>
+
+  <rect x='200' y='190' width='400' height='70' class='box'/>
+  <text x='230' y='230' class='txt'>Dicionário de Dados (Metadados)</text>
+
+  <line x1='160' y1='160' x2='300' y2='190' class='arrow'/>
+  <line x1='400' y1='160' x2='400' y2='190' class='arrow'/>
+  <line x1='640' y1='160' x2='500' y2='190' class='arrow'/>
+</svg>

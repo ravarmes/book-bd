@@ -1,0 +1,222 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700" role="img" aria-labelledby="title desc">
+  <defs>
+    <style><![CDATA[
+      .bg-main { fill:#f5f7fa; }
+      .title { font-family: 'Segoe UI', Arial, sans-serif; font-size:28px; fill:#1a2332; font-weight:bold; }
+      .box-primary { fill:#2563eb; stroke:#1e40af; stroke-width:2; rx:12; }
+      .box-secondary { fill:#7c3aed; stroke:#6d28d9; stroke-width:2; rx:12; }
+      .box-accent { fill:#059669; stroke:#047857; stroke-width:2; rx:12; }
+      .arrow-thick { stroke:#2563eb; stroke-width:3; fill:none; marker-end:url(#arrowhead-blue); }
+      .frame { fill:none; stroke:#cbd5e1; stroke-width:1; stroke-dasharray:5,5; rx:8; }
+      .phase-title { font-family: 'Segoe UI', Arial, sans-serif; font-size:14px; fill:#64748b; font-weight:bold; text-transform:uppercase; letter-spacing:1px; }
+      .icon-text { font-family: 'Courier New', monospace; font-size:32px; fill:#fff; font-weight:bold; }
+      .label { font-family: 'Segoe UI', Arial, sans-serif; font-size:16px; fill:#fff; font-weight:bold; }
+    ]]></style>
+    <marker id="arrowhead-blue" markerWidth="10" markerHeight="10" refX="10" refY="5" orient="auto">
+      <polygon points="0 0, 10 5, 0 10" fill="#2563eb" />
+    </marker>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="1200" height="700" class="bg-main" />
+  
+  <!-- Main Title -->
+  <text x="600" y="45" text-anchor="middle" class="title">PostgreSQL → Power BI: Pipeline de Análise</text>
+  
+  <!-- Section 1: Database Icon -->
+  <g>
+    <text x="110" y="105" class="phase-title">1. EXTRAÇÃO</text>
+    
+    <rect x="60" y="130" width="180" height="200" class="frame" />
+    
+    <!-- Database Icon -->
+    <g transform="translate(150, 180)">
+      <!-- Cylinder top -->
+      <ellipse cx="0" cy="0" rx="50" ry="15" fill="#1e40af" stroke="#1e3a8a" stroke-width="2"/>
+      <!-- Cylinder body -->
+      <rect x="-50" y="0" width="100" height="70" fill="#2563eb" stroke="none"/>
+      <rect x="-50" y="0" width="100" height="70" fill="#2563eb" stroke="#1e3a8a" stroke-width="2"/>
+      <!-- Cylinder middle line -->
+      <ellipse cx="0" cy="25" rx="50" ry="15" fill="none" stroke="#1e3a8a" stroke-width="2"/>
+      <ellipse cx="0" cy="50" rx="50" ry="15" fill="none" stroke="#1e3a8a" stroke-width="2"/>
+      <!-- Cylinder bottom -->
+      <ellipse cx="0" cy="70" rx="50" ry="15" fill="#1e40af" stroke="#1e3a8a" stroke-width="2"/>
+      
+      <!-- PostgreSQL label -->
+      <text x="0" y="-25" text-anchor="middle" font-family="'Segoe UI', Arial" font-size="16" fill="#1a2332" font-weight="bold">PostgreSQL</text>
+    </g>
+  </g>
+  
+  <!-- Arrow 1 -->
+  <path d="M 240 230 L 330 230" class="arrow-thick" />
+  
+  <!-- Section 2: SQL Icon -->
+  <g>
+    <text x="450" y="105" class="phase-title">2. PROCESSAMENTO SQL</text>
+    
+    <rect x="330" y="130" width="340" height="200" class="frame" />
+    
+    <!-- SQL Command Icon - Large brackets with code symbol -->
+    <g transform="translate(500, 230)">
+      <!-- Left bracket -->
+      <path d="M -60,-50 L -70,-50 L -70,50 L -60,50" stroke="#6d28d9" stroke-width="6" fill="none" stroke-linecap="round"/>
+      <!-- Right bracket -->
+      <path d="M 60,-50 L 70,-50 L 70,50 L 60,50" stroke="#6d28d9" stroke-width="6" fill="none" stroke-linecap="round"/>
+      
+      <!-- SQL Code lines representation -->
+      <line x1="-40" y1="-25" x2="40" y2="-25" stroke="#7c3aed" stroke-width="5" stroke-linecap="round"/>
+      <line x1="-40" y1="-5" x2="30" y2="-5" stroke="#7c3aed" stroke-width="5" stroke-linecap="round"/>
+      <line x1="-40" y1="15" x2="35" y2="15" stroke="#7c3aed" stroke-width="5" stroke-linecap="round"/>
+      <line x1="-40" y1="35" x2="25" y2="35" stroke="#7c3aed" stroke-width="5" stroke-linecap="round"/>
+      
+      <!-- SQL text -->
+      <text x="0" y="-70" text-anchor="middle" font-family="'Courier New', monospace" font-size="24" fill="#7c3aed" font-weight="bold">SQL</text>
+    </g>
+  </g>
+  
+  <!-- Arrow 2 -->
+  <path d="M 670 230 L 760 230" class="arrow-thick" />
+  
+  <!-- Section 3: Table Result Icon -->
+  <g>
+    <text x="850" y="105" class="phase-title">3. RESULTADO</text>
+    
+    <rect x="760" y="130" width="280" height="200" class="frame" />
+    
+    <!-- Table/Grid Icon -->
+    <g transform="translate(900, 180)">
+      <!-- Table structure -->
+      <rect x="-70" y="-40" width="140" height="120" fill="#e0e7ff" stroke="#4f46e5" stroke-width="3" rx="4"/>
+      
+      <!-- Header row -->
+      <rect x="-70" y="-40" width="140" height="25" fill="#4f46e5" rx="4"/>
+      
+      <!-- Vertical lines -->
+      <line x1="-23" y1="-40" x2="-23" y2="80" stroke="#4f46e5" stroke-width="2"/>
+      <line x1="23" y1="-40" x2="23" y2="80" stroke="#4f46e5" stroke-width="2"/>
+      
+      <!-- Horizontal lines -->
+      <line x1="-70" y1="-15" x2="70" y2="-15" stroke="#4f46e5" stroke-width="2"/>
+      <line x1="-70" y1="10" x2="70" y2="10" stroke="#cbd5e1" stroke-width="2"/>
+      <line x1="-70" y1="35" x2="70" y2="35" stroke="#cbd5e1" stroke-width="2"/>
+      <line x1="-70" y1="60" x2="70" y2="60" stroke="#cbd5e1" stroke-width="2"/>
+      
+      <!-- Data dots to represent content -->
+      <circle cx="-46" cy="-3" r="3" fill="#6366f1"/>
+      <circle cx="0" cy="-3" r="3" fill="#6366f1"/>
+      <circle cx="46" cy="-3" r="3" fill="#6366f1"/>
+      
+      <circle cx="-46" cy="22" r="3" fill="#94a3b8"/>
+      <circle cx="0" cy="22" r="3" fill="#94a3b8"/>
+      <circle cx="46" cy="22" r="3" fill="#94a3b8"/>
+      
+      <circle cx="-46" cy="47" r="3" fill="#94a3b8"/>
+      <circle cx="0" cy="47" r="3" fill="#94a3b8"/>
+      <circle cx="46" cy="47" r="3" fill="#94a3b8"/>
+    </g>
+  </g>
+  
+  <!-- Arrow 3 to Power BI -->
+  <path d="M 600 360 L 600 420" class="arrow-thick" />
+  
+  <!-- Section 4: Power BI Visualization -->
+  <g>
+    <text x="80" y="435" class="phase-title">4. VISUALIZAÇÃO</text>
+    
+    <rect x="50" y="460" width="1100" height="210" class="frame" />
+    
+    <rect x="70" y="475" width="1060" height="30" class="box-accent" rx="8" />
+    <text x="600" y="497" text-anchor="middle" class="label" font-size="16">Power BI Dashboard</text>
+    
+    <!-- Chart 1: Bar Chart (pure visual) -->
+    <g>
+      <rect x="90" y="520" width="240" height="130" fill="#fff" stroke="#cbd5e1" stroke-width="2" rx="6" />
+      
+      <!-- Bars with gradient effect -->
+      <rect x="115" y="555" width="35" height="70" fill="#2563eb" rx="3" opacity="0.9"/>
+      <rect x="160" y="575" width="35" height="50" fill="#3b82f6" rx="3" opacity="0.9"/>
+      <rect x="205" y="585" width="35" height="40" fill="#60a5fa" rx="3" opacity="0.9"/>
+      <rect x="250" y="605" width="35" height="20" fill="#93c5fd" rx="3" opacity="0.9"/>
+      
+      <!-- Axis -->
+      <line x1="105" y1="630" x2="295" y2="630" stroke="#94a3b8" stroke-width="2"/>
+      <line x1="105" y1="545" x2="105" y2="630" stroke="#94a3b8" stroke-width="2"/>
+    </g>
+    
+    <!-- Chart 2: Pie Chart -->
+    <g>
+      <rect x="360" y="520" width="240" height="130" fill="#fff" stroke="#cbd5e1" stroke-width="2" rx="6" />
+      
+      <!-- Pie slices -->
+      <g transform="translate(480, 585)">
+        <!-- Slice 1 (54%) -->
+        <path d="M 0,-50 A 50,50 0 0,1 48,15 L 0,0 Z" fill="#2563eb" opacity="0.9"/>
+        <!-- Slice 2 (27%) -->
+        <path d="M 48,15 A 50,50 0 0,1 -15,48 L 0,0 Z" fill="#3b82f6" opacity="0.9"/>
+        <!-- Slice 3 (13%) -->
+        <path d="M -15,48 A 50,50 0 0,1 -48,-15 L 0,0 Z" fill="#60a5fa" opacity="0.9"/>
+        <!-- Slice 4 (6%) -->
+        <path d="M -48,-15 A 50,50 0 0,1 0,-50 L 0,0 Z" fill="#93c5fd" opacity="0.9"/>
+        
+        <!-- Center circle for donut effect -->
+        <circle cx="0" cy="0" r="25" fill="#fff"/>
+      </g>
+    </g>
+    
+    <!-- Chart 3: Line Chart -->
+    <g>
+      <rect x="630" y="520" width="240" height="130" fill="#fff" stroke="#cbd5e1" stroke-width="2" rx="6" />
+      
+      <!-- Grid lines -->
+      <line x1="650" y1="555" x2="850" y2="555" stroke="#e5e7eb" stroke-width="1"/>
+      <line x1="650" y1="575" x2="850" y2="575" stroke="#e5e7eb" stroke-width="1"/>
+      <line x1="650" y1="595" x2="850" y2="595" stroke="#e5e7eb" stroke-width="1"/>
+      <line x1="650" y1="615" x2="850" y2="615" stroke="#e5e7eb" stroke-width="1"/>
+      
+      <!-- Line chart path -->
+      <polyline points="655,615 680,595 705,605 730,580 755,590 780,565 805,575 830,555" 
+                 stroke="#2563eb" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      
+      <!-- Data points -->
+      <circle cx="655" cy="615" r="4" fill="#2563eb"/>
+      <circle cx="680" cy="595" r="4" fill="#2563eb"/>
+      <circle cx="705" cy="605" r="4" fill="#2563eb"/>
+      <circle cx="730" cy="580" r="4" fill="#2563eb"/>
+      <circle cx="755" cy="590" r="4" fill="#2563eb"/>
+      <circle cx="780" cy="565" r="4" fill="#2563eb"/>
+      <circle cx="805" cy="575" r="4" fill="#2563eb"/>
+      <circle cx="830" cy="555" r="4" fill="#2563eb"/>
+      
+      <!-- Axis -->
+      <line x1="645" y1="630" x2="855" y2="630" stroke="#94a3b8" stroke-width="2"/>
+      <line x1="645" y1="540" x2="645" y2="630" stroke="#94a3b8" stroke-width="2"/>
+    </g>
+    
+    <!-- Chart 4: Area Chart -->
+    <g>
+      <rect x="900" y="520" width="240" height="130" fill="#fff" stroke="#cbd5e1" stroke-width="2" rx="6" />
+      
+      <!-- Area fill -->
+      <polygon points="915,625 940,605 965,595 990,580 1015,590 1040,570 1065,575 1090,560 1090,625" 
+               fill="#93c5fd" opacity="0.5"/>
+      
+      <!-- Line on top -->
+      <polyline points="915,625 940,605 965,595 990,580 1015,590 1040,570 1065,575 1090,560" 
+                 stroke="#2563eb" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      
+      <!-- Data points -->
+      <circle cx="915" cy="625" r="3" fill="#2563eb"/>
+      <circle cx="940" cy="605" r="3" fill="#2563eb"/>
+      <circle cx="965" cy="595" r="3" fill="#2563eb"/>
+      <circle cx="990" cy="580" r="3" fill="#2563eb"/>
+      <circle cx="1015" cy="590" r="3" fill="#2563eb"/>
+      <circle cx="1040" cy="570" r="3" fill="#2563eb"/>
+      <circle cx="1065" cy="575" r="3" fill="#2563eb"/>
+      <circle cx="1090" cy="560" r="3" fill="#2563eb"/>
+      
+      <!-- Axis -->
+      <line x1="910" y1="630" x2="1095" y2="630" stroke="#94a3b8" stroke-width="2"/>
+      <line x1="910" y1="545" x2="910" y2="630" stroke="#94a3b8" stroke-width="2"/>
+    </g>
+  </g>
+</svg>

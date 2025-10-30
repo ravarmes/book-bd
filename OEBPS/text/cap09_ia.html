@@ -1,0 +1,317 @@
+<!doctype html>
+<html lang='pt-BR'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <title>Capítulo 9 — IA Generativa e o Futuro da Análise</title>
+    <link rel='stylesheet' type='text/css' href='../css/style.css' />
+    <meta name='description' content='Base de dados estruturada como insumo para IA e ML. Modelagem (MER), Relacional e SQL; prompts analíticos; dataset de empréstimos (Biblioteca); tendências Big Data/NoSQL; exercícios com gabaritos.' />
+</head>
+
+<body>
+    <div class='container'>
+
+        <header>
+            <h1 id='cap9'>CAPÍTULO 9 – IA Generativa e o Futuro da Análise</h1>
+            <p class='lead'>Como uma <strong>base de dados estruturada</strong> e <strong>consistente</strong> alimenta
+               análises avançadas e aplicações de <strong>IA</strong> e <strong>ML</strong>. Foco na disciplina de BD.</p>
+        </header>
+        <hr />
+
+        <!-- Aviso importante -->
+        <table class='box-table important-table'>
+            <tr>
+                <td class='box-content important' role='note' aria-labelledby='imp-title-9-0'>
+                    <div id='imp-title-9-0' class='box-title'><img src='../images/icon-importante.png' class='icon-img' alt='Importante'><strong>Aviso</strong></div>
+                    <div>
+                        <p>Ferramentas de IA Generativa (ChatGPT, DeepSeek, Gemini, Mônica IA, Notebook LM, etc.) não são
+                           detalhadas nas fontes de apoio. Este capítulo foca nos <strong>fundamentos de BD</strong> que
+                           <em>preparam</em> e <em>viabilizam</em> o uso dessas tecnologias.</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <!-- Ferramentas sugeridas -->
+        <table class='box-table tip-table'>
+            <tr>
+                <td class='box-content tip definition' role='note' aria-labelledby='def-title-9-0'>
+                    <div id='def-title-9-0' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Definição'><strong>Ferramentas sugeridas</strong></div>
+                    <div>
+                        <p><strong>ChatGPT</strong>, <strong>DeepSeek</strong>, <strong>Gemini</strong>, <strong>Mônica IA</strong> — apoio à redação de requisitos,
+                           geração de SQL e organização de consultas; sempre validar e testar no SGBD.</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <section id='sec9-1'>
+            <h2>9.1 Ferramentas de IA para apoiar a Modelagem e a Geração de Código SQL</h2>
+            <p>O projeto de BD segue etapas: requisitos, <strong>modelagem conceitual (MER)</strong>,
+               <strong>projeto lógico (Relacional)</strong> e <strong>projeto físico</strong>. IA pode apoiar na
+               <em>redação</em> e <em>tradução</em> desses artefatos, mas a base é o Modelo Relacional e a SQL.</p>
+            <table class='content-table'>
+                <caption><strong>Tabela 9.1 - </strong>Pipeline de projeto e implementação de BD</caption>
+                <thead>
+                    <tr>
+                        <th>Etapa</th>
+                        <th>Artefato</th>
+                        <th>Saída</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Modelagem</td><td>MER (Entidades/Relacionamentos)</td><td>Diagrama ER</td></tr>
+                    <tr><td>Lógico</td><td>Modelo Relacional</td><td>Tabelas, PK/FK</td></tr>
+                    <tr><td>Físico</td><td>SQL (DDL)</td><td><code>CREATE TABLE</code>, índices</td></tr>
+                </tbody>
+            </table>
+            <figure>
+                <img src='../images/1-5-three_schemas.svg' alt='Três esquemas: conceitual, lógico e físico.' />
+                <figcaption><strong>Figura 9.1 — </strong>Três esquemas: base da informação organizada.</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec9-2'>
+            <h2>9.2 Exemplos de Prompts para Análise e Relatórios</h2>
+            <p>Consultas avançadas (<strong>DQL</strong>) transformam dados em informação visual — junções, agregações,
+               <code>GROUP BY</code>, <code>HAVING</code> e subconsultas.</p>
+            <table class='content-table'>
+                <caption><strong>Tabela 9.2 - </strong>Objetivos analíticos e base SQL</caption>
+                <thead>
+                    <tr>
+                        <th>Objetivo do Relatório</th>
+                        <th>Comando SQL Básico (DQL)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Salário médio por setor</td><td><code>SELECT AVG(Salario), ID_Setor FROM FUNCIONARIO GROUP BY ID_Setor;</code></td></tr>
+                    <tr><td>Clientes com vendas acima de valor</td><td><em>JOIN</em> + agregação + <code>HAVING</code> por cliente</td></tr>
+                    <tr><td>Professores por departamento</td><td><code>JOIN</code> <code>PROFESSOR</code> ↔ <code>DEPARTAMENTO</code></td></tr>
+                </tbody>
+            </table>
+            <figure>
+                <img src='../images/report-frequency.svg' alt='Agregações por grupos para visualização.' />
+                <figcaption class='tight-caption'><strong>Figura 9.2 — </strong>Agregações e agrupamentos: base de relatórios.</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec9-3'>
+            <h2>9.3 EXERCÍCIO GUIADO: Notebook LM como Gerador de Datasets de Sentimento</h2>
+            <table class='box-table case-table'>
+                <tr>
+                    <td class='box-content case' role='note' aria-labelledby='case-title-9-3'>
+                        <div id='case-title-9-3' class='box-title'><img src='../images/icon-estudodecaso.png' class='icon-img' alt='Estudo de Caso'><strong>Contexto</strong></div>
+                        <div>
+                            <p>Gerar <em>dataset</em> limpo para análise de sentimentos a partir de transcrições.
+                               A qualidade vem da <strong>normalização</strong> e das <strong>restrições</strong> do BD.</p>
+                            <ul>
+                                <li><strong>Normalização</strong>: 1FN, 2FN, 3FN minimizam redundância e anomalias.</li>
+                                <li><strong>Integridade</strong>: PK/FK e domínios garantem consistência.</li>
+                                <li><strong>Exportação</strong>: extração via <code>SELECT</code> e exportação para <strong>CSV</strong>.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure>
+                <img src='../images/3-3-normalization_overview.svg' alt='Normalização e integridade como base para datasets.' />
+                <figcaption><strong>Figura 9.3 — </strong>Camadas SQL no preparo de datasets.</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec9-4'>
+            <h2>9.4 ESTUDO DE CASO: Análise com IA do Dataset de Empréstimos (Biblioteca)</h2>
+            <table class='box-table case-table'>
+                <tr>
+                    <td class='box-content case' role='note' aria-labelledby='case-title-9-4'>
+                        <div id='case-title-9-4' class='box-title'><img src='../images/icon-estudodecaso.png' class='icon-img' alt='Estudo de Caso'><strong>Contexto</strong></div>
+                        <div>
+                            <p>Dataset integrando <strong>ALUNO</strong>, <strong>LIVRO</strong> e <strong>EMPRESTIMO</strong> com colunas derivadas
+                               (ex.: <em>Dias_Atraso</em>) para previsão de atraso ou recomendação simples.</p>
+                            <ul>
+                                <li><strong>JOINs</strong>: por PK/FK, recompondo dados normalizados.</li>
+                                <li><strong>Features simples</strong>: atrasos, contagens por aluno e por título.</li>
+                                <li><strong>CSV</strong>: exportação para treinamento e experimentos.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 9.1 — </strong>Consulta base para Dataset de Empréstimos</figcaption>
+                <pre class='code sql'>
+SELECT
+    A.Matricula,
+    A.Nome AS Nome_Aluno,
+    L.Titulo AS Titulo_Livro,
+    E.Data_Emprestimo,
+    E.Data_Devolucao_Prevista,
+    E.Data_Devolucao_Real,
+    (E.Data_Devolucao_Real - E.Data_Devolucao_Prevista) AS Dias_Atraso
+FROM ALUNO AS A
+JOIN EMPRESTIMO AS E ON E.Matricula_Aluno = A.Matricula
+JOIN LIVRO AS L ON L.Codigo = E.Codigo_Livro
+ORDER BY A.Nome, E.Data_Emprestimo;
+                </pre>
+            </figure>
+        </section>
+
+        <section id='sec9-5'>
+            <h2>9.5 Tendências e Oportunidades no Mercado de Dados</h2>
+            <table class='box-table important-table'>
+                <tr>
+                    <td class='box-content important' role='note' aria-labelledby='imp-title-9-5'>
+                        <div id='imp-title-9-5' class='box-title'><img src='../images/icon-importante.png' class='icon-img' alt='Importante'><strong>Tendências</strong></div>
+                        <div>
+                            <ul>
+                                <li><strong>Migração</strong>: popularização do Modelo Relacional (SQL) e independência de dados.</li>
+                                <li><strong>Big Data e NoSQL</strong>: armazenamento de formatos não tradicionais.</li>
+                                <li><strong>Arquiteturas</strong>: Cliente‑Servidor (três camadas) e distribuídas para escalar.</li>
+                                <li><strong>Papel do DBA</strong>: segurança, recuperação e desempenho.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure>
+                <img src='../images/1-3-sgbd_architecture.svg' alt='Arquitetura Cliente–Servidor em três camadas.' />
+                <figcaption><strong>Figura 9.4 — </strong>Três camadas: dados, negócio e apresentação.</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec9-6'>
+            <h2>9.6 EXERCÍCIOS COMPLEMENTARES: Fixação</h2>
+            <table class='box-table complementary-table'>
+                <tr>
+                    <td class='box-content complementary' role='note' aria-labelledby='comp-title-9-6'>
+                        <div id='comp-title-9-6' class='box-title'><img src='../images/icon-complementar.png' class='icon-img' alt='Exercícios Complementares'><strong>Práticas</strong></div>
+                        <div>
+                            <ol>
+                                <li><strong>Funções agregadas e agrupamento</strong>: recuperar <em>departamento</em>, <em>número de professores</em> e <em>salário médio</em>, somente onde há mais de dois professores.</li>
+                                <li><strong>Junção (INNER JOIN)</strong>: listar <em>funcionário</em> e <em>setor</em> apenas quando há setor atribuído, com apelidos.</li>
+                                <li><strong>Ordenação e concatenação</strong>: exibir <em>Nome_Completo</em> e ordenar descendentemente por esse campo.</li>
+                                <li><strong>Filtro (LIKE)</strong>: recuperar <em>Nome</em> de professores nascidos no ano de 1980.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec9-7'>
+            <h2>9.7 Gabaritos</h2>
+            <table class='box-table gabarito-table'>
+                <tr>
+                    <td class='box-content gabarito' role='note' aria-labelledby='gab-title-9-7'>
+                        <div id='gab-title-9-7' class='box-title'><img src='../images/icon-gabarito.png' class='icon-img' alt='Gabaritos'><strong>Gabaritos</strong></div>
+                        <div>
+                            <p><strong>Complementares (Fixação)</strong></p>
+
+                            <h4>1) Agregação e Agrupamento</h4>
+                            <ul>
+                                <li><strong>Estratégia</strong>: <code>GROUP BY</code> por departamento e <code>HAVING COUNT(*) &gt; 2</code>.</li>
+                                <li><strong>Consulta</strong>: <code>SELECT DNumero, COUNT(*), AVG(Salario) FROM PROFESSOR GROUP BY DNumero HAVING COUNT(*) &gt; 2;</code></li>
+                            </ul>
+
+                            <h4>2) INNER JOIN Funcionário ↔ Setor</h4>
+                            <ul>
+                                <li><strong>Estratégia</strong>: junção por chave de setor; apenas quem tem setor.</li>
+                                <li><strong>Consulta</strong>: <code>SELECT F.Nome, S.Nome AS Setor FROM FUNCIONARIO AS F INNER JOIN SETOR AS S ON S.ID = F.ID_Setor;</code></li>
+                            </ul>
+
+                            <h4>3) Concatenação e Ordenação Desc</h4>
+                            <ul>
+                                <li><strong>Estratégia</strong>: concatenar com operador do SGBD e ordenar pelo alias.</li>
+                                <li><strong>Consulta</strong>: <code>SELECT Nome || ' ' || Sobrenome AS Nome_Completo FROM CLIENTE ORDER BY Nome_Completo DESC;</code></li>
+                            </ul>
+
+                            <h4>4) Filtro por Ano (LIKE)</h4>
+                            <ul>
+                                <li><strong>Estratégia</strong>: <code>LIKE '1980%'</code> para datas no padrão <code>aaaa-mm-dd</code>.</li>
+                                <li><strong>Consulta</strong>: <code>SELECT Nome FROM PROFESSOR WHERE DataNascimento LIKE '1980%';</code></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec9-8'>
+            <h2>9.8 RAG: Recuperação Aumentada por Geração</h2>
+            <p><strong>RAG</strong> combina busca em fontes confiáveis com geração de linguagem natural,
+               reduzindo alucinações ao <strong>injetar contexto</strong> relevante no prompt.</p>
+            <table class='content-table'>
+                <caption><strong>Tabela 9.8 - </strong>Componentes de um pipeline RAG</caption>
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Indexação/Embeddings</strong></td><td>Representa documentos como vetores (ex.: <code>pgvector</code>)</td></tr>
+                    <tr><td><strong>Retriever</strong></td><td>Recupera trechos mais similares ao pedido do usuário</td></tr>
+                    <tr><td><strong>Prompt Template</strong></td><td>Estrutura o contexto recuperado e a tarefa</td></tr>
+                    <tr><td><strong>LLM</strong></td><td>Gera a resposta com <em>citations</em> e limites de escopo</td></tr>
+                    <tr><td><strong>Caching</strong></td><td>Reaproveita consultas e respostas frequentes</td></tr>
+                    <tr><td><strong>Observabilidade</strong></td><td>Registro de consultas, fontes e métricas de qualidade</td></tr>
+                </tbody>
+            </table>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 9.2 — </strong>Armazenar embeddings com pgvector (conceito)</figcaption>
+                <pre class='code sql'>
+-- Habilitar extensão de vetores
+CREATE EXTENSION IF NOT EXISTS vector;
+
+-- Tabela de documentos com embeddings
+CREATE TABLE docs (
+    id SERIAL PRIMARY KEY,
+    content TEXT NOT NULL,
+    embedding VECTOR(1536)
+);
+
+-- Busca por similaridade (aproximada)
+SELECT id, content
+FROM docs
+ORDER BY embedding <-> :query_embedding
+LIMIT 5;
+                </pre>
+            </figure>
+            <p class='small'>Fonte: <a href='https://supabase.com/docs/guides/ai' target='_blank' rel='noopener'>Supabase — AI e Vetores</a>.</p>
+        </section>
+
+        <section id='sec9-9'>
+            <h2>9.9 MLOps: Ciclo de Vida, Monitoramento e Governança</h2>
+            <p><strong>MLOps</strong> organiza o ciclo de vida de modelos em produção: versionamento, implantação,
+               monitoramento e atualização contínua com <strong>dados de referência</strong> e <strong>drift</strong> controlados.</p>
+            <table class='content-table'>
+                <caption><strong>Tabela 9.9 - </strong>Práticas de MLOps</caption>
+                <thead>
+                    <tr>
+                        <th>Etapa</th>
+                        <th>Foco</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Experiment Tracking</strong></td><td>Métricas e hiperparâmetros (ex.: MLflow)</td></tr>
+                    <tr><td><strong>Versionamento</strong></td><td>Dados, código e modelos (DVC, registries)</td></tr>
+                    <tr><td><strong>CI/CD</strong></td><td>Testes, validação e implantação automatizada</td></tr>
+                    <tr><td><strong>Serviço</strong></td><td>APIs/serving para predição (latência e escala)</td></tr>
+                    <tr><td><strong>Monitoramento</strong></td><td>Qualidade, <em>data drift</em> e <em>concept drift</em></td></tr>
+                    <tr><td><strong>Retraining</strong></td><td>Rotina de re‑treino com dados atualizados</td></tr>
+                    <tr><td><strong>Feature Store</strong></td><td>Catálogo de features consistente entre treino e produção</td></tr>
+                </tbody>
+            </table>
+            <p class='small'>Referências: <a href='https://learn.microsoft.com/azure/machine-learning/concept-mlops' target='_blank' rel='noopener'>Microsoft Learn — MLOps</a>.</p>
+        </section>
+
+        <footer>
+            <hr />
+            <p>Capítulo 9 — IA Generativa e Análise · Apostila de Banco de Dados</p>
+        </footer>
+
+    </div>
+</body>
+
+</html>

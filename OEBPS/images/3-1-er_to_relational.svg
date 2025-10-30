@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 950" width="1400" height="950">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 950" width="960" height="950">
   <defs>
     <style>
       .title-main { font: 700 36px 'Segoe UI', Arial, sans-serif; fill:#1a1a1a; }
@@ -49,8 +49,8 @@
   </defs>
   
   <!-- Título -->
-  <text class="title-main" x="700" y="50" text-anchor="middle">Do Modelo ER para o Modelo Relacional</text>
-  <text class="title-sub" x="700" y="80" text-anchor="middle">Mapeamento de entidades, relacionamentos e atributos</text>
+  <text class="title-main" x="50%" y="50" text-anchor="middle">Do Modelo ER para o Modelo Relacional</text>
+  <text class="title-sub" x="50%" y="80" text-anchor="middle">Mapeamento de entidades, relacionamentos e atributos</text>
   
   <!-- ========== LADO ESQUERDO: MODELO ER ========== -->
   

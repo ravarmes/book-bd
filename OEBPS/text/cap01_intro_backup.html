@@ -37,12 +37,28 @@
                 do conjunto de relacionamentos que o ligam aos demais dados no BD.
             </p>
             <p>A <strong>Informação</strong> é gerada após a interpretação ou o processamento dos dados. Ela é um
-                agrupamento organizado de dados que faz sentido, gera conhecimento e auxilia na tomada de decisões.
-                Para deixar clara a cadeia que será cobrada nos exercícios, considere o exemplo abaixo:</p>
-            <p><strong>Dados (fatos brutos):</strong> "2013" (ano), "Brasil" (seleção), "Copa das Confederações" (competição), "1º lugar" (posição).</p>
-            <p><strong>Informação (resultado objetivo):</strong> "O Brasil foi campeão da Copa das Confederações em 2013". Observação: essa informação é <em>produzida</em> pelo processamento e organização dos dados (filtragens, agregações, cálculos), sem necessidade de detalhar o método nesta seção.</p>
-            <p><strong>Conhecimento (evidência + ação):</strong> a recorrência de títulos em competições internacionais indica alta popularidade; <em>evidência</em>: histórico de vitórias por período (informações observadas/calculadas); <em>ação</em>: planejar campanha de marketing em anos de torneios com maior probabilidade de bons resultados. Conforme pode ser observado na <strong>Figura 1.1</strong>, essa hierarquia evolui de <em>dados</em> → <em>informação</em> → <em>conhecimento</em>.</p>
+                agrupamento organizado de dados que faz sentido, gera conhecimento e auxilia na tomada de decisões em
+                uma empresa. Por exemplo, o valor "2013" é um dado; ao combiná-lo com "Brasil", "1º Lugar" e "Copa das
+                Confederações", obtém-se a informação de que "O Brasil foi campeão da Copa das Confederações do ano de
+                2013".</p>
+            <p>Um <strong>Registro</strong> é uma sequência de dados juntos que fornecem uma informação completa. Por
+                exemplo, a ficha de um cliente contendo nome, CPF, RG e endereço.</p>
+            <p>O <strong>Conhecimento</strong> representa o discernimento obtido por meio de critérios e da apreciação
+                dos dados e informações.</p>
 
+            <!-- Bloco de Definições chave -->
+            <table class="box-table tip-table">
+                <tr>
+                    <td class="box-content tip" role="note" aria-labelledby="def-title-1">
+                        <div id="def-title-1" class="box-title"><img src="../images/icon-definicao.png" class="icon-img" alt="Definição"><strong>Definição</strong></div>
+                        <div>
+                            <p><strong>Dado</strong>: registro bruto sem contexto (ex.: "2013").</p>
+                            <p><strong>Informação</strong>: dados organizados que respondem “quem/quando/onde” (ex.: "Brasil campeão em 2013").</p>
+                            <p><strong>Conhecimento</strong>: insight aplicável para decidir/agir.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
 
             <!-- Bloco Importante com síntese didática -->
             <table class="box-table warning-table">
@@ -61,8 +77,10 @@
                     conhecimento.
                 </figcaption>
             </figure>
-            <p>A <strong>Figura 1.1</strong> sintetiza a transformação: dados brutos, quando organizados e interpretados, geram informação; padrões observados com evidências permitem ação e formam conhecimento.</p>
-            </section>
+            <p><strong>Sugestão de Figura:</strong><br />Figura 1.1: Diagrama de Hierarquia D-I-C (Dados, Informação e
+                Conhecimento).<br />Legenda: Representação visual da progressão, onde o dado é a matéria-prima, que é
+                processada para gerar informação, e a informação é analisada para construir conhecimento.</p>
+        </section>
 
         <section id='sec1-2'>
             <h2>1.2 O Problema do Armazenamento: Da Planilha Simples (Dataset) e suas Falhas (Redundância) ao SGBD</h2>
@@ -140,7 +158,7 @@
 
         <section id='sec1-3'>
             <h2>1.3 Sistemas de Gerenciamento de Banco de Dados (SGBDs): Funções e Componentes</h2>
-            <p>Um SGBD fornece mecanismos para: Para contextualizar, veja o <strong>Código 1</strong> a seguir; em seguida, a <strong>Figura 1.3</strong> apresenta sua arquitetura.</p>
+            <p>Um SGBD fornece mecanismos para:</p>
             <ul>
                 <li><strong>Definição e manipulação</strong> de dados (DDL/DML) e <strong>consulta</strong> (SQL).</li>
                 <li><strong>Transações</strong> com propriedades ACID (Atomicidade, Consistência, Isolamento e
@@ -180,14 +198,13 @@ INSERT INTO Aluno (id, nome, turma) VALUES ( 1, 'Ana', '3A' );
 SELECT nome, turma FROM Aluno WHERE id = 1;
 </pre>
             </figure>
-            <p>O <strong>Código 1</strong> ilustra um ciclo básico de <strong>DDL</strong> (criação de tabela), <strong>DML</strong> (inserção) e uma <strong>consulta</strong>, conectando a estrutura dos dados ao uso prático pelo SGBD. Em seguida, a <strong>Figura 1.3</strong> apresenta a arquitetura típica do SGBD.</p>
             <figure>
                 <img src='../images/1-3-sgbd_architecture.svg'
                     alt='Arquitetura típica de um SGBD (componentes principais)' />
                 <figcaption><strong>Figura 1.3 - </strong>Arquitetura típica de um SGBD: processador de consultas,
                     gerenciador de transações, buffer/cache e armazenamento.</figcaption>
             </figure>
-            <p>Conforme mostrado na <strong>Figura 1.3</strong>, componentes típicos: <strong>Parser/Executor</strong> (interpreta e executa consultas),
+            <p>Componentes típicos: <strong>Parser/Executor</strong> (interpreta e executa consultas),
                 <strong>Otimização</strong> (escolha de planos eficientes), <strong>Gerenciador de Transações</strong>
                 (ACID, isolamento), <strong>Controle de Concorrência</strong> (bloqueios/MVCC),
                 <strong>Buffer/Cache</strong> (desempenho) e <strong>Armazenamento</strong> (arquivos, índices e logs).
@@ -197,7 +214,7 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                 <li><strong>Índices</strong>: aceleram buscas por chaves e campos consultados.</li>
                 <li><strong>Segurança</strong>: papéis, permissões e visões limitam o acesso a dados sensíveis.</li>
             </ul>
-            <p><strong>Natureza autodescritiva</strong>: além dos dados, o SGBD mantém um <em>catálogo de
+            <p><strong>Natureza auto-descritiva</strong>: além dos dados, o SGBD mantém um <em>catálogo de
                     metadados</em> que descreve estruturas, tipos e restrições, permitindo conhecer e validar o BD.</p>
             <p><strong>Componentes de um sistema de BD</strong>: Dados; Software (SGBD, aplicativos); Hardware; Usuários
                 (DBA, programadores, usuários finais).</p>
@@ -239,7 +256,8 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                 <li><strong>Compartilhamento:</strong> Permite que múltiplos usuários e programas acessem o BD
                     simultaneamente.</li>
             </ul>
-            <p>Um sistema de banco de dados é composto pelo BD juntamente com seu sistema gerenciador (como ilustrado na <strong>Figura 1.4</strong>). Os quatro componentes básicos de um Sistema de Banco de Dados são:</p>
+            <p>Um sistema de banco de dados é composto pelo BD juntamente com seu sistema gerenciador. Os quatro
+                componentes básicos de um Sistema de Banco de Dados são:</p>
             <ol>
                 <li><strong>Dados:</strong> A coleção de registros armazenados.</li>
                 <li><strong>Software:</strong> O SGBD, os programas aplicativos e os softwares de acesso aos dados.</li>
@@ -253,11 +271,13 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                 <figcaption><strong>Figura 1.4 - </strong>Ambiente de Sistema de BD: usuários/aplicações → SGBD →
                     Banco de Dados.</figcaption>
             </figure>
-            <p>A <strong>Figura 1.4</strong> evidencia o fluxo: aplicações e usuários interagem com o <strong>SGBD</strong>, que processa consultas e transações e gerencia o acesso ao <strong>Banco de Dados</strong>.</p>
-            <p><strong>Componente Essencial: Metadados e Catálogo</strong></p>
-            <p>Uma característica fundamental do SGBD é sua <strong>natureza autodescritiva</strong>. Um sistema de
+            <p><strong>Sugestão de Figura:</strong><br />Figura 1.2: Ambiente simplificado de um sistema de banco de
+                dados.<br />Legenda: Diagrama ilustrando como as Aplicações/Usuários interagem com o Banco de Dados,
+                tendo o SGBD como intermediário que gerencia o acesso e a manipulação.</p>
+            <p><strong>Componente Essencial: Meta-dados e Catálogo</strong></p>
+            <p>Uma característica fundamental do SGBD é sua <strong>natureza auto-descritiva</strong>. Um sistema de
                 banco de dados não contém apenas os dados, mas também uma definição completa da estrutura do BD e suas
-                restrições, armazenada em um <strong>catálogo de metadados</strong>. O SGBD utiliza esses metadados
+                restrições, armazenada em um <strong>catálogo de meta-dados</strong>. O SGBD utiliza esses meta-dados
                 para conhecer a estrutura dos arquivos, incluindo o tipo e o formato dos dados que serão acessados.</p>
             <p>O SGBD também proporciona diversas vantagens, incluindo:</p>
             <ul>
@@ -287,7 +307,18 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                 Banco de Dados.</p>
             <p>Os modelos de dados são a base para a <strong>Abstração dos Dados</strong>, que é a capacidade do SGBD de
                 esconder os detalhes da implantação da forma como os dados são armazenados e mantidos. Essa abstração é
-                organizada através da <strong>Arquitetura de Três Esquemas (ou Níveis de Abstração)</strong>. Conforme a <strong>Tabela 1.1</strong>, os níveis e seus focos são apresentados; e a <strong>Figura 1.5</strong> ilustra a separação entre visões externas, o esquema conceitual e a implementação interna.</p>
+                organizada através da <strong>Arquitetura de Três Esquemas (ou Níveis de Abstração)</strong>.</p>
+            <!-- Bloco Importante: independência de dados e múltiplas visões -->
+            <table class="box-table warning-table">
+                <tr>
+                    <td class="box-content warning" role="note" aria-labelledby="imp-title-4">
+                        <div id="imp-title-4" class="box-title"><img src="../images/icon-importante.png" class="icon-img" alt="Importante"><strong>Importante</strong></div>
+                        <div>
+                            <p><strong>Independência de dados</strong>: mude detalhes físicos (arquivos/índices) sem quebrar aplicações/visões. <strong>Múltiplas visões</strong>: cada perfil vê só o que precisa.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
             <table class='content-table'>
                 <caption><strong>Tabela 1.1 - </strong>Níveis de Abstração de Dados.</caption>
                 <thead>
@@ -306,7 +337,7 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                         <td><strong>Projeto Físico</strong></td>
                     </tr>
                     <tr>
-                        <td><strong>Nível Conceitual (Lógico)</strong></td>
+                        <td><strong>Nível Lógico (Conceitual)</strong></td>
                         <td>Descreve <strong>quais dados estão armazenados</strong> e <strong>como eles se
                                 relacionam</strong>. É a visão geral do BD, contendo a estrutura e os relacionamentos. É
                             independente do SGBD específico.</td>
@@ -327,7 +358,8 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                     o esquema
                     conceitual e a implementação interna.</figcaption>
             </figure>
-            <p>A <strong>Figura 1.5</strong> reforça a independência de dados: mudanças físicas (índices, tipos, estruturas) não afetam as visões externas; o esquema conceitual centraliza a estrutura e relacionamentos do BD.</p>
+            <p>A arquitetura de três esquemas promove <strong>independência de dados</strong> — mudar estruturas físicas
+                sem afetar as visões dos usuários.</p>
             <!-- Lista removida por redundância: detalhamento dos níveis já coberto na tabela e no texto -->
             <p><strong>Fluxo de projeto</strong>: Modelo Conceitual (ER) → Projeto Lógico (relacional/tabelas) → Projeto
                 Físico (tipos, índices), dependente do SGBD escolhido.</p>
@@ -340,6 +372,11 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                 <strong>Projeto Físico</strong> é um refinamento do modelo lógico, dependente do SGBD escolhido (por
                 exemplo, definindo tipos de dados como <code>VARCHAR(45)</code>).
             </p>
+            <!-- Figura removida por duplicação: Arquitetura de Três Esquemas -->
+            <p><strong>Sugestão de Figura:</strong><br />Figura 1.3: Níveis de Abstração de Dados (Arquitetura de Três
+                Esquemas).<br />Legenda: Representação dos três níveis: Nível Físico (detalhes de armazenamento), Nível
+                Lógico (estrutura completa dos dados e relações) e Múltiplas Visões (subconjuntos de dados vistos pelos
+                usuários).</p>
         </section>
 
         <section id="sec1-5">
@@ -350,17 +387,18 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                         <div id="case-title-x" class="box-title"><img src="../images/icon-estudodecaso.png"
                                 class="icon-img" alt="Estudo de Caso"><strong>Estudo de Caso:</strong></div>
                         <div>
-                            <p>A Biblioteca Escolar pretende informatizar o controle do acervo e das operações de empréstimo, devolução e reserva de livros. O sistema deve permitir que alunos consultem os livros disponíveis, realizem reservas e deixem avaliações sobre os livros lidos.</p>
-                            <p>Para fins de cadastro e contato, o sistema deve registrar as informações de endereço e telefones dos alunos. Cada aluno reside em um único endereço e pode possuir vários telefones.</p>
-                            <p>Os bibliotecários serão responsáveis por registrar os empréstimos e as devoluções realizados pelos alunos. As multas são geradas automaticamente em caso de devolução em atraso.</p>
-                            <p>Cada livro é escrito por um ou mais autores e um autor pode ter escrito vários livros. Cada livro pode possuir vários exemplares físicos, identificados por código e localizados em prateleiras específicas. O sistema deverá controlar o status de cada exemplar (disponível, emprestado, reservado, extraviado).</p>
-                            <p>O sistema deve também gerar relatórios gerenciais, como listagem de livros mais emprestados, alunos com mais multas e histórico de movimentações.</p>
+                            <p>Domínio: <strong>Sistema de Biblioteca Escolar</strong>. Objetivo principal: controlar a circulação do acervo e apoiar relatórios gerenciais. Perfis: <strong>alunos</strong> (reservas, empréstimos e <em>avaliações de livros</em>), <strong>bibliotecarios</strong> (registro de empréstimos/devoluções, multas).</p>
+                            <p>Este texto descreve o <strong>mini‑mundo</strong> da biblioteca que será modelado nos próximos capítulos.</p>
+                            <p>Entidades iniciais: <strong>aluno</strong> (nome, turma, matricula), <strong>livro</strong> (titulo, autor, editora, isbn), <strong>exemplar</strong> (codigo, localizacao, status), <strong>emprestimo</strong> (data_emprestimo, data_prevista, data_devolucao), <strong>reserva</strong>, <strong>multa</strong>, <strong>avaliacao</strong> (nota 1–5, data, comentario opcional; vinculo ao emprestimo e ao aluno).</p>
+                            <p>Regras de negócio exemplares: limite de <strong>3 empréstimos</strong> simultâneos por aluno; reservas <strong>máx. 2 ativas</strong>; atrasos geram <strong>multa</strong>; aluno com multa não paga <strong>não pode</strong> novo empréstimo; <strong>cada empréstimo pode receber 1 avaliação</strong> de <strong>1 a 5</strong> feita pelo aluno, preferencialmente após a devolução; bibliotecário registra operações e auditoria.</p>
+                            <p>Ao longo do livro, cada capítulo trará uma prática relacionada ao conteúdo (modelagem conceitual, lógica e física; integridade; consultas; transações). Até o final, o aluno terá <strong>modelado e implementado</strong> o sistema completo da biblioteca.</p>
                             <hr />
                             <p><strong>Prática do Capítulo:</strong></p>
                             <ul>
-                                <li>Liste 8–12 <strong>dados</strong> relevantes do domínio.</li>
-                                <li>Converta 3 conjuntos de dados em <strong>informações</strong> úteis.</li>
-                                <li>Derive 2 <strong>conhecimentos</strong> a partir das informações, com evidência.</li>
+                                <li>Liste 8–12 <strong>dados brutos</strong> relevantes (ex.: aluno.nome, livro.isbn, emprestimo.data).</li>
+                                <li>Converta 3 conjuntos de dados em <strong>informações</strong> úteis (ex.: empréstimos por turma nos últimos 30 dias).</li>
+                                <li>Derive 2 <strong>conhecimentos</strong> a partir das informações (ex.: políticas que reduzem atrasos).</li>
+                                <li>Esboce 3 <strong>consultas</strong> que respondam perguntas do domínio (texto livre, sem SQL obrigatório).</li>
                             </ul>
                         </div>
                     </td>
@@ -372,22 +410,6 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
         <section id="sec1-6">
             <h2>1.6 Exercícios Complementares</h2>
 
-            <table class="box-table tip-table" role="note" aria-labelledby="ex-orient-title">
-                <tr>
-                    <td class="box-content tip">
-                        <div id="ex-orient-title" class="box-title"><img src="../images/icon-observacao.png" class="icon-img" alt="Orientação"><strong>Orientação para os Exercícios</strong></div>
-                        <div>
-                            <p>Em todo exercício deste capítulo, identifique apenas <strong>Dados → Informação → Conhecimento</strong>:</p>
-                            <ul>
-                                <li><strong>Dados</strong> → fatos brutos do domínio.</li>
-                                <li><strong>Informações</strong> → resultados objetivos derivados dos dados.</li>
-                                <li><strong>Conhecimentos</strong> → interpretações e ações justificadas por evidências.</li>
-                            </ul>
-                        </div>
-                    </td>
-                </tr>
-            </table>
-
             <table class="box-table complementary-table" role="note" aria-labelledby="ex-comp-title-x">
                 <tr>
                     <td class="box-content complementary">
@@ -395,17 +417,12 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                                 class="icon-img" alt="Exercícios Complementares"><strong>Exercícios
                                 Complementares:</strong></div>
                         <div>
-                            <p><strong>1. Sistema de Barbearia</strong><br/>
-                            <em>Objetivo principal:</em> controlar agendamentos, serviços prestados e fidelização de clientes. <em>Perfis:</em> clientes (agendamentos, histórico de serviços, preferências), barbeiros (agenda pessoal, especialidades, comissões), recepcionista (controle de agenda geral, pagamentos, produtos vendidos).</p>
-                            <p>Liste 6–8 <strong>dados</strong> relevantes (cliente, serviço, agenda, barbeiro, pagamento), derive 3 <strong>informações</strong> úteis para gestão (ex.: serviços mais frequentes no mês, barbeiro com maior faturamento, horários de pico) e proponha 2 <strong>conhecimentos</strong> acionáveis com evidência.</p>
-
-                            <p><strong>2. Sistema de Academia</strong><br/>
-                            <em>Objetivo principal:</em> gerenciar matrículas, planos, frequência e acompanhamento físico dos alunos. <em>Perfis:</em> alunos (check-in/check-out, planos contratados, avaliações físicas, treinos), instrutores (fichas de treino, acompanhamento de alunos, especialidades), recepcionista (matrículas, renovações, controle de acesso).</p>
-                            <p>Defina 5–7 <strong>dados</strong> essenciais (aluno, plano, frequência, avaliação física, instrutor), derive 3 <strong>informações</strong> estratégicas (ex.: taxa de frequência por plano, alunos próximos ao vencimento) e proponha 2 <strong>conhecimentos</strong> com base nessas informações.</p>
-
-                            <p><strong>3. Sistema de Locadora de Carros</strong><br/>
-                            <em>Objetivo principal:</em> controlar frota, locações, devoluções e manutenção preventiva. <em>Perfis:</em> clientes (reservas, histórico de locações, avaliações), atendentes (controle de contratos, check-in/check-out de veículos, vistoria), mecânicos (manutenção preventiva e corretiva, relatórios de estado dos veículos).</p>
-                            <p>Liste 8–10 <strong>dados</strong> do domínio (veículo, contrato, cliente, vistoria), derive 3 <strong>informações</strong> operacionais (ex.: taxa de utilização da frota, veículos com maior incidência de manutenção) e proponha 2 <strong>conhecimentos</strong> para melhorar disponibilidade e reduzir custos.</p>
+                            <ol>
+                                <li>Barbearia: liste 6–8 <strong>dados</strong> (cliente, serviço, agenda) e derive 3 <strong>informações</strong> úteis (ex.: serviços mais frequentes no mês).</li>
+                                <li>Academia: defina 5 campos (aluno, plano, frequência) e escreva 2 <strong>consultas</strong> que respondam perguntas do gestor (texto livre).</li>
+                                <li>Locadora de carros: indique 3 <strong>chaves</strong> e 3 <strong>regras de integridade</strong> simples (ex.: devolução exige contrato).</li>
+                                <li>Explique Dado × Informação × Conhecimento com um exemplo do seu cotidiano (qualquer contexto) e 1 insight acionável.</li>
+                            </ol>
                         </div>
                     </td>
                 </tr>
@@ -421,21 +438,12 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                                 class="icon-img" alt="Exercícios Integrados"><strong>Exercícios Integrados:</strong>
                         </div>
                         <div>
-                            <p><strong>1. Geografia - Análise Espacial e Indicadores Socioeconômicos</strong><br/>
-                            <em>Contexto curricular:</em> estudo da Geografia pela cartografia, dinâmica da Natureza, impactos da ação humana, hidrografia, clima, biogeografia, questões ambientais, sociais e econômicas dos processos de apropriação dos recursos naturais em diferentes escalas e grandes quadros ambientais do mundo.</p>
-                            <p>Modele um sistema de indicadores municipais (população, IDH, área territorial, recursos hídricos, biomas) e identifique apenas <strong>Dados → Informação → Conhecimento</strong> para análises de impacto ambiental e desenvolvimento sustentável.</p>
-
-                            <p><strong>2. Biologia - Biodiversidade e Organização Celular</strong><br/>
-                            <em>Contexto curricular:</em> características gerais dos organismos, níveis de organização, método científico, biomoléculas, ácidos nucleicos, proteínas, lipídios, carboidratos, estrutura e funcionamento celular, microscopia, tipos celulares, parede celular, membrana plasmática, citoplasma, organelas, núcleo, divisões celulares, reprodução e métodos contraceptivos.</p>
-                            <p>Modele um sistema de catalogação de espécies e estudos celulares (espécie, classificação taxonômica, local de coleta, características celulares, estruturas observadas, método de análise) e identifique apenas <strong>Dados → Informação → Conhecimento</strong> relacionando biodiversidade com organização celular.</p>
-
-                            <p><strong>3. Química - Experimentos e Tabela Periódica</strong><br/>
-                            <em>Contexto curricular:</em> matéria e suas propriedades, Teoria Atômica, Estrutura Eletrônica, radioatividade, Tabela Periódica, ligações químicas intermoleculares, cálculos químicos, estudo dos gases, estequiometria.</p>
-                            <p>Registre um sistema de experimentos laboratoriais (elementos da tabela periódica, reagentes, procedimentos, resultados, propriedades observadas, cálculos estequiométricos) e identifique apenas <strong>Dados → Informação → Conhecimento</strong> sobre rastreabilidade e consistência dos dados experimentais.</p>
-
-                            <p><strong>4. História - Acervos Documentais e Periodização</strong><br/>
-                            <em>Contexto curricular:</em> importância do estudo da História, transição dos tempos medievais para os "tempos modernos", Renascimento da Religião, das Artes e das Ciências na Idade da Razão, revoluções políticas e econômicas (séculos XVII, XVIII e XIX), Industrialização, Era das Guerras e Revoluções.</p>
-                            <p>Defina um sistema de acervo histórico digital (documento, período histórico, temática, região geográfica, tipo de fonte, contexto político-econômico) e identifique apenas <strong>Dados → Informação → Conhecimento</strong> para estudos comparativos entre períodos e regiões.</p>
+                            <ol>
+                                <li><strong>Biologia</strong>: modele uma coleta de espécies (espécie, local, data, observador) e descreva 2 consultas científicas (ex.: ocorrências por bioma).</li>
+                                <li><strong>Química</strong>: registre experimentos (reagentes, procedimentos, resultados) e indique 2 regras de integridade/ACID aplicáveis (ex.: logs de resultados).</li>
+                                <li><strong>História</strong>: defina um acervo (documento, período, temática) e proponha 2 visões diferentes (por período; por tema) com consultas ilustrativas.</li>
+                                <li><strong>Geografia</strong>: modele indicadores por município (população, IDH, área) e sugira 2 índices/consultas por região (ex.: top 10 por IDH na região).</li>
+                            </ol>
                         </div>
                     </td>
                 </tr>
@@ -452,21 +460,27 @@ SELECT nome, turma FROM Aluno WHERE id = 1;
                         <div>
                             <p><strong>Estudo de Caso — possíveis respostas:</strong></p>
                             <ul>
-                                <li><strong>Dados</strong> (exemplos): aluno.nome, aluno.matrícula, livro.ISBN, livro.título, exemplar.código, exemplar.status, empréstimo.data_empréstimo, empréstimo.data_devolução, avaliação.nota (1–5), avaliação.data, reserva.data, multa.valor.</li>
-                                <li><strong>Informações</strong>: empréstimos por turma nos últimos 30 dias; livros mais reservados por série; taxa de atraso por mês; média de avaliação por livro.</li>
-                                <li><strong>Conhecimentos</strong>: enviar lembrete 2 dias antes reduz atrasos; ampliar exemplares de títulos com alta reserva diminui fila; títulos com média ≥ 4 merecem recomendação em destaque/acervo ampliado.</li>
+                                <li><strong>Dados</strong> (exemplos): aluno.nome, aluno.matrícula, livro.ISBN, livro.título, exemplar.código, exemplar.status, empréstimo.data_empréstimo, empréstimo.data_devolução, <strong>avaliação.nota</strong> (1–5), avaliação.data, reserva.data, multa.valor.</li>
+                                <li><strong>Informações</strong>: empréstimos por turma nos últimos 30 dias; livros mais reservados por série; taxa de atraso por mês; <strong>média de avaliação</strong> por livro.</li>
+                                <li><strong>Conhecimentos</strong>: política de enviar lembrete 2 dias antes reduz atrasos; ampliar exemplares de títulos com alta reserva diminui fila; <strong>títulos com média ≥ 4</strong> merecem recomendação em destaque/acervo ampliado.</li>
+                                <li><strong>Consultas</strong>: “Top 10 livros por reservas no trimestre”; “Empréstimos por turma e mês”; “Alunos com multa ativa”; <strong>“Livros com média de avaliação ≥ 4 e ao menos 5 avaliações”</strong>.</li>
                             </ul>
                             <hr />
                             <p><strong>Exercícios Complementares — possíveis respostas:</strong></p>
-                            <p><strong>1. Barbearia:</strong> Dados — cliente.nome, cliente.telefone, barbeiro.nome, serviço.tipo, serviço.preço, agenda.data_hora, pagamento.forma, produto.vendido; Informações — serviços mais frequentes por mês, barbeiro com maior faturamento, horários de pico por dia da semana, produtos mais vendidos; Conhecimentos — oferecer combos nos horários de pico e treinar barbeiros em serviços mais demandados.</p>
-                            <p><strong>2. Academia:</strong> Dados — aluno.id, plano.tipo, frequencia.check_in, avaliacao_fisica.data, instrutor.especialidade; Informações — alunos com frequência &lt; 8 visitas/mês por plano, taxa de renovação por tipo de plano; Conhecimentos — campanha de engajamento para planos com baixa frequência e ação pró‑ativa antes do vencimento.</p>
-                            <p><strong>3. Locadora:</strong> Dados — veiculo.id, contrato.numero, cliente.cpf, vistoria.data, manutencao.tipo; Informações — taxa de utilização da frota, veículos com maior incidência de manutenção, tempo médio de locação; Conhecimentos — ajustar manutenção preventiva para modelos com maior falha e redistribuir frota para elevar utilização.</p>
+                            <ol>
+                                <li>Barbearia: dados possíveis — cliente.nome, serviço.tipo, agenda.data; informações — serviços mais frequentes, pico de horários; consultas — “serviços por semana”.</li>
+                                <li>Academia: campos — aluno.id, plano.tipo, frequência.mensal; consultas — “alunos com frequência &lt; 2/semana”, “planos com maior retenção”.</li>
+                                <li>Locadora: chaves — carro.id, contrato.id, cliente.id; regras — devolução exige contrato ativo; multa aplica regras por atraso &gt;= 1 dia.</li>
+                                <li>Dado × Informação × Conhecimento: exemplo — registros de compras → ticket médio mensal → decisão de oferecer desconto progressivo.</li>
+                            </ol>
                             <hr />
                             <p><strong>Exercícios Integrados — possíveis respostas:</strong></p>
-                            <p><strong>1. Geografia:</strong> Dados — município, IDH, bioma, área, recursos hídricos; Informações — ranking por região com pressão hídrica e IDH; Conhecimentos — focar políticas de conservação em biomas com pior combinação área/recursos/IDH.</p>
-                            <p><strong>2. Biologia:</strong> Dados — espécie, classificação, local de coleta, estruturas celulares; Informações — distribuição de tipos celulares por família, organelas por grupo; Conhecimentos — correlacionar ambientes com estruturas celulares predominantes para orientar estudos.</p>
-                            <p><strong>3. Química:</strong> Dados — elemento, reagente, procedimento, resultado, propriedade observada; Informações — taxa de sucesso por procedimento, variação de propriedades por reagente; Conhecimentos — priorizar protocolos com maior reprodutibilidade e segurança.</p>
-                            <p><strong>4. História:</strong> Dados — documento, período, temática, região, tipo de fonte; Informações — séries cronológicas por tema e região; Conhecimentos — identificar períodos com maior intensidade de industrialização para estudos comparativos.</p>
+                            <ol>
+                                <li>Biologia: consultas por bioma e período; integridade — ocorrência precisa de espécie válida e coordenadas.</li>
+                                <li>Química: ACID — logs imutáveis de resultados; integridade — reagente deve existir no catálogo e quantidades consistentes.</li>
+                                <li>História: visões — por período e por tema; consultas — “documentos por década”, “temas mais frequentes”.</li>
+                                <li>Geografia: índices — top 10 IDH por região; consultas — “municípios por área &gt; X com densidade &lt; Y”.</li>
+                            </ol>
                         </div>
                     </td>
                 </tr>

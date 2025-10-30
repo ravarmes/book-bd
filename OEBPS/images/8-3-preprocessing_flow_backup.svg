@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="260" viewBox="0 0 920 260">
+  <defs>
+    <style>
+      .title{font-family:Segoe UI,Arial,sans-serif;font-size:20px;fill:#513095;font-weight:600}
+      .box{fill:#f2edff;stroke:#513095;stroke-width:2}
+      .chip{fill:#e3dbff;stroke:#513095;stroke-width:1}
+      .label{font-family:Segoe UI,Arial,sans-serif;font-size:16px;fill:#513095;font-weight:600}
+      .sub{font-size:13px}
+      .arrow{stroke:#513095;stroke-width:2;fill:none;marker-end:url(#ah)}
+    </style>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#513095" />
+    </marker>
+  </defs>
+
+  <text x="460" y="28" text-anchor="middle" class="title">Fluxo de Pré‑processamento de Dados</text>
+
+  <!-- Flow boxes -->
+  <rect x="40" y="70" rx="10" ry="10" width="140" height="60" class="box"/>
+  <text x="110" y="105" text-anchor="middle" class="label">Banco de Dados</text>
+
+  <rect x="210" y="70" rx="10" ry="10" width="120" height="60" class="box"/>
+  <text x="270" y="105" text-anchor="middle" class="label">SQL</text>
+
+  <rect x="360" y="70" rx="10" ry="10" width="120" height="60" class="box"/>
+  <text x="420" y="95" text-anchor="middle" class="label">CSV</text>
+  <text x="420" y="115" text-anchor="middle" class="label sub">Export</text>
+
+  <rect x="510" y="60" rx="10" ry="10" width="150" height="80" class="box"/>
+  <text x="585" y="95" text-anchor="middle" class="label">Pandas</text>
+  <text x="585" y="115" text-anchor="middle" class="label sub">DataFrame</text>
+
+  <rect x="690" y="60" rx="10" ry="10" width="180" height="80" class="box"/>
+  <text x="780" y="95" text-anchor="middle" class="label">Pré‑processamento</text>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M180,100 L210,100"/>
+  <path class="arrow" d="M330,100 L360,100"/>
+  <path class="arrow" d="M480,100 L510,100"/>
+  <path class="arrow" d="M660,100 L690,100"/>
+
+  <!-- Chips for steps -->
+  <rect x="700" y="150" rx="8" ry="8" width="70" height="28" class="chip"/>
+  <text x="735" y="169" text-anchor="middle" class="label sub">1FN</text>
+
+  <rect x="780" y="150" rx="8" ry="8" width="80" height="28" class="chip"/>
+  <text x="820" y="169" text-anchor="middle" class="label sub">2FN/3FN</text>
+
+  <rect x="700" y="185" rx="8" ry="8" width="70" height="28" class="chip"/>
+  <text x="735" y="204" text-anchor="middle" class="label sub">NULL</text>
+
+  <rect x="780" y="185" rx="8" ry="8" width="80" height="28" class="chip"/>
+  <text x="820" y="204" text-anchor="middle" class="label sub">Outliers</text>
+
+  <rect x="700" y="220" rx="8" ry="8" width="80" height="28" class="chip"/>
+  <text x="740" y="239" text-anchor="middle" class="label sub">Encoding</text>
+
+  <rect x="790" y="220" rx="8" ry="8" width="90" height="28" class="chip"/>
+  <text x="835" y="239" text-anchor="middle" class="label sub">Normalização</text>
+</svg>

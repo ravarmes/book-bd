@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="260" viewBox="0 0 920 260">
+  <defs>
+    <style>
+      .title{font-family:Segoe UI,Arial,sans-serif;font-size:20px;fill:#1b5e20;font-weight:600}
+      .box{fill:#e9f7ee;stroke:#1b5e20;stroke-width:2}
+      .join{fill:#dff3e6;stroke:#1b5e20;stroke-width:2}
+      .label{font-family:Segoe UI,Arial,sans-serif;font-size:16px;fill:#1b5e20;font-weight:600}
+      .sub{font-size:13px}
+      .arrow{stroke:#1b5e20;stroke-width:2;fill:none;marker-end:url(#ah)}
+    </style>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#1b5e20" />
+    </marker>
+  </defs>
+
+  <text x="460" y="28" text-anchor="middle" class="title">Dataset de Empréstimos (Biblioteca)</text>
+
+  <!-- Entities -->
+  <rect x="40" y="60" rx="10" ry="10" width="160" height="70" class="box"/>
+  <text x="120" y="95" text-anchor="middle" class="label">ALUNO</text>
+
+  <rect x="40" y="150" rx="10" ry="10" width="160" height="70" class="box"/>
+  <text x="120" y="185" text-anchor="middle" class="label">LIVRO</text>
+
+  <rect x="240" y="105" rx="10" ry="10" width="170" height="70" class="box"/>
+  <text x="325" y="140" text-anchor="middle" class="label">EMPRÉSTIMO</text>
+
+  <!-- JOIN hub -->
+  <rect x="450" y="105" rx="10" ry="10" width="120" height="70" class="join"/>
+  <text x="510" y="140" text-anchor="middle" class="label">JOIN</text>
+  <text x="510" y="160" text-anchor="middle" class="label sub">PK/FK</text>
+
+  <!-- CSV -->
+  <rect x="610" y="105" rx="10" ry="10" width="120" height="70" class="box"/>
+  <text x="670" y="140" text-anchor="middle" class="label">CSV</text>
+
+  <!-- Python exploration -->
+  <rect x="760" y="95" rx="10" ry="10" width="140" height="90" class="box"/>
+  <text x="830" y="125" text-anchor="middle" class="label">Python</text>
+  <text x="830" y="150" text-anchor="middle" class="label sub">df.describe()</text>
+  <text x="830" y="170" text-anchor="middle" class="label sub">df.groupby()</text>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M200,95 L240,125"/>
+  <path class="arrow" d="M200,185 L240,145"/>
+  <path class="arrow" d="M410,140 L450,140"/>
+  <path class="arrow" d="M570,140 L610,140"/>
+  <path class="arrow" d="M730,140 L760,140"/>
+</svg>

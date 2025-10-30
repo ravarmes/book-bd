@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="260" viewBox="0 0 640 260">
+  <title>SQL JOINs — Anti JOINs (LEFT/RIGHT)</title>
+  <desc>Visualização das áreas retornadas por LEFT/RIGHT JOIN quando filtradas com WHERE ... IS NULL (anti-join).</desc>
+  <rect x="0" y="0" width="640" height="260" fill="#ffffff"/>
+  <defs>
+    <style>
+      .circle { fill: none; stroke: #333; stroke-width: 2; }
+      .shaded { fill: #d23f3f; fill-opacity: 0.55; }
+      .label { font-family: Helvetica, Arial, sans-serif; font-size: 13px; fill: #333; }
+    </style>
+  </defs>
+
+  <!-- LEFT ANTI JOIN: A WHERE B.key IS NULL -->
+  <g transform="translate(90,60)">
+    <defs>
+      <clipPath id="clipA_left"><circle cx="80" cy="60" r="50"/></clipPath>
+    </defs>
+    <circle class="circle" cx="80" cy="60" r="50"/>
+    <circle class="circle" cx="130" cy="60" r="50"/>
+    <!-- preencher A inteiro -->
+    <circle class="shaded" cx="80" cy="60" r="50"/>
+    <!-- remover a interseção (pintar branco por cima) -->
+    <circle cx="130" cy="60" r="50" fill="#ffffff" clip-path="url(#clipA_left)"/>
+    <text x="80" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">A</text>
+    <text x="130" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">B</text>
+    <text class="label" x="105" y="130" text-anchor="middle">LEFT ANTI JOIN</text>
+  </g>
+
+  <!-- RIGHT ANTI JOIN: B WHERE A.key IS NULL -->
+  <g transform="translate(370,60)">
+    <defs>
+      <clipPath id="clipA_right"><circle cx="80" cy="60" r="50"/></clipPath>
+    </defs>
+    <circle class="circle" cx="80" cy="60" r="50"/>
+    <circle class="circle" cx="130" cy="60" r="50"/>
+    <!-- preencher B inteiro -->
+    <circle class="shaded" cx="130" cy="60" r="50"/>
+    <!-- remover a interseção (pintar branco por cima) -->
+    <circle cx="130" cy="60" r="50" fill="#ffffff" clip-path="url(#clipA_right)"/>
+    <text x="80" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">A</text>
+    <text x="130" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">B</text>
+    <text class="label" x="105" y="130" text-anchor="middle">RIGHT ANTI JOIN</text>
+  </g>
+</svg>

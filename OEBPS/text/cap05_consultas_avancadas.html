@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang='pt-BR'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <title>Capítulo 5 — Consultas Avançadas: Extraindo Insights de Dados Relacionados</title>
+    <link rel='stylesheet' type='text/css' href='../css/style.css' />
+    <meta name='description' content='Junções (JOINs), agregação (COUNT, SUM, AVG, MAX, MIN), GROUP BY, HAVING, subconsultas, operadores lógicos (AND, OR, NOT), criação de VIEW, estudo de caso e exercícios com foco no domínio Biblioteca.' />
+</head>
+
+<body>
+    <div class='container'>
+
+        <header>
+            <h1 id='cap5'>CAPÍTULO 5 – Consultas Avançadas: Extraindo <em>Insights</em> de Dados Relacionados</h1>
+            <p class='lead'>A cláusula <strong>SELECT</strong> é o coração das consultas em bancos relacionais.
+               Aqui avançamos para <strong>junções</strong>, <strong>agregação</strong>, <strong>agrupamentos</strong>,
+               <strong>filtragem por grupos</strong>, <strong>subconsultas</strong> e <strong>views</strong>,
+               sempre no contexto do <em>mini‑mundo</em> da <strong>Biblioteca</strong> definido nos capítulos anteriores.</p>
+        </header>
+        <hr />
+
+        <!-- Ferramenta utilizada (nota breve) -->
+        <table class='box-table tip-table'>
+            <tr>
+                <td class='box-content tip definition' role='note' aria-labelledby='def-title-5-0'>
+                    <div id='def-title-5-0' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Definição'><strong>Ferramenta</strong></div>
+                    <div>
+                        <p><strong>pgAdmin (PostgreSQL)</strong> — interface gráfica para executar consultas SQL.
+                           Os exemplos seguem o padrão ISO/IEC 9075 e funcionam em SGBDs relacionais como o PostgreSQL.</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <section id='sec5-1'>
+            <h2>5.1 Junções (JOINs) e Relacionamentos entre Tabelas</h2>
+            <p>Após normalização, dados de uma entidade se distribuem em múltiplas tabelas.
+               As <strong>junções</strong> recompõem essa visão, combinando tuplas relacionadas por <strong>PK/FK</strong>.</p>
+            <p><strong>JOIN × UNION</strong>: o <em>JOIN</em> forma cada linha com atributos de várias tabelas; o <em>UNION</em>
+               combina resultados <em>verticamente</em> de consultas compatíveis (mesmas colunas).</p>
+            <figure>
+                <img src='../images/3-2-keys_fk.svg' alt='Modelo lógico com PK/FK entre aluno, reserva e livro, base para JOINs.' />
+                <figcaption><strong>Figura 5.1 — </strong>PK/FK no esquema da Biblioteca: base para junções entre tabelas.</figcaption>
+            </figure>
+            <table class='content-table'>
+                <caption><strong>Tabela 5.1 - </strong>Tipos de Junções</caption>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                        <th>Resultado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>INNER JOIN</strong></td><td>Somente correspondências em ambas as tabelas</td><td>Interseção</td></tr>
+                    <tr><td><strong>LEFT OUTER JOIN</strong></td><td>Todos os registros da tabela à esquerda</td><td>Esquerda + correspondências</td></tr>
+                    <tr><td><strong>RIGHT OUTER JOIN</strong></td><td>Todos os registros da tabela à direita</td><td>Direita + correspondências</td></tr>
+                    <tr><td><strong>FULL OUTER JOIN</strong></td><td>Todos os registros de ambas as tabelas</td><td>União com nulos</td></tr>
+                </tbody>
+            </table>
+            <figure>
+                <img src='../images/5-1-joins_overview.svg' alt='Diagramas de Venn: INNER, LEFT, RIGHT e FULL JOIN.' />
+                <figcaption><strong>Figura 5.1b — </strong>JOINs visuais: áreas resultantes por tipo.</figcaption>
+            </figure>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 5.1 — </strong>Junções no contexto da Biblioteca</figcaption>
+                <pre class='code sql'>
+-- Listar empréstimos com título do livro
+SELECT
+    E.id_emprestimo,
+    L.titulo,
+    E.data_emprestimo,
+    E.data_prevista
+FROM
+    EMPRESTIMO AS E
+JOIN
+    LIVRO AS L
+        ON L.codigo = E.codigo_livro
+ORDER BY
+    E.data_emprestimo DESC;
+
+-- Alunos e seus empréstimos (inclusive quem ainda não emprestou)
+SELECT
+    A.matricula,
+    A.nome,
+    E.id_emprestimo
+FROM
+    ALUNO AS A
+LEFT JOIN
+    EMPRESTIMO AS E
+        ON A.matricula = E.matricula_aluno
+ORDER BY
+    A.nome ASC;
+                </pre>
+            </figure>
+            <figure>
+                <img src='../images/5-1-joins_anti.svg' alt='Diagramas de Venn para LEFT/RIGHT anti-join (sem correspondência).' />
+                <figcaption><strong>Figura 5.1c — </strong>Regiões sem correspondência: LEFT/RIGHT anti‑join.</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec5-2'>
+            <h2>5.2 Funções de Agregação, Agrupamentos (GROUP BY) e Filtragem (HAVING)</h2>
+            <p>Agregações resumem múltiplas tuplas em uma tupla de <em>resumo</em>.
+               Para resumir por subgrupos, utilize <strong>GROUP BY</strong> e filtre grupos com <strong>HAVING</strong>.</p>
+            <figure>
+                <img src='../images/report-frequency.svg' alt='Diagrama conceitual de contagem e média por grupos.' />
+                <figcaption class='tight-caption'><strong>Figura 5.2 — </strong>Contagens e médias por grupos: visão resumida.</figcaption>
+            </figure>
+            <table class='content-table'>
+                <caption><strong>Tabela 5.2 - </strong>Funções de Agregação (exemplos)</caption>
+                <thead>
+                    <tr>
+                        <th>Função</th>
+                        <th>Descrição</th>
+                        <th>Exemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>COUNT</code></td><td>Número de registros</td><td><code>COUNT(*)</code></td></tr>
+                    <tr><td><code>SUM</code></td><td>Somatório</td><td><code>SUM(valor)</code></td></tr>
+                    <tr><td><code>AVG</code></td><td>Média</td><td><code>AVG(nota)</code></td></tr>
+                    <tr><td><code>MAX</code></td><td>Maior valor</td><td><code>MAX(data)</code></td></tr>
+                    <tr><td><code>MIN</code></td><td>Menor valor</td><td><code>MIN(idade)</code></td></tr>
+                </tbody>
+            </table>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 5.2 — </strong>Agregação com <code>GROUP BY</code> e filtro <code>HAVING</code></figcaption>
+                <pre class='code sql'>
+-- Livros mais emprestados (Biblioteca)
+SELECT
+    L.titulo,
+    COUNT(E.codigo_livro) AS total_emprestimos
+FROM
+    LIVRO AS L
+JOIN
+    EMPRESTIMO AS E
+        ON L.codigo = E.codigo_livro
+GROUP BY
+    L.titulo
+HAVING
+    COUNT(E.codigo_livro) &gt;= 1
+ORDER BY
+    total_emprestimos DESC;
+                </pre>
+            </figure>
+        </section>
+
+        <section id='sec5-3'>
+            <h2>5.3 Subconsultas e Operadores Lógicos</h2>
+            <p>Uma <strong>subconsulta</strong> é um <code>SELECT</code> aninhado usado como filtro ou origem de dados.
+               Combine condições com <strong>AND</strong>, <strong>OR</strong> e <strong>NOT</strong>.</p>
+            <table class='content-table'>
+                <caption><strong>Tabela 5.3 - </strong>Operadores Lógicos na cláusula <code>WHERE</code></caption>
+                <thead>
+                    <tr>
+                        <th>Operador</th>
+                        <th>Descrição</th>
+                        <th>Exemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>AND</code></td><td>Conjunção (todas verdadeiras)</td><td><code>A AND B</code></td></tr>
+                    <tr><td><code>OR</code></td><td>Disjunção (alguma verdadeira)</td><td><code>A OR B</code></td></tr>
+                    <tr><td><code>NOT</code></td><td>Negação</td><td><code>NOT A</code></td></tr>
+                </tbody>
+            </table>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 5.3 — </strong>Subconsultas no filtro</figcaption>
+                <pre class='code sql'>
+-- Alunos com ao menos 1 empréstimo atrasado
+SELECT
+    A.nome,
+    E.data_prevista,
+    D.data_devolucao
+FROM
+    ALUNO AS A
+JOIN
+    EMPRESTIMO AS E
+        ON A.matricula = E.matricula_aluno
+LEFT JOIN
+    DEVOLUCAO AS D
+        ON D.id_emprestimo = E.id_emprestimo
+WHERE
+    (
+        D.data_devolucao IS NOT NULL AND
+        D.data_devolucao &gt; E.data_prevista
+    )
+    OR (
+        D.data_devolucao IS NULL AND
+        E.data_prevista &lt; CURRENT_DATE
+    );
+
+-- Livros cujos códigos aparecem em empréstimos de alto volume
+SELECT
+    L.titulo
+FROM
+    LIVRO AS L
+WHERE
+    L.codigo IN (
+        SELECT E.codigo_livro
+        FROM EMPRESTIMO AS E
+        GROUP BY E.codigo_livro
+        HAVING COUNT(*) &gt;= 5
+    );
+                </pre>
+            </figure>
+        </section>
+
+        <section id='sec5-4'>
+            <h2>5.4 Criando Visões (VIEW) e Consultas Reutilizáveis</h2>
+            <p><strong>VIEW</strong> é um <code>SELECT</code> salvo no banco, funcionando como tabela virtual.</p>
+            <table class='box-table tip-table'>
+                <tr>
+                    <td class='box-content tip' role='note' aria-labelledby='def-title-5-4'>
+                        <div id='def-title-5-4' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Definição'><strong>Definição</strong></div>
+                        <div>
+                            <p><strong>VIEW</strong>: simplifica consultas complexas, favorece reutilização e pode
+                               restringir colunas para personalizar acesso.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 5.4 — </strong>View para empréstimos em aberto</figcaption>
+                <pre class='code sql'>
+-- Visão com empréstimos não devolvidos
+CREATE VIEW vw_emprestimos_em_aberto AS
+SELECT
+    E.id_emprestimo,
+    E.matricula_aluno,
+    E.codigo_livro,
+    E.data_emprestimo,
+    E.data_prevista
+FROM
+    EMPRESTIMO AS E
+LEFT JOIN
+    DEVOLUCAO AS D
+        ON D.id_emprestimo = E.id_emprestimo
+WHERE
+    D.id_emprestimo IS NULL;
+
+-- Consultar a VIEW como se fosse tabela
+SELECT
+    matricula_aluno,
+    COUNT(id_emprestimo) AS qtde_em_aberto
+FROM
+    vw_emprestimos_em_aberto
+GROUP BY
+    matricula_aluno
+ORDER BY
+    qtde_em_aberto DESC;
+                </pre>
+            </figure>
+        </section>
+
+        <section id='sec5-5'>
+            <h2>5.5 Estudo de Caso: Relatórios da Biblioteca</h2>
+            <table class='box-table case-table'>
+                <tr>
+                    <td class='box-content case' role='note' aria-labelledby='case-title-5-5'>
+                        <div id='case-title-5-5' class='box-title'><img src='../images/icon-estudodecaso.png' class='icon-img' alt='Estudo de Caso'><strong>Estudo de Caso</strong></div>
+                        <div>
+                            <p><strong>Objetivo</strong>: produzir relatórios com <em>JOIN</em>, agregação e filtros,
+                               a partir das tabelas <code>ALUNO</code>, <code>LIVRO</code>, <code>EMPRESTIMO</code> e <code>DEVOLUCAO</code>.</p>
+                            <ul>
+                                <li>Livros mais populares (contagem por título)</li>
+                                <li>Histórico de atrasos (datas real &gt; prevista ou ainda não devolvidos)</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <p><em>Consulte os gabaritos na seção 5.8.</em></p>
+        </section>
+
+        <section id='sec5-6'>
+            <h2>5.6 Exercícios Complementares</h2>
+            <table class='box-table complementary-table'>
+                <tr>
+                    <td class='box-content complementary' role='note' aria-labelledby='comp-title-5-6'>
+                        <div id='comp-title-5-6' class='box-title'><img src='../images/icon-complementar.png' class='icon-img' alt='Exercícios Complementares'><strong>Exercícios Complementares</strong></div>
+                        <div>
+                            <p><strong>Cenário:</strong> E‑commerce com tabelas <code>CLIENTE(CPF, nome)</code> e <code>REGISTRO_VENDA(id, cliente_cpf FK, valor_total)</code>.</p>
+                            <ol>
+                                <li><strong>Ticket médio</strong>: calcule o valor médio (<code>AVG</code>) de todas as vendas registradas.</li>
+                                <li><strong>Clientes frequentes</strong>: liste <code>nome</code>, <code>cpf</code> e o total de pedidos (<code>COUNT</code>) dos clientes com mais de 5 compras, ordenando pelo total decrescente.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <p><em>Consulte os gabaritos na seção 5.8.</em></p>
+        </section>
+
+        <section id='sec5-7'>
+            <h2>5.7 Exercícios Integrados</h2>
+            <table class='box-table integrated-table'>
+                <tr>
+                    <td class='box-content integrated' role='note' aria-labelledby='int-title-5-7'>
+                        <div id='int-title-5-7' class='box-title'><img src='../images/icon-integrado.png' class='icon-img' alt='Exercícios Integrados'><strong>Exercícios Integrados</strong></div>
+                        <div>
+                            <p><strong>Cenários:</strong> 1) Demografia com <code>CIDADE(nome, populacao)</code>; 2) Práticas Corporais com <code>TB_ALUNO(matricula, nome)</code> e <code>TB_REGISTRO_PRATICA(matricula_aluno FK, duracao)</code>.</p>
+                            <ol>
+                                <li><strong>Demografia</strong>: retorne a menor população (<code>MIN</code>) e a soma total (<code>SUM</code>) de todas as cidades.</li>
+                                <li><strong>Práticas Corporais</strong>: liste a média de duração das práticas (<code>AVG</code>) por aluno e ordene de forma decrescente.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure>
+                <img src='../images/report-frequency.svg' alt='Ilustração de agregação para demografia e duração média por aluno.' />
+                <figcaption class='tight-caption'><strong>Figura 5.3 — </strong>Agregações aplicadas a domínios distintos.</figcaption>
+            </figure>
+            <p><em>Consulte os gabaritos na seção 5.8.</em></p>
+        </section>
+
+        <section id='sec5-8'>
+            <h2>5.8 Gabaritos</h2>
+            <table class='box-table gabarito-table'>
+                <tr>
+                    <td class='box-content gabarito' role='note' aria-labelledby='gab-title-5-8'>
+                        <div id='gab-title-5-8' class='box-title'><img src='../images/icon-gabarito.png' class='icon-img' alt='Gabaritos'><strong>Gabaritos</strong></div>
+                        <div>
+                            <p><strong>Estudo de Caso — Biblioteca (Gabarito)</strong>:</p>
+                            <p><strong>Relatório 1: Empréstimos mais populares</strong></p>
+                            <h4>1 — Tabelas e junções</h4>
+                            <ul>
+                                <li>Juntar <code>LIVRO</code> a <code>EMPRESTIMO</code> por <code>LIVRO.codigo = EMPRESTIMO.codigo_livro</code>.</li>
+                            </ul>
+                            <h4>2 — Agregações e funções</h4>
+                            <ul>
+                                <li>Agrupar por <code>LIVRO.titulo</code> e calcular <code>COUNT(EMPRESTIMO.codigo_livro)</code> como total de empréstimos.</li>
+                            </ul>
+                            <h4>3 — Filtros e ordenação</h4>
+                            <ul>
+                                <li>Ordenar por <em>total_emprestimos</em> em ordem decrescente; opcionalmente limitar ao Top N.</li>
+                            </ul>
+                            <p><strong>Relatório 2: Histórico de atrasos</strong></p>
+                            <h4>1 — Tabelas e junções</h4>
+                            <ul>
+                                <li>Juntar <code>ALUNO</code> a <code>EMPRESTIMO</code> (por matrícula), <code>LIVRO</code> (por código) e <code>DEVOLUCAO</code> (por <code>id_emprestimo</code>), usando <em>LEFT JOIN</em> para contemplar casos sem devolução.</li>
+                            </ul>
+                            <h4>2 — Filtros</h4>
+                            <ul>
+                                <li>Selecionar devoluções com atraso: <code>DEVOLUCAO.data_devolucao &gt; EMPRESTIMO.data_prevista</code>.</li>
+                                <li>Alternativa: listar não devolvidos vencidos: <code>DEVOLUCAO.data_devolucao IS NULL</code> e <code>EMPRESTIMO.data_prevista &lt; CURRENT_DATE</code>.</li>
+                            </ul>
+                            <h4>3 — Colunas e ordenação</h4>
+                            <ul>
+                                <li>Exibir aluno, título do livro, data prevista e data real; ordenar por data real desc.</li>
+                            </ul>
+                            <hr />
+                            <p><strong>Exercícios Complementares — Gabarito</strong>:</p>
+                            <p><strong>Exercício 1: Ticket médio</strong></p>
+                            <h4>1 — Tabelas e colunas</h4>
+                            <ul>
+                                <li>Usar <code>REGISTRO_VENDA</code>, coluna <code>valor_total</code>.</li>
+                            </ul>
+                            <h4>2 — Funções</h4>
+                            <ul>
+                                <li>Calcular <code>AVG(valor_total)</code>, sem agrupamento.</li>
+                            </ul>
+                            <h4>3 — Resultado</h4>
+                            <ul>
+                                <li>Uma linha com o valor médio das vendas.</li>
+                            </ul>
+                            <p><strong>Exercício 2: Clientes frequentes</strong></p>
+                            <h4>1 — Tabelas e junções</h4>
+                            <ul>
+                                <li>Juntar <code>CLIENTE</code> a <code>REGISTRO_VENDA</code> por <code>cliente_cpf</code>.</li>
+                            </ul>
+                            <h4>2 — Agregações</h4>
+                            <ul>
+                                <li>Agrupar por cliente e contar <code>COUNT(REGISTRO_VENDA.id)</code>.</li>
+                            </ul>
+                            <h4>3 — Filtros e ordenação</h4>
+                            <ul>
+                                <li>Filtrar clientes com mais de 5 pedidos (<code>HAVING COUNT &gt; 5</code>); ordenar por total desc.</li>
+                            </ul>
+                            <hr />
+                            <p><strong>Exercícios Integrados — Gabarito</strong>:</p>
+                            <p><strong>Exercício 1: Demografia</strong></p>
+                            <h4>1 — Tabelas e colunas</h4>
+                            <ul>
+                                <li>Usar <code>CIDADE</code>, coluna <code>populacao</code>.</li>
+                            </ul>
+                            <h4>2 — Funções</h4>
+                            <ul>
+                                <li>Calcular <code>MIN(populacao)</code> e <code>SUM(populacao)</code>.</li>
+                            </ul>
+                            <h4>3 — Resultado</h4>
+                            <ul>
+                                <li>Uma linha com duas colunas: <em>menor_populacao</em> e <em>populacao_total</em>.</li>
+                            </ul>
+                            <p><strong>Exercício 2: Práticas corporais</strong></p>
+                            <h4>1 — Tabelas e junções</h4>
+                            <ul>
+                                <li>Juntar <code>TB_ALUNO</code> a <code>TB_REGISTRO_PRATICA</code> por <code>matricula_aluno</code>.</li>
+                            </ul>
+                            <h4>2 — Agregações</h4>
+                            <ul>
+                                <li>Agrupar por <code>TB_ALUNO.nome</code> e calcular <code>AVG(TB_REGISTRO_PRATICA.duracao)</code>.</li>
+                            </ul>
+                            <h4>3 — Ordenação</h4>
+                            <ul>
+                                <li>Ordenar pela média decrescente; exibir aluno e média.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+    </div>
+</body>
+</html>

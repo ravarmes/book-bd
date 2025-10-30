@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="540" viewBox="0 0 960 540">
+  <title>SQL JOINs — Visão Geral</title>
+  <desc>Venn diagrams ilustrando INNER, LEFT, RIGHT e FULL OUTER JOIN.</desc>
+  <rect x="0" y="0" width="960" height="540" fill="#ffffff"/>
+  <!-- Título -->
+  <text x="50%" y="40" font-family="Helvetica, Arial, sans-serif" font-size="28" text-anchor="middle" fill="#1f4f8b">SQL JOINs</text>
+  
+  <!-- Parâmetros comuns -->
+  <defs>
+    <style>
+      .label { font-family: Helvetica, Arial, sans-serif; font-size: 13px; fill: #333; }
+      .sql   { font-family: Georgia, 'Times New Roman', serif; font-size: 12px; fill: #444; }
+      .circle { fill: none; stroke: #333; stroke-width: 2; }
+      .shaded { fill: #d23f3f; fill-opacity: 0.55; }
+    </style>
+  </defs>
+
+  <!-- Grid: 2x2 -->
+  <!-- INNER JOIN -->
+  <g transform="translate(120,100)">
+    <defs>
+      <clipPath id="clipA_inner"><circle cx="80" cy="60" r="50"/></clipPath>
+    </defs>
+    <!-- círculos base -->
+    <circle class="circle" cx="80" cy="60" r="50"/>
+    <circle class="circle" cx="130" cy="60" r="50"/>
+    <!-- área de interseção -->
+    <circle class="shaded" cx="130" cy="60" r="50" clip-path="url(#clipA_inner)"/>
+    <!-- rótulos A/B -->
+    <text x="80" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">A</text>
+    <text x="130" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">B</text>
+    <text class="label" x="105" y="130" text-anchor="middle">INNER JOIN</text>
+  </g>
+
+  <!-- LEFT JOIN -->
+  <g transform="translate(360,100)">
+    <circle class="circle" cx="80" cy="60" r="50"/>
+    <circle class="circle" cx="130" cy="60" r="50"/>
+    <circle class="shaded" cx="80" cy="60" r="50"/>
+    <text x="80" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">A</text>
+    <text x="130" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">B</text>
+    <text class="label" x="105" y="130" text-anchor="middle">LEFT JOIN</text>
+  </g>
+
+  <!-- RIGHT JOIN -->
+  <g transform="translate(600,100)">
+    <circle class="circle" cx="80" cy="60" r="50"/>
+    <circle class="circle" cx="130" cy="60" r="50"/>
+    <circle class="shaded" cx="130" cy="60" r="50"/>
+    <text x="80" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">A</text>
+    <text x="130" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">B</text>
+    <text class="label" x="105" y="130" text-anchor="middle">RIGHT JOIN</text>
+  </g>
+
+  <!-- FULL OUTER JOIN -->
+  <g transform="translate(240,290)">
+    <circle class="circle" cx="80" cy="60" r="50"/>
+    <circle class="circle" cx="130" cy="60" r="50"/>
+    <circle class="shaded" cx="80" cy="60" r="50"/>
+    <circle class="shaded" cx="130" cy="60" r="50"/>
+    <text x="80" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">A</text>
+    <text x="130" y="60" text-anchor="middle" dy="5" font-size="16" fill="#333">B</text>
+    <text class="label" x="105" y="130" text-anchor="middle">FULL OUTER JOIN</text>
+  </g>
+
+  <!-- Rodapé sintaxes breves -->
+  <g transform="translate(40,450)">
+    <text class="sql" x="0" y="0">SELECT ... FROM A INNER JOIN B ON A.key = B.key</text>
+    <text class="sql" x="0" y="22">SELECT ... FROM A LEFT JOIN B ON A.key = B.key</text>
+    <text class="sql" x="0" y="44">SELECT ... FROM A RIGHT JOIN B ON A.key = B.key</text>
+    <text class="sql" x="0" y="66">SELECT ... FROM A FULL OUTER JOIN B ON A.key = B.key</text>
+  </g>
+
+</svg>

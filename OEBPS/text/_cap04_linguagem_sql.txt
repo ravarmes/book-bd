@@ -1,0 +1,251 @@
+### CAPÍTULO 4 – Linguagem SQL: Definição, Manipulação e Segurança de Dados
+
+A Structured Query Language (SQL) é a linguagem padrão para manipular bancos de dados relacionais. Ela foi desenvolvida pela IBM nos anos 70 e adotada por vários desenvolvedores de SGBDs. A SQL é uma linguagem declarativa, o que a diferencia de linguagens procedurais, sendo um padrão internacional utilizado quase universalmente com SGBDs relacionais para consultas e manipulação de dados.
+
+🖥️ **Ferramenta:** pgAdmin (PostgreSQL)
+
+O **PostgreSQL** é um SGBD Relacional (SGBDR) que se originou do POSTGRES, desenvolvido na Universidade da Califórnia, Berkely, e é considerado um dos mais avançados bancos de dados de código aberto disponíveis. O **pgAdmin** é o *front-end* (interface gráfica) frequentemente usado pelo PostgreSQL para coletar dados de entrada, pré-processá-los e apresentar resultados ao usuário de forma inteligível, auxiliando na manipulação do banco de dados.
+
+## 4.1 Introdução à Linguagem SQL e ao SGBD PostgreSQL.
+
+A Linguagem SQL é dividida em subconjuntos de comandos, de acordo com as operações que se deseja efetuar sobre o banco de dados:
+
+*   **DDL (Data Definition Language)**: Usado para criar, alterar e excluir a **estrutura** (esquemas, tabelas, índices).
+*   **DML (Data Manipulation Language)**: Usado para inserir, atualizar e apagar **dados**.
+*   **DQL (Data Query Language)**: Contém o comando `SELECT`, usado para recuperar (consultar) dados. (Muitas vezes visto como parte do DML).
+*   **DCL (Data Control Language)**: Controla o acesso dos usuários aos dados, gerenciando segurança e autorização.
+*   **DTL (Data Transaction Language)**: Usado para iniciar e finalizar transações.
+
+Embora a SQL seja padronizada (ISO/IEC 9075), cada SGBDR (como o PostgreSQL ou MySQL) apresenta seu próprio **dialeto**, com extensões e variações.
+
+## 4.2 Comandos DDL: Criação e Estrutura de Tabelas e Índices.
+
+A DDL é o conjunto de comandos que permite a criação, alteração e remoção da estrutura das tabelas e índices de um sistema. O resultado do uso da DDL é o **dicionário ou diretório de dados** (metadados), que armazena a definição completa da estrutura e restrições do banco de dados.
+
+### Comando CREATE TABLE
+
+Usado para criar uma nova relação (tabela). A sintaxe exige o nome da tabela e, entre parênteses, os atributos (colunas) com seus tipos de dados e restrições:
+
+| Tipo de Dado Comum | Descrição |
+| :--- | :--- |
+| `INT` (Integer) | Armazena números inteiros. |
+| `VARCHAR(N)` | Sequência de tamanho variável com até N caracteres. |
+| `CHAR(N)` | Caractere de tamanho fixo. |
+| `DATE` | Armazena data. |
+| `DECIMAL(P, E)` / `NUMERIC` | Números de ponto flutuante, usados para valores que precisam de exatidão (como dados monetários). |
+
+**Restrições Importantes:**
+
+*   **`NOT NULL`**: Indica que o atributo deve ter um conteúdo e não pode ser nulo. É obrigatório para chaves primárias.
+*   **`PRIMARY KEY`**: Define a chave primária da tabela, garantindo a unicidade e identificação exclusiva do registro.
+*   **`FOREIGN KEY... REFERENCES`**: Define a chave estrangeira (FK), que referencia a chave primária de outra tabela. As chaves estrangeiras são cruciais para implementar relacionamentos e impor a **integridade referencial**.
+    *   Podem incluir regras de integridade referencial como `ON DELETE [RESTRICT | CASCADE | SET NULL]`.
+
+### Comando ALTER TABLE
+
+Usado para fazer alterações na estrutura de tabelas já existentes.
+
+*   **Adicionar Coluna**: `ALTER TABLE <Tabela> ADD <Atributo> <Tipo_Dado>`.
+*   **Modificar Coluna**: `ALTER TABLE <Tabela> MODIFY <Atributo> <Tipo_Dado>` (ou `ALTER... TYPE` no PostgreSQL).
+*   **Excluir Coluna**: `ALTER TABLE <Tabela> DROP <Atributo>`.
+*   **Adicionar Chave Estrangeira**: Permite criar o relacionamento após a tabela ter sido criada, usando `FOREIGN KEY` e `REFERENCES`.
+
+### Comando DROP TABLE
+
+Usado para excluir a estrutura da tabela do banco de dados (tabela e todos os seus registros).
+
+### Índices
+
+Embora não detalhados na sintaxe explícita, a criação de **índices** é uma capacidade do DDL. Índices são arquivos auxiliares, frequentemente baseados em estruturas de dados em árvore ou *hash*, que aceleram a busca e execução de consultas no disco, melhorando a eficiência.
+
+## 4.3 Comandos DML: Inclusão, Exclusão e Alteração de Dados.
+
+O DML (Linguagem de Manipulação de Dados) é o subconjunto de comandos usado para inserir, atualizar e apagar dados.
+
+### Comando INSERT
+
+Adiciona um novo registro (tupla) em uma tabela.
+
+A sintaxe pode ser **explícita** (listando as colunas) ou **implícita** (assumindo a ordem das colunas, repassando valores para todas elas).
+
+*Exemplo (explícito):*
+`INSERT INTO ALUNO (Matricula, Nome, DataNascimento) VALUES ('2018005', 'Mariana Gomes', '2001-02-28');`
+
+Valores de atributos que armazenam caracteres e datas devem ser colocados entre aspas simples (' ').
+
+### Comando UPDATE
+
+Altera os dados de um ou mais registros em uma tabela.
+
+O `UPDATE` utiliza a cláusula `SET` para definir quais atributos serão modificados e qual novo valor será atribuído, e a cláusula **`WHERE`** para filtrar quais registros sofrerão a alteração.
+
+*Exemplo:*
+`UPDATE PROFESSOR SET Salario = Salario * 1.05 WHERE DCodigo='3';` (Aumenta o salário dos professores do departamento 3 em 5%).
+
+### Comando DELETE
+
+Remove um ou mais registros (linhas/tuplas) de uma tabela.
+
+O `DELETE` utiliza a cláusula **`WHERE`** para selecionar as tuplas a serem removidas. Se a cláusula `WHERE` for omitida, **todos** os registros da tabela serão excluídos.
+
+*Exemplo:*
+`DELETE FROM ALUNO WHERE Nome='Caio Nunes';`
+
+A remoção de registros em tabelas que possuem chave estrangeira em outras tabelas deve seguir as regras de **integridade referencial** (como `ON DELETE CASCADE`), garantindo que os registros dependentes sejam tratados corretamente.
+
+## 4.4 Gerenciamento de Transações: COMMIT, ROLLBACK e SAVEPOINT.
+
+Uma transação consiste em um conjunto de operações de banco de dados que são tratadas como uma unidade lógica indivisível. O subconjunto DTL (Data Transaction Language) define comandos para iniciar e finalizar transações.
+
+As transações realizadas pelo SGBD devem seguir as propriedades **ACID** (Atomicidade, Consistência, Isolamento e Durabilidade):
+
+*   **Atomicidade**: Garante que todas as operações de uma transação sejam executadas, ou nenhuma delas. É o princípio do "tudo ou nada".
+*   **Consistência**: Garante que a execução da transação leve o banco de dados de um estado consistente a outro estado consistente.
+*   **Isolamento**: Garante que uma transação não seja interferida por nenhuma outra transação concorrente.
+*   **Durabilidade**: Garante que o que foi salvo não será perdido, mesmo após falhas de software ou hardware.
+
+### Comando COMMIT
+
+Após executar comandos DML (`INSERT`, `UPDATE`, `DELETE`), os dados ficam na memória *cache* da transação. O comando `COMMIT` é utilizado para persistir os dados permanentemente no banco de dados.
+
+*Sintaxe:*
+`COMMIT;`
+
+### Comando ROLLBACK
+
+O comando `ROLLBACK` é usado para descartar os dados que estão na memória *cache* da transação, retornando o banco de dados ao estado consistente anterior à transação.
+
+*Sintaxe:*
+`ROLLBACK;`
+
+### SAVEPOINT
+
+Embora o `SAVEPOINT` não seja detalhado nos comandos dos fontes, ele é um conceito relacionado que permite que uma transação seja revertida para um ponto intermediário definido, em vez de reverter toda a transação.
+
+## 4.5 Consultas Simples (DQL) e Ordenações.
+
+A recuperação dos dados armazenados é efetuada através do comando `SELECT` (DQL).
+
+### Estrutura Básica do SELECT
+
+A forma básica da declaração `SELECT` é composta pelas cláusulas `SELECT`, `FROM` e, opcionalmente, `WHERE`:
+
+`SELECT < lista de atributos > FROM < lista de tabelas > WHERE < condicoes > ;`
+
+*   **`SELECT <lista de atributos>`**: Seleciona as colunas desejadas. Usar `SELECT *` seleciona todos os atributos das tuplas selecionadas.
+*   **`FROM <lista de tabelas>`**: Especifica a(s) tabela(s) que contém os dados.
+*   **`WHERE <condicoes>`**: Restringe a seleção das tuplas (registros).
+
+### Cláusula WHERE e Operadores
+
+A cláusula `WHERE` utiliza operadores lógicos e comparativos para filtrar os registros:
+
+| Operador | Significado | Exemplo | Fonte |
+| :--- | :--- | :--- | :--- |
+| **`=`** | Igual | `WHERE Nome = 'Tadeu'` | |
+| **`<>`** ou `!=` | Diferente | `WHERE Nome <> 'Tadeu'` | |
+| **`>`**, `<` | Maior que, Menor que | `WHERE Salario > 1000` | |
+| **`BETWEEN A AND B`** | Seleciona valores entre A e B (inclusivo) | `WHERE Idade BETWEEN 10 AND 20` | |
+| **`LIKE`** | Correspondência de padrão de *string* (`%` substitui zero ou mais caracteres; `_` substitui um único caractere) | `WHERE Endereco LIKE '%Ipatinga%'` | |
+| **`IS NULL`** / `IS NOT NULL` | Verifica se o valor é nulo ou não nulo | `WHERE ID_Setor IS NULL` | |
+| **`AND`** / **`OR`** | Operadores lógicos para combinar condições | `WHERE ID_Setor IS NOT NULL AND ID = 1` | |
+
+### Cláusula ORDER BY
+
+Permite ordenar as tuplas resultantes de uma consulta pelos valores de um ou mais atributos.
+
+*   **`ASC` (Ascendente)**: Ordem padrão, do menor para o maior (pode ser omitido).
+*   **`DESC` (Descendente)**: Ordem decrescente, do maior para o menor.
+
+*Exemplo:*
+`SELECT Nome FROM PROFESSOR ORDER BY Nome DESC;`
+
+## 4.6 Comandos DCL: Usuários, Papéis e Controle de Acesso (Permissões).
+
+A Linguagem de Controle de Dados (DCL) é o subconjunto de comandos que controla o acesso dos usuários aos dados.
+
+**Segurança e Acesso Não-Autorizado:**
+
+Um SGBD deve prover um subsistema de segurança e autorização, o qual o Administrador do Banco de Dados (DBA) usa para criar contas e especificar restrições de acesso. O SGBD, então, assegura que essas restrições sejam aplicadas automaticamente.
+
+Em um grande banco de dados compartilhado, é comum que muitos usuários não devam ter acesso a toda a informação (dados confidenciais como salários e bônus). Além disso, alguns usuários podem ter permissão apenas para leitura, enquanto outros podem realizar alterações (manipulação de dados).
+
+O DBA é responsável pela segurança do banco de dados, garantindo que apenas usuários com acesso adequado possam utilizá-lo.
+
+## 4.7 ESTUDO DE CASO: Criando e protegendo o banco da Biblioteca (DDL, DML, DCL, Transações).
+
+O contexto da Biblioteca envolve o armazenamento de informações sobre alunos, disciplinas (livros/itens), professores (funcionários) e solicitações (empréstimos).
+
+**1. Criação de Estruturas (DDL):**
+Usando o modelo relacional e comandos DDL, pode-se criar a tabela `ALUNO` (ou `ESTUDANTE`) e `LIVRO`, por exemplo:
+
+```sql
+-- DDL: Criação de Tabela LIVRO (Entidade Regular)
+CREATE TABLE LIVRO (
+    Codigo INT NOT NULL,
+    Titulo VARCHAR(100) NOT NULL,
+    Autor VARCHAR(100),
+    PRIMARY KEY (Codigo)
+);
+
+-- DDL: Criação de Tabela ALUNO, referenciando uma tabela CURSO (se existir no modelo)
+CREATE TABLE ALUNO (
+    Matricula INT NOT NULL,
+    Nome VARCHAR(45) NOT NULL,
+    DataNascimento DATE NOT NULL,
+    Endereco VARCHAR(45),
+    CCodigo INT NOT NULL,
+    PRIMARY KEY (Matricula),
+    FOREIGN KEY (CCodigo) REFERENCES CURSO(Codigo) -- Integridade referencial
+);
+```
+**2. Inserção de Dados (DML - INSERT):**
+Adicionar novos livros ao acervo:
+`INSERT INTO LIVRO (Codigo, Titulo, Autor) VALUES (101, 'Fundamentos de BD', 'Elmasri/Navathe');`
+
+**3. Alteração de Dados (DML - UPDATE):**
+Atualizar o título de um livro:
+`UPDATE LIVRO SET Titulo = 'Fundamentos de Sistemas de Banco de Dados' WHERE Codigo = 101;`
+
+**4. Gerenciamento de Transações (DTL):**
+Se um funcionário registra um empréstimo (que envolve reduzir o estoque e registrar o cliente/livro), essa operação deve ser atômica. Se o sistema falhar no meio, um `ROLLBACK` garante que nenhuma parte da operação seja salva. Se for bem-sucedida, um `COMMIT` salva as mudanças.
+*Exemplo:* Após registrar o empréstimo na tabela `EMPRESTIMO` e atualizar a tabela `LIVRO` (removendo da disponibilidade):
+`COMMIT;`
+
+**5. Proteção e Acesso (DCL):**
+O DBA deve restringir o acesso, por exemplo, permitindo que apenas o usuário `bibliotecario` possa `INSERT` e `UPDATE` na tabela `LIVRO`, enquanto o usuário `aluno_consulta` só possa usar o `SELECT`.
+
+## 4.8 EXERCÍCIOS COMPLEMENTARES: Prática com DDL e DML em um novo domínio (Ex: Locadora de Carros).
+
+Utilizando o domínio de uma Locadora (similar aos exemplos de Vendas/Locadora/Empresa nos fontes), realize as seguintes operações DDL e DML:
+
+**Cenário Base (Tabelas simplificadas):**
+
+1.  Crie a tabela `CARRO` (atributos: `ID_Carro` (PK, INT), `Modelo` (VARCHAR), `Placa` (VARCHAR, UNIQUE), `Valor_Diaria` (NUMERIC)).
+2.  Crie a tabela `CLIENTE` (atributos: `CPF` (PK, VARCHAR), `Nome` (VARCHAR), `Telefone` (VARCHAR)).
+3.  Crie a tabela `LOCACAO` (atributos: `ID_Locacao` (PK, INT), `ID_Carro_FK` (FK, INT), `CPF_Cliente_FK` (FK, VARCHAR), `Data_Saida` (DATE)).
+
+**Exercícios DDL:**
+
+1.  Crie o comando SQL para adicionar um novo atributo chamado `Cor` (VARCHAR 20) na tabela `CARRO`.
+2.  Crie o comando SQL para alterar o tamanho máximo do atributo `Modelo` na tabela `CARRO` para 60 caracteres.
+
+**Exercícios DML:**
+
+1.  Escreva o comando SQL para incluir o carro 'Corsa', placa 'XYZ-1234', diária de 75.00, com ID 1 na tabela `CARRO`.
+2.  Escreva o comando SQL para atualizar o `Valor_Diaria` do carro com `ID_Carro = 1` para 80.00.
+3.  Escreva o comando SQL para registrar uma locação: carro ID 1, cliente CPF '99999999999', na data atual (assumindo que o cliente já existe).
+4.  Escreva o comando SQL para excluir o cliente 'João' (CPF '11111111111').
+
+## 4.9 EXERCÍCIOS COMPLEMENTARES: Exercícios de Fixação.
+
+Com base em uma tabela genérica `FUNCIONARIO` (colunas: `ID`, `Nome`, `Salario`, `Departamento_ID`), responda às seguintes consultas (DQL):
+
+1.  Liste o nome de todos os funcionários e seus salários.
+2.  Liste o ID e o nome dos funcionários que têm salário maior que 1500.
+3.  Liste todos os atributos dos funcionários que trabalham no departamento com `Departamento_ID` igual a 2.
+4.  Liste o ID, nome e salário de todos os funcionários, ordenados do maior salário para o menor.
+5.  Liste os nomes de todos os funcionários, mas apenas uma ocorrência para nomes repetidos.
+6.  Liste todos os nomes de funcionários que começam com a letra 'M'.
+7.  Liste o nome e o salário de todos os funcionários, assumindo que eles receberão um aumento de 10% (exiba o novo salário calculado, mas sem alterar o banco de dados).
+8.  Recupere todos os funcionários cujo `Departamento_ID` não foi informado (`NULL`).

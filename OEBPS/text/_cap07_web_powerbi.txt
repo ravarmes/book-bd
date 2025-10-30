@@ -1,0 +1,277 @@
+## 🧭 **Prompt para o agente gerar o Capítulo 7 – Integração Web e BI**
+
+> Você é um autor técnico escrevendo um livro prático sobre **Banco de Dados**, voltado para iniciantes e estudantes de cursos técnicos e de graduação.
+> O capítulo a ser escrito é o **Capítulo 7 – Integração Web e Business Intelligence (BI)**.
+> O texto deve ser **didático, progressivo e orientado à prática**, com exemplos e trechos de código, usando o **estudo de caso da Biblioteca Escolar** desenvolvido ao longo do livro.
+>
+> Use uma linguagem acessível e instrutiva, como em uma aula prática.
+> Evite teorias longas — priorize a experimentação e a visualização de resultados.
+>
+> O banco de dados da biblioteca (já criado localmente pelos alunos) contém as tabelas:
+> `aluno`, `livro`, `exemplar`, `emprestimo`, `reserva`, `autor`, `livro_autor`, `telefone_aluno` e `avaliacao`.
+
+---
+
+## 📘 **CAPÍTULO 7 – Integração Web e *Business Intelligence* (BI)**
+
+🌐 **Ferramentas:** Supabase (DBaaS PostgreSQL) e Power BI
+
+---
+
+### 🎯 **Objetivo Geral**
+
+Mostrar como **publicar o banco da biblioteca na web** (via **Supabase**) e **analisar seus dados visualmente** (via **Power BI**), aplicando os conceitos de *Business Intelligence* com um enfoque totalmente prático.
+
+---
+
+## 🧩 **Estrutura e Diretrizes**
+
+### **7.1 Introdução ao Business Intelligence (BI): A Análise Visual de Dados**
+
+**Conceito e motivação:**
+
+* Explicar que *Business Intelligence* (BI) é o processo de transformar dados em informações estratégicas.
+* Aplicar o conceito ao contexto da biblioteca:
+
+  * Quais são os livros mais emprestados?
+  * Quais autores têm mais títulos em circulação?
+  * Qual o número médio de reservas por aluno?
+  * Qual é a nota média das avaliações dos empréstimos?
+
+**Prática introdutória:**
+
+> Criar um pequeno conjunto de dados fictício da tabela `emprestimo` e gerar um gráfico no Power BI mostrando a **quantidade de empréstimos por aluno**.
+> Mostrar como essa simples visualização já ajuda a perceber padrões de uso da biblioteca.
+
+**Breve teoria:**
+
+* Diferenciar consultas operacionais (ex: SQL) e análises analíticas (BI).
+* Apresentar os quatro tipos de análise:
+  **Descritiva** (o que aconteceu), **Diagnóstica** (por que aconteceu), **Preditiva** (o que pode acontecer), e **Prescritiva** (como agir).
+
+---
+
+### **7.2 Conexão com Power BI e Análise Descritiva de Dados**
+
+**Objetivo:**
+Conectar o Power BI ao banco local da biblioteca e explorar visualmente as tabelas.
+
+**Passos práticos:**
+
+1. Abrir o Power BI Desktop.
+2. Ir em **“Obter Dados → PostgreSQL Database”**.
+3. Inserir os dados de conexão do banco local.
+4. Selecionar as tabelas `aluno`, `livro`, `emprestimo` e `reserva`.
+
+**Limpeza e transformação (Power Query):**
+
+* Renomear colunas.
+* Criar colunas calculadas (ex: duração de empréstimo).
+* Filtrar empréstimos ativos.
+
+**Prática:**
+
+> Criar três gráficos:
+>
+> * 📊 Empréstimos por livro.
+> * 📈 Empréstimos por mês.
+> * 📚 Reservas por status (ativa, concluída, cancelada).
+
+**Mini-insight:**
+Com esses gráficos, o aluno já visualiza **quais livros têm alta demanda** e **quais reservas são mais recorrentes**.
+
+---
+
+### **7.3 Criando Dashboards e Relatórios Visuais**
+
+**Conceito:**
+
+* Explicar o que é um **dashboard**: painel interativo que consolida várias visões de um mesmo conjunto de dados.
+* Reforçar a importância de **indicadores-chave (KPIs)** no contexto da biblioteca, como:
+
+  * Total de empréstimos.
+  * Livros mais emprestados.
+  * Alunos mais ativos.
+  * Média de avaliações.
+
+**Prática completa:**
+
+> Criar um dashboard no Power BI com:
+>
+> * Gráfico de barras: *Top 5 livros mais emprestados*.
+> * Gráfico de linha: *Empréstimos por mês*.
+> * Cartão: *Total de reservas ativas*.
+> * Filtro interativo: *Filtrar por aluno*.
+
+**Mini-desafio:**
+
+> Adicione um gráfico com a *nota média de avaliação por livro* (usando a tabela `avaliacao`).
+
+---
+
+### **7.4 Publicando o Banco no Supabase (DBaaS)**
+
+**Introdução:**
+
+* Explicar o conceito de **Database as a Service (DBaaS)**.
+* Mostrar o Supabase como uma solução gratuita, segura e baseada em PostgreSQL.
+
+**Passos práticos:**
+
+1. Acesse [https://supabase.com](https://supabase.com).
+2. Crie uma conta e um novo projeto.
+3. Copie as credenciais de acesso ao banco (host, port, user, password, database).
+4. No painel SQL do Supabase, cole e execute o **script do banco da biblioteca**.
+5. Confirme se as tabelas foram criadas.
+
+**Prática:**
+
+> Execute no Supabase o seguinte SQL para listar os livros mais emprestados:
+>
+> ```sql
+> SELECT l.titulo, COUNT(e.id_emprestimo) AS total_emprestimos
+> FROM emprestimo e
+> JOIN exemplar ex ON e.cod_exemplar = ex.cod_exemplar
+> JOIN livro l ON ex.isbn = l.isbn
+> GROUP BY l.titulo
+> ORDER BY total_emprestimos DESC;
+> ```
+
+**Resultado esperado:**
+Banco da biblioteca publicado e consultável via web.
+
+---
+
+### **7.5 API REST do Supabase: Acesso ao Banco via Web**
+
+**Objetivo:**
+Mostrar que o Supabase cria automaticamente uma **API RESTful** que permite acessar os dados da biblioteca via navegador ou requisições HTTP.
+
+**Exemplo prático:**
+
+* Acessar o *API Playground* no painel do Supabase.
+* Fazer uma requisição REST:
+
+  ```
+  GET https://<projeto>.supabase.co/rest/v1/livro?select=titulo,isbn
+  ```
+* Retorno em JSON:
+
+  ```json
+  [
+    {"titulo": "Dom Casmurro", "isbn": 1234},
+    {"titulo": "O Cortiço", "isbn": 2345}
+  ]
+  ```
+
+**Prática:**
+
+> Fazer uma requisição para listar os exemplares disponíveis:
+>
+> ```
+> GET https://<projeto>.supabase.co/rest/v1/exemplar?status=eq.disponível
+> ```
+
+**Integração com Power BI:**
+
+* Mostrar como conectar o Power BI diretamente ao Supabase:
+
+  * via **PostgreSQL connection string**, ou
+  * via **API REST (conector Web)**.
+* Explicar que isso permite atualizar os relatórios automaticamente a partir do banco na nuvem.
+
+**📂 Observação adicional (exportação CSV):**
+
+> O Power BI permite exportar relatórios ou tabelas em formato CSV.
+> Esses arquivos podem ser reimportados no Supabase (painel SQL → “Import Data”) para análise ou backup.
+
+---
+
+### **7.6 Criando um Frontend Web com a API do Supabase**
+
+**Objetivo:**
+Construir uma página simples em HTML e JavaScript que consome a API REST do Supabase para exibir dados da biblioteca.
+
+**Demonstração prática:**
+
+> Exemplo 1 – Listagem de Alunos:
+
+```html
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Alunos da Biblioteca</title>
+</head>
+<body>
+  <h2>Lista de Alunos</h2>
+  <table border="1" id="tabelaAlunos">
+    <tr><th>Matrícula</th><th>Nome</th></tr>
+  </table>
+
+  <script>
+    async function carregarAlunos() {
+      const url = "https://<projeto>.supabase.co/rest/v1/aluno?select=matricula,nome";
+      const res = await fetch(url, {
+        headers: { apikey: "<chave-anon-pública>" }
+      });
+      const alunos = await res.json();
+      const tabela = document.getElementById("tabelaAlunos");
+      alunos.forEach(a => {
+        tabela.innerHTML += `<tr><td>${a.matricula}</td><td>${a.nome}</td></tr>`;
+      });
+    }
+    carregarAlunos();
+  </script>
+</body>
+</html>
+```
+
+> Exemplo 2 – Listagem de Empréstimos (com JOIN simplificado):
+
+```html
+<h2>Empréstimos</h2>
+<table border="1" id="tabelaEmprestimos">
+  <tr><th>ID</th><th>Aluno</th><th>Livro</th><th>Data</th></tr>
+</table>
+
+<script>
+async function carregarEmprestimos() {
+  const url = "https://<projeto>.supabase.co/rest/v1/emprestimo?select=id_emprestimo,data_emprestimo,aluno(matricula,nome),exemplar(livro(titulo))";
+  const res = await fetch(url, { headers: { apikey: "<chave-anon-pública>" } });
+  const emprestimos = await res.json();
+  const tabela = document.getElementById("tabelaEmprestimos");
+  emprestimos.forEach(e => {
+    tabela.innerHTML += `<tr><td>${e.id_emprestimo}</td><td>${e.aluno.nome}</td><td>${e.exemplar.livro.titulo}</td><td>${e.data_emprestimo}</td></tr>`;
+  });
+}
+carregarEmprestimos();
+</script>
+```
+
+**Conclusão da seção:**
+
+* O aluno agora vê os dados da biblioteca publicados e acessíveis na web.
+* Essa prática demonstra o ciclo completo: **Banco → Supabase → API REST → Frontend interativo**.
+
+---
+
+### **Encerramento do Capítulo**
+
+**Resumo:**
+
+* O aluno aprendeu a conectar o Power BI ao banco local e na nuvem.
+* Publicou o banco no Supabase e explorou a API REST.
+* Criou um pequeno frontend web para visualizar os dados.
+
+**Desafio Final:**
+
+> Desenvolva um painel no Power BI conectado ao Supabase mostrando:
+>
+> * Total de empréstimos por mês.
+> * Top 5 livros mais emprestados.
+> * Alunos com mais avaliações registradas.
+> * Taxa de reservas concluídas.
+>
+> E, como complemento, personalize a página HTML para mostrar livros disponíveis com botão “Reservar”.
+

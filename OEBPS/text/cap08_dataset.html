@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang='pt-BR'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <title>Capítulo 8 - Análise de Dados, Datasets e Preparação para Machine Learning</title>
+    <link rel='stylesheet' type='text/css' href='../css/style.css' />
+    <meta name='description' content='Extração de dados (SELECT) para CSV, conceito de dataset para Machine Learning, qualidade de dados, pré-processamento (1FN, 2FN, 3FN, NULL), estudo de caso Biblioteca e exercícios complementares com gabaritos.' />
+</head>
+
+<body>
+    <div class='container'>
+
+        <header>
+            <h1 id='cap8'>CAPÍTULO 8 – Análise de Dados, <em>Datasets</em> e Preparação para <em>Machine Learning</em></h1>
+            <p class='lead'>Transformando <strong>dados brutos</strong> em <strong>informação organizada</strong> e <strong>conhecimento</strong>.
+               Do <strong>SELECT</strong> à geração de <strong>datasets</strong> limpos para análise e ML.</p>
+        </header>
+        <hr />
+
+        <!-- Ferramenta -->
+        <table class='box-table tip-table'>
+            <tr>
+                <td class='box-content tip definition' role='note' aria-labelledby='def-title-8-0'>
+                    <div id='def-title-8-0' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Definição'><strong>Ferramenta</strong></div>
+                    <div>
+                        <p><strong>PostgreSQL/pgAdmin</strong> — Extrair dados via <code>SELECT</code> e exportar para <strong>CSV</strong>.
+                           Use <em>JOINs</em>, agregações e agrupamentos para estruturar o dataset.</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <section id='sec8-1'>
+            <h2>8.1 - O Banco de Dados como Fonte de Datasets: Exportação de Dados Limpos (CSV)</h2>
+            <p>O banco relacional concentra <strong>dados estruturados, consistentes e validados</strong>. Ao elaborar consultas com
+               <code>JOIN</code>, agregações e filtros, geramos <strong>datasets prontos</strong> para BI ou Machine Learning.</p>
+            <p><strong>Pipeline lógico</strong>:</p>
+            <pre class='code'>SELECT → FROM → WHERE → ORDER BY → EXPORT (CSV)</pre>
+            <figure>
+                <img src='../images/8-1-sql_pipeline.svg' alt='Pipeline: SELECT → FROM → WHERE → ORDER BY → CSV' />
+                <figcaption><strong>Figura 8.1 — </strong>Do SQL ao dataset CSV (e Pandas).</figcaption>
+            </figure>
+            <p>Consultas com <strong>JOIN</strong>, <strong>agregações</strong> e <strong>agrupamentos</strong> estruturam o dataset antes da exportação (<strong>CSV</strong>), garantindo consistência para análise e <em>Machine Learning</em>. <strong>CSV</strong> pode ser carregado em <strong>Power BI</strong>, <strong>Excel</strong> ou via <code>pandas.read_csv()</code>.</p>
+            <!-- Sugestão de nova figura (Figura 8.1): Pipeline de Dados: do SELECT ao Dataset
+                 Visual: Banco de Dados → SELECT SQL → Export CSV → pandas → Modelo ML -->
+            <table class='box-table tip-table'>
+                <tr>
+                    <td class='box-content tip' role='note' aria-labelledby='tip-title-8-1'>
+                        <div id='tip-title-8-1' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Exemplo'><strong>Exemplo prático</strong></div>
+                        <div>
+                            <p>Una <code>ALUNO</code>, <code>LIVRO</code> e <code>EMPRESTIMO</code> para formar um dataset de circulação. Exporte em <strong>CSV</strong>
+                               e utilize no Excel, Power BI ou Python (<code>pandas.read_csv()</code>).</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <h2>Ferramentas sugeridas</h2>
+            <table class='tools-table'>
+                <caption><strong>Ferramentas — </strong>SQL, Python, BI e Notebooks</caption>
+                <tr>
+                    <td>
+                        <ul>
+                            <li>SQL (<code>SELECT</code>, <code>JOIN</code>, <code>GROUP BY</code>)</li>
+                            <li>Python (<code>pandas</code>, <code>scikit-learn</code>)</li>
+                            <li>Power BI / Superset (ETL básico, filtros e visualização)</li>
+                            <li>Notebooks (Jupyter / Colab)</li>
+                        </ul>
+                    </td>
+                </tr>
+            </table>
+
+            <h2>Processo CRISP-DM</h2>
+            <table class='content-table'>
+                <caption><strong>Tabela 8.2 - </strong>Fases do CRISP-DM</caption>
+                <thead>
+                    <tr>
+                        <th>Fase</th>
+                        <th>Objetivo</th>
+                        <th>Principais entregas</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Business Understanding</strong></td><td>Definir metas e métricas de sucesso</td><td>Problema, KPIs, critérios</td></tr>
+                    <tr><td><strong>Data Understanding</strong></td><td>Coletar, descrever e explorar dados</td><td>Dic. de dados, qualidade, insights</td></tr>
+                    <tr><td><strong>Data Preparation</strong></td><td>Limpar e transformar dados</td><td>Dataset modelável, features prontas</td></tr>
+                    <tr><td><strong>Modeling</strong></td><td>Selecionar algoritmos e ajustar hiperparâmetros</td><td>Modelos e validações</td></tr>
+                    <tr><td><strong>Evaluation</strong></td><td>Avaliar resultados e riscos</td><td>Métricas, validação cruzada, decisão</td></tr>
+                    <tr><td><strong>Deployment</strong></td><td>Implantar e monitorar</td><td>Pipeline, monitoramento, feedback</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id='sec8-2'>
+            <h2>8.2 O Conceito de Dataset no Contexto de Machine Learning (ML)</h2>
+            <p><strong>Dataset</strong> é a informação organizada pronta para análise: tabelas coerentes e relacionadas,
+               derivadas de dados limpos e normalizados.</p>
+            <table class='box-table tip-table'>
+                <tr>
+                    <td class='box-content tip' role='note' aria-labelledby='tip-title-8-2'>
+                        <div id='tip-title-8-2' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Conceito-chave'><strong>Conceito-chave</strong></div>
+                        <div>
+                            <p>Um dataset é o encontro entre o <strong>modelo de dados</strong> (BD) e o <strong>modelo de aprendizado</strong> (ML).
+                               Traduz a lógica relacional para o formato vetorial usado por algoritmos.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <!-- Sugestão de nova figura (Figura 8.2): Do Banco Relacional ao Dataset para ML
+                 Visual: Banco Relacional → CSV → DataFrame Pandas → Modelo ML -->
+            <figure>
+                <img src='../images/8-2-db_to_ml.svg' alt='Do Banco Relacional ao Dataset para ML' />
+                <figcaption><strong>Figura 8.2 — </strong>Banco de Dados → CSV → DataFrame → Modelo.</figcaption>
+            </figure>
+            <p>Esta figura destaca o caminho do <strong>BD normalizado</strong> até o <strong>modelo de ML</strong>: extraímos com <code>SELECT</code>, exportamos em <strong>CSV</strong>, carregamos em <code>pandas.DataFrame</code> e, então, vetorizamos <em>features</em> para treinar o algoritmo. JOINs e colunas derivadas devem ser feitos <em>antes</em> da vetorização para manter consistência.</p>
+            <table class='content-table'>
+                <caption><strong>Tabela 8.2 - </strong>Do BD normalizado ao dataset para ML</caption>
+                <thead>
+                    <tr>
+                        <th>Etapa</th>
+                        <th>Objetivo</th>
+                        <th>Benefício no ML</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Normalização</td><td>Reduz redundância e anomalias</td><td>Consistência e dados confiáveis</td></tr>
+                    <tr><td>Recomposição</td><td>JOINs para visão integrada</td><td>Features coerentes</td></tr>
+                    <tr><td>Derivação</td><td>Colunas derivadas e agregações</td><td>Indicadores e sinais úteis</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id='sec8-3'>
+            <h2>8.3 Fontes de Dados e Qualidade (Kaggle e Outras)</h2>
+            <p>A abordagem de BD garante <strong>qualidade</strong> por meio de normalização e restrições de integridade,
+               diferindo de datasets brutos sem controle.</p>
+            <table class='box-table important-table'>
+                <tr>
+                    <td class='box-content important' role='note' aria-labelledby='imp-title-8-3'>
+                        <div id='imp-title-8-3' class='box-title'><img src='../images/icon-importante.png' class='icon-img' alt='Importante'><strong>Qualidade de Dados</strong></div>
+                        <div>
+                            <ul>
+                                <li><strong>Sem duplicidade</strong> e com regras de validação aplicadas.</li>
+                                <li><strong>Campos normalizados</strong> e tipos padronizados.</li>
+                                <li><strong>Registro de origem</strong> e <strong>data de atualização</strong>.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+        </section>
+
+        <section id='sec8-4'>
+            <h2>8.4 Estratégias de Pré‑processamento e Limpeza de Dados</h2>
+            <p>Muitas tarefas de limpeza são resolvidas na <strong>modelagem</strong> do BD:</p>
+            <h3>1. Tratamento de Atributos Não‑Atômicos (1FN)</h3>
+            <ul>
+                <li><strong>Multi‑valorados</strong>: mover para tabela própria relacionada por <code>FK</code>.</li>
+                <li><strong>Compostos</strong>: decompor em atributos simples (atômicos).</li>
+            </ul>
+            <h3>2. Tratamento de Redundância (2FN e 3FN)</h3>
+            <ul>
+                <li><strong>2FN</strong>: remove dependência funcional parcial.</li>
+                <li><strong>3FN</strong>: remove dependência funcional transitiva.</li>
+            </ul>
+            <h3>3. Valores Nulos</h3>
+            <ul>
+                <li>Minimizar <code>NULL</code> em campos cruciais com <code>NOT NULL</code>.</li>
+                <li>Definir estratégia de imputação ou descarte para análise/ML.</li>
+            </ul>
+            <h3>4. Outliers</h3>
+            <ul>
+                <li>Detectar por <strong>desvio padrão</strong> ou <strong>IQR</strong>.</li>
+                <li>Tratar por recorte, imputação ou transformação.</li>
+            </ul>
+            <h3>5. Codificação</h3>
+            <ul>
+                <li>Converter categorias: <em>One‑Hot</em>, <em>Target</em> ou <em>Embeddings</em>.</li>
+            </ul>
+            <h3>6. Normalização</h3>
+            <ul>
+                <li>Escalar variáveis (ex.: <strong>Min‑Max</strong>, <strong>Z‑score</strong>).</li>
+            </ul>
+            <!-- Sugestão de figura (8.4): Fluxo de Pré-processamento (BD → SQL → CSV → Pandas) -->
+            <figure>
+                <img src='../images/8-3-preprocessing_flow.svg' alt='Fluxo de pré‑processamento de dados' />
+                <figcaption><strong>Figura 8.3 — </strong>BD → SQL/CSV → Pandas → Limpeza e transformação.</figcaption>
+            </figure>
+            <p>A figura resume as etapas de <strong>pré‑processamento</strong> mais comuns: parte é resolvida na <strong>modelagem relacional</strong> (1FN, 2FN/3FN e restrições), e parte no <strong>pandas/scikit‑learn</strong> (tratamento de <code>NULL</code>, <em>outliers</em>, codificação de categorias e normalização). O objetivo é produzir um dataset <em>modelável</em> com <em>features</em> consistentes.</p>
+        </section>
+
+        <section id='sec8-5'>
+            <h2>8.5 ESTUDO DE CASO: Dataset de Empréstimos (Biblioteca)</h2>
+            <table class='box-table case-table'>
+                <tr>
+                    <td class='box-content case' role='note' aria-labelledby='case-title-8-5'>
+                        <div id='case-title-8-5' class='box-title'><img src='../images/icon-estudodecaso.png' class='icon-img' alt='Estudo de Caso'><strong>Contexto</strong></div>
+                        <div>
+                            <p>Gerar dataset consolidando <strong>ALUNO</strong>, <strong>LIVRO</strong> e <strong>EMPRESTIMO</strong> para análise (p.ex. risco de atraso).</p>
+                            <ul>
+                                <li><strong>JOINs</strong> por PK/FK, colunas derivadas e ordenação.</li>
+                                <li><strong>Exportação CSV</strong> via ferramenta (<em>pgAdmin</em>).</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 8.1 — </strong>Consulta de Extração para Dataset</figcaption>
+                <pre class='code sql'>
+SELECT
+    A.Matricula,
+    A.Nome AS Nome_Aluno,
+    L.Titulo AS Titulo_Livro,
+    E.Data_Emprestimo,
+    E.Data_Devolucao_Real,
+    -- Coluna Derivada: Exemplo Conceitual
+    (E.Data_Devolucao_Real - E.Data_Devolucao_Prevista) AS Dias_Atraso
+FROM
+    ALUNO AS A
+INNER JOIN
+    EMPRESTIMO AS E ON A.Matricula = E.Matricula_Aluno
+INNER JOIN
+    LIVRO AS L ON E.Codigo_Livro = L.Codigo
+ORDER BY
+    A.Nome, E.Data_Emprestimo;
+                </pre>
+            </figure>
+            <table class='box-table case-table'>
+                <tr>
+                    <td class='box-content case' role='note' aria-labelledby='case-ext-8-5'>
+                        <div id='case-ext-8-5' class='box-title'><img src='../images/icon-estudodecaso.png' class='icon-img' alt='Estudo de Caso'><strong>Extensão do Estudo de Caso</strong></div>
+                        <div>
+                            <p>Após gerar o <strong>CSV</strong> com a consulta SQL, importe em um notebook Python e aplique estatísticas descritivas:</p>
+                            <p style='text-align:left'><span style='white-space:nowrap'><code>df.describe()</code></span>, <span style='white-space:nowrap'><code>df.groupby('Titulo_Livro')['Dias_Atraso'].mean()</code></span>, <span style='white-space:nowrap'><code>sns.histplot(df['Dias_Atraso'])</code></span> para explorar distribuições e atrasos por livro.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <!-- Sugestão de figura (nova): Dataset de Empréstimos — BD → JOIN → CSV → Exploração em Python -->
+            <figure>
+                <img src='../images/8-4-loans_dataset.svg' alt='Dataset de Empréstimos: ALUNO + EMPRESTIMO + LIVRO' />
+                <figcaption><strong>Figura 8.4 — </strong>Geração do dataset de empréstimos: JOIN → CSV → Python.</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec8-6'>
+            <h2>8.6 EXERCÍCIOS COMPLEMENTARES: Preparação de Datasets na Web</h2>
+            <table class='box-table complementary-table'>
+                <tr>
+                    <td class='box-content complementary' role='note' aria-labelledby='comp-title-8-6'>
+                        <div id='comp-title-8-6' class='box-title'><img src='../images/icon-complementar.png' class='icon-img' alt='Exercícios Complementares'><strong>Práticas</strong></div>
+                        <div>
+                            <p><strong>Cenário</strong>: tabela <code>USUARIO_WEB</code> com <em>Telefone(s)</em> multi‑valorado e <em>Nome_Completo</em> composto por <em>Nome</em> e <em>Sobrenome</em>.</p>
+                            <ol>
+                                <li><strong>Aplicação da 1FN</strong>: Como eliminar a não‑atomicidade de <em>Telefone(s)</em>? Como decompor <em>Nome_Completo</em>?</li>
+                                <li><strong>Resultado no Modelo Relacional</strong>: Considerando <code>Usuario_ID</code> como <code>PK</code> de <code>USUARIO_WEB</code>, descreva as tabelas após aplicar 1FN.</li>
+                                <li><strong>Geração do Dataset Final</strong>: Escreva uma <strong>consulta SQL</strong> que extraia <em>nome</em>, <em>sobrenome</em> e a <em>lista de telefones</em> por usuário usando <code>JOIN</code> e concatenação.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec8-7'>
+            <h2>8.7 Gabaritos</h2>
+            <table class='box-table gabarito-table'>
+                <tr>
+                    <td class='box-content gabarito' role='note' aria-labelledby='gab-title-8-7'>
+                        <div id='gab-title-8-7' class='box-title'><img src='../images/icon-gabarito.png' class='icon-img' alt='Gabaritos'><strong>Gabaritos</strong></div>
+                        <div>
+                            <p><strong>Complementares (Web)</strong></p>
+
+                            <h4>1) Aplicação da 1FN</h4>
+                            <ul>
+                                <li><strong>Telefone(s)</strong>: criar tabela <code>TELEFONE_USUARIO</code> com colunas <code>Usuario_ID (FK)</code>, <code>Telefone</code>.</li>
+                                <li><strong>Nome_Completo</strong>: decompor em <code>Nome</code> e <code>Sobrenome</code> na tabela <code>USUARIO_WEB</code>.</li>
+                            </ul>
+
+                            <h4>2) Resultado no Modelo Relacional</h4>
+                            <ul>
+                                <li><strong>USUARIO_WEB</strong>(<code>Usuario_ID PK</code>, <code>Nome</code>, <code>Sobrenome</code>, ...)</li>
+                                <li><strong>TELEFONE_USUARIO</strong>(<code>Usuario_ID FK → USUARIO_WEB(Usuario_ID)</code>, <code>Telefone</code>)</li>
+                                <li><strong>Relacionamento</strong>: 1:N (um usuário, vários telefones)</li>
+                            </ul>
+
+                            <h4>3) Dataset Final (JOIN + concatenação)</h4>
+                            <ul>
+                                <li><strong>Agregação de telefones</strong>: use <code>STRING_AGG</code> (PostgreSQL) para concatenar telefones de cada usuário.</li>
+                                <li><strong>Consulta</strong>: <code>SELECT u.Usuario_ID, u.Nome, u.Sobrenome, STRING_AGG(t.Telefone, ', ') AS Telefones FROM USUARIO_WEB AS u LEFT JOIN TELEFONE_USUARIO AS t ON t.Usuario_ID = u.Usuario_ID GROUP BY u.Usuario_ID, u.Nome, u.Sobrenome ORDER BY u.Nome;</code></li>
+                                <li><strong>Observações</strong>: <code>LEFT JOIN</code> mantém usuários sem telefones; ajuste o separador conforme a necessidade.</li>
+                            </ul>
+
+                            <p><strong>Estudo de Caso (Biblioteca)</strong></p>
+                            <h4>Consulta de Extração</h4>
+                            <ul>
+                                <li><strong>JOINs</strong>: <code>ALUNO</code> ↔ <code>EMPRESTIMO</code> ↔ <code>LIVRO</code>.</li>
+                                <li><strong>Derivação</strong>: calcular <em>Dias_Atraso</em> pela diferença de datas.</li>
+                                <li><strong>Ordenação</strong>: por <em>Nome</em> e <em>Data_Emprestimo</em>.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <footer>
+            <hr />
+            <p>Capítulo 8 — Datasets e ML · Apostila de Banco de Dados</p>
+        </footer>
+
+    </div>
+</body>
+
+</html>

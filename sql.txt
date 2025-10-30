@@ -1,0 +1,82 @@
+-- Entidades regulares
+CREATE TABLE aluno (
+    matricula INTEGER NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    PRIMARY KEY (matricula)
+);
+
+CREATE TABLE livro (
+    isbn INTEGER NOT NULL,
+    titulo VARCHAR(150) NOT NULL,
+    PRIMARY KEY (isbn)
+);
+
+-- Relacionamento N:M via associativa (emprestimo)
+CREATE TABLE emprestimo (
+    id_emprestimo INTEGER NOT NULL,
+    matricula_aluno INTEGER NOT NULL,
+    cod_exemplar INTEGER NOT NULL,
+    data_emprestimo DATE NOT NULL,
+    data_prevista DATE NOT NULL,
+    PRIMARY KEY (id_emprestimo),
+    FOREIGN KEY (matricula_aluno) REFERENCES aluno(matricula) ON DELETE CASCADE,
+    FOREIGN KEY (cod_exemplar) REFERENCES exemplar(cod_exemplar) ON DELETE RESTRICT
+);
+
+-- Atributo multivalorado
+CREATE TABLE telefone_aluno (
+    matricula_aluno INTEGER NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    PRIMARY KEY (matricula_aluno, telefone),
+    FOREIGN KEY (matricula_aluno) REFERENCES aluno(matricula) ON DELETE CASCADE
+);
+-- Tabela associativa N:N entre livro e autor
+CREATE TABLE livro_autor (
+    isbn INTEGER NOT NULL,
+    id_autor INTEGER NOT NULL,
+    PRIMARY KEY (isbn, id_autor),
+    FOREIGN KEY (isbn) REFERENCES livro(isbn) ON DELETE RESTRICT,
+    FOREIGN KEY (id_autor) REFERENCES autor(id_autor) ON DELETE RESTRICT
+);
+
+-- Entidade autor
+CREATE TABLE autor (
+    id_autor INTEGER NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    PRIMARY KEY (id_autor)
+);
+
+-- Entidade exemplar (cópias de livro)
+CREATE TABLE exemplar (
+    cod_exemplar INTEGER NOT NULL,
+    isbn INTEGER NOT NULL,
+    localizacao VARCHAR(50),
+    status VARCHAR(20) NOT NULL,
+    PRIMARY KEY (cod_exemplar),
+    FOREIGN KEY (isbn) REFERENCES livro(isbn) ON DELETE RESTRICT
+);
+
+-- Reservas de livros feitas por alunos
+CREATE TABLE reserva (
+    id_reserva INTEGER NOT NULL,
+    matricula_aluno INTEGER NOT NULL,
+    isbn INTEGER NOT NULL,
+    data_reserva DATE NOT NULL,
+    status VARCHAR(20) NOT NULL,
+    PRIMARY KEY (id_reserva),
+    FOREIGN KEY (matricula_aluno) REFERENCES aluno(matricula) ON DELETE CASCADE,
+    FOREIGN KEY (isbn) REFERENCES livro(isbn) ON DELETE RESTRICT
+);
+
+-- Avaliações associadas a um empréstimo
+CREATE TABLE avaliacao (
+    id_avaliacao INTEGER NOT NULL,
+    id_emprestimo INTEGER NOT NULL,
+    matricula_aluno INTEGER NOT NULL,
+    nota SMALLINT NOT NULL,
+    data_avaliacao DATE NOT NULL,
+    comentario VARCHAR(500),
+    PRIMARY KEY (id_avaliacao),
+    FOREIGN KEY (id_emprestimo) REFERENCES emprestimo(id_emprestimo) ON DELETE RESTRICT,
+    FOREIGN KEY (matricula_aluno) REFERENCES aluno(matricula) ON DELETE CASCADE
+);

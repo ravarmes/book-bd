@@ -16,6 +16,12 @@
     <item id="cap01_intro" href="text/cap01_intro.html" media-type="application/xhtml+xml" />
     <item id="cap02_modelagem_conceitual" href="text/cap02_modelagem_conceitual.html" media-type="application/xhtml+xml" />
     <item id="cap03_modelagem_logica" href="text/cap03_modelagem_logica.html" media-type="application/xhtml+xml" />
+    <item id="cap04_linguagem_sql" href="text/cap04_linguagem_sql.html" media-type="application/xhtml+xml" />
+    <item id="cap05_consultas_avancadas" href="text/cap05_consultas_avancadas.html" media-type="application/xhtml+xml" />
+    <item id="cap06_otimizacao" href="text/cap06_otimizacao.html" media-type="application/xhtml+xml" />
+    <item id="cap07_web_powerbi" href="text/cap07_web_powerbi.html" media-type="application/xhtml+xml" />
+    <item id="cap08_dataset" href="text/cap08_dataset.html" media-type="application/xhtml+xml" />
+    <item id="cap09_ia" href="text/cap09_ia.html" media-type="application/xhtml+xml" />
 
     <!-- Imagens -->
     <item id="img_db_env_svg" href="images/1-4-db_environment.svg" media-type="image/svg+xml" />
@@ -51,6 +57,27 @@
     <item id="icon_integrado" href="images/icon-integrado.png" media-type="image/png" />
     <item id="icon_observacao" href="images/icon-observacao.png" media-type="image/png" />
 
+    <!-- Capítulo 4: Imagens -->
+    <item id="img_cap4_sql_layers_svg" href="images/4-1-sql_layers.svg" media-type="image/svg+xml" />
+    <item id="img_cap4_ddl_flow_svg" href="images/4-2-ddl_flow.svg" media-type="image/svg+xml" />
+    <item id="img_cap4_transactions_svg" href="images/4-4-transactions.svg" media-type="image/svg+xml" />
+    <item id="img_cap4_select_basic_svg" href="images/4-5-select_basic.svg" media-type="image/svg+xml" />
+
+    <!-- Capítulo 5: Imagens -->
+    <item id="img_cap5_joins_anti" href="images/5-1-joins_anti.svg" media-type="image/svg+xml" />
+    <item id="img_cap5_joins_overview" href="images/5-1-joins_overview.svg" media-type="image/svg+xml" />
+
+    <!-- Capítulo 7: Imagens -->
+    <item id="img_cap7_loans_per_student" href="images/7-1-loans_per_student.svg" media-type="image/svg+xml" />
+    <item id="img_cap7_sql_pipeline" href="images/7-2-sql_pipeline.svg" media-type="image/svg+xml" />
+    <item id="img_cap7_supabase_dbaas" href="images/7-3-supabase_dbaas.svg" media-type="image/svg+xml" />
+
+    <!-- Capítulo 8: Imagens -->
+    <item id="img_cap8_sql_pipeline" href="images/8-1-sql_pipeline.svg" media-type="image/svg+xml" />
+    <item id="img_cap8_db_to_ml" href="images/8-2-db_to_ml.svg" media-type="image/svg+xml" />
+    <item id="img_cap8_preprocessing_flow" href="images/8-3-preprocessing_flow.svg" media-type="image/svg+xml" />
+    <item id="img_cap8_loans_dataset" href="images/8-4-loans_dataset.svg" media-type="image/svg+xml" />
+
   </manifest>
   <spine>
     <itemref idref="capa" />
@@ -58,5 +85,11 @@
     <itemref idref="cap01_intro" />
     <itemref idref="cap02_modelagem_conceitual" />
     <itemref idref="cap03_modelagem_logica" />
+    <itemref idref="cap04_linguagem_sql" />
+    <itemref idref="cap05_consultas_avancadas" />
+    <itemref idref="cap06_otimizacao" />
+    <itemref idref="cap07_web_powerbi" />
+    <itemref idref="cap08_dataset" />
+    <itemref idref="cap09_ia" />
   </spine>
 </package>

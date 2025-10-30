@@ -205,22 +205,10 @@
                 </tr>
             </table>
 
-            <p>Para fixar as ideias de cardinalidade no <strong>domínio Biblioteca</strong>, a
-                <strong>Figura 2.3</strong> apresenta três associações binárias e um exemplo com
-                <em>entidade associativa</em> (múltiplos conceitos):</p>
-            <ul>
-                <li><strong>1:N (um para muitos)</strong>: <em>livro</em> → <em>exemplar</em> (um livro possui vários exemplares; cada exemplar pertence a um livro).</li>
-                <li><strong>1:1 (um para um)</strong>: <em>reserva</em> ↔ <em>exemplar</em> (cada reserva ativa refere‑se a um único exemplar; um exemplar pode ter no máximo uma reserva ativa).</li>
-                <li><strong>M:N (muitos para muitos)</strong>: <em>autor</em> ↔ <em>livro</em> (um autor escreve vários livros e um livro tem vários autores).</li>
-                <li><strong>M:N resolvido</strong>: <em>aluno</em> ↔ <em>emprestimo</em> ↔ <em>exemplar</em> (entidade associativa com atributos como datas).</li>
-            </ul>
-            <p>As multiplicidades são usadas aqui como <em>ilustração</em> (classes); no ER interpretamos como
-                <strong>taxa de cardinalidade</strong> combinada à <strong>participação mínima</strong> para
-                guiar a transformação ao modelo lógico. Regras de negócio podem alterar a mínima (ex.: reserva ativa).</p>
             <figure>
-                <img src='../images/2-3-cardinality_library.svg'
-                    alt='Biblioteca: 1:N livro–exemplar (vermelho), 1:1 reserva–exemplar (verde), M:N autor–livro (azul) e M:N resolvido aluno–emprestimo–exemplar (laranja), com ícones e conceitos no singular.' />
-                <figcaption><strong>Figura 2.3 — </strong>Associações no domínio Biblioteca (conceitos no singular) e exemplo com entidade associativa.</figcaption>
+                <img src='../images/2-3-cardinality.svg'
+                    alt='Exemplos de cardinalidade (1:1, 1:N, M:N) e participação total/parcial anotadas.' />
+                <figcaption><strong>Figura 2.3 — </strong>Cardinalidades e participação com exemplos didáticos.</figcaption>
             </figure>
         </section>
 

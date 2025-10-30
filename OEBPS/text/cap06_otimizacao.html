@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang='pt-BR'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <title>Capítulo 6 — Otimização, Modelo Físico e Administração Básica</title>
+    <link rel='stylesheet' type='text/css' href='../css/style.css' />
+    <meta name='description' content='Projeto físico, índices, ajuste de normalização, desnormalização, plano de execução e tuning básico. Estudo de caso e exercícios com foco em desempenho.' />
+</head>
+
+<body>
+    <div class='container'>
+
+        <header>
+            <h1 id='cap6'>CAPÍTULO 6 – Otimização, Modelo Físico e Administração Básica</h1>
+            <p class='lead'>Encerramos o projeto de banco de dados com o <strong>modelo físico</strong>,
+               a <strong>otimização</strong> de consultas e a administração básica. O objetivo é garantir
+               que operações sejam executadas com <strong>eficiência</strong> no SGBD escolhido.</p>
+        </header>
+        <hr />
+
+        <!-- Ferramenta utilizada (nota breve) -->
+        <table class='box-table tip-table'>
+            <tr>
+                <td class='box-content tip definition' role='note' aria-labelledby='def-title-6-0'>
+                    <div id='def-title-6-0' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Definição'><strong>Ferramenta</strong></div>
+                    <div>
+                        <p><strong>pgAdmin (PostgreSQL)</strong> — interface gráfica para administrar o SGBD, criar objetos (DDL) e analisar desempenho.</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <section id='sec6-1'>
+            <h2>6.1 Conceito de Modelo Físico e Mapeamento para o SGBD</h2>
+            <p>O <strong>Projeto Físico</strong> é a etapa final do projeto de BD, refinando o modelo lógico
+               para a implementação no SGBD. É o <strong>nível mais baixo de abstração</strong>, descrevendo como
+               dados são <em>armazenados fisicamente</em> e acessados.</p>
+            <table class='content-table'>
+                <caption><strong>Tabela 6.1 - </strong>Modelo Físico: aspectos principais</caption>
+                <thead>
+                    <tr>
+                        <th>Aspecto</th>
+                        <th>Descrição</th>
+                        <th>Exemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Estrutura</td><td>Tamanho e tipo de campos; terminologia alinhada ao processamento</td><td><code>VARCHAR(100)</code>, <code>NUMERIC(10,2)</code></td></tr>
+                    <tr><td>Dependência do SGBD</td><td>Escolhas específicas do PostgreSQL/MySQL</td><td>Tipos nativos, políticas <code>ON DELETE</code></td></tr>
+                    <tr><td>Acesso</td><td>Índices e caminhos de acesso</td><td><code>CREATE INDEX</code> em colunas de busca</td></tr>
+                    <tr><td>Implementação</td><td>Definição via <strong>DDL</strong></td><td><code>CREATE TABLE</code>, <code>ALTER TABLE</code></td></tr>
+                </tbody>
+            </table>
+            <figure>
+                <img src='../images/4-2-ddl_flow.svg' alt='Fluxo de DDL: criação de tabelas, índices e alterações estruturais.' />
+                <figcaption><strong>Figura 6.1 — </strong>Fluxo de DDL: criação de tabelas e índices no projeto físico.</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec6-2'>
+            <h2>6.2 Índices: Criação, Tipos e Desempenho de Consultas</h2>
+            <p>Índices são estruturas auxiliares que aceleram a <strong>busca</strong> no disco por tuplas de interesse.
+               O projeto físico deve especificar <strong>quais índices</strong> serão criados.</p>
+            <table class='content-table'>
+                <caption><strong>Tabela 6.2 - </strong>Índices: função e tipos</caption>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Uso típico</th>
+                        <th>Observações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>B-tree</strong></td><td>Igualdade e ordenação</td><td>Padrão do PostgreSQL; eficiente em ampla gama de consultas</td></tr>
+                    <tr><td><strong>Hash</strong></td><td>Busca por igualdade</td><td>Especializado; menos usado que B-tree</td></tr>
+                    <tr><td><strong>Composto</strong></td><td>Filtros por múltiplas colunas</td><td>Ordem das colunas influencia desempenho</td></tr>
+                    <tr><td><strong>Único</strong></td><td>Garantir unicidade</td><td>Ajuda integridade e desempenho</td></tr>
+                </tbody>
+            </table>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 6.1 — </strong>Criação de índices (DDL)</figcaption>
+                <pre class='code sql'>
+-- Índice simples
+CREATE INDEX idx_coluna ON TABELA (coluna);
+
+-- Índice composto
+CREATE INDEX idx_multi ON TABELA (col1, col2);
+                </pre>
+            </figure>
+            <p>Os comandos <strong>CREATE INDEX</strong> definem estruturas auxiliares para acelerar filtros e ordenações; o índice composto favorece consultas que filtram por ambas as colunas na ordem definida.</p>
+
+            <h3>Tipos de índices no PostgreSQL</h3>
+            <table class='content-table'>
+                <caption><strong>Tabela 6.3 - </strong>Tipos de índice e usos recomendados</caption>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Uso recomendável</th>
+                        <th>Considerações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>B-tree</strong></td><td>Igualdade, ordenação e intervalos</td><td>Padrão do PostgreSQL; versátil e eficiente em ampla gama de consultas</td></tr>
+                    <tr><td><strong>Hash</strong></td><td>Apenas igualdade</td><td>Especializado; menos flexível que B-tree</td></tr>
+                    <tr><td><strong>GiST</strong></td><td>Estratégias gerais (geoespacial, proximidade, etc.)</td><td>Suporta diversas famílias de operadores; bom para dados dinâmicos</td></tr>
+                    <tr><td><strong>SP-GiST</strong></td><td>Dados particionáveis (trie, árvores patricia)</td><td>Estratégias que beneficiam particionamento lógico</td></tr>
+                    <tr><td><strong>GIN</strong></td><td>Conteúdo com múltiplos valores (texto, arrays, JSONB)</td><td>Índice invertido; buscas rápidas, atualizações mais custosas</td></tr>
+                    <tr><td><strong>BRIN</strong></td><td>Tabelas muito grandes com correlação por blocos (faixas)</td><td>Resumo por blocos; excelente custo/benefício em <em>big tables</em></td></tr>
+                </tbody>
+            </table>
+            <p class='small'>Fonte: <a href='https://www.postgresql.org/docs/current/indexes-types.html' target='_blank' rel='noopener'>PostgreSQL Docs — Tipos de Índice</a>.</p>
+
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 6.2 — </strong>Busca textual com GIN</figcaption>
+                <pre class='code sql'>
+-- Exemplo: índice GIN para busca de texto
+CREATE INDEX idx_doc_tsv ON DOCUMENTO USING GIN (to_tsvector('portuguese', conteudo));
+
+-- Consulta por termo
+SELECT id, titulo
+FROM DOCUMENTO
+WHERE to_tsvector('portuguese', conteudo) @@ to_tsquery('portuguese', 'biblioteca & desempenho');
+                </pre>
+            </figure>
+            <p>Este SQL cria um índice <strong>GIN</strong> sobre o vetor de texto (<code>to_tsvector</code>) para acelerar buscas por termos; a consulta usa <code>to_tsquery</code> com operadores booleanos para localizar documentos rapidamente.</p>
+        </section>
+
+        <section id='sec6-3'>
+            <h2>6.3 Ajustes de Normalização e Desnormalização para Performance</h2>
+            <p>A <strong>normalização</strong> reduz a <em>redundância</em> e as anomalias, enquanto a <strong>desnormalização</strong>
+               introduz redundância de modo <em>controlado</em> para atender necessidades de desempenho ou histórico.</p>
+            <table class='box-table important-table'>
+                <tr>
+                    <td class='box-content important' role='note' aria-labelledby='imp-title-6-3'>
+                        <div id='imp-title-6-3' class='box-title'><img src='../images/icon-importante.png' class='icon-img' alt='Importante'><strong>Importante</strong></div>
+                        <div>
+                            <h3>Normalização (Controle de Redundância)</h3>
+                            <ul>
+                                <li>Minimiza redundância e anomalias (inserção, atualização, exclusão).</li>
+                                <li>Evita inconsistências e desperdício de armazenamento.</li>
+                            </ul>
+                            <h3>Desnormalização (Ajuste para Performance)</h3>
+                            <ul>
+                                <li>Controverso; introduz redundância intencional.</li>
+                                <li>Casos: histórico imutável; consultas recorrentes e complexas; ganhos práticos de desempenho.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec6-4'>
+            <h2>6.4 Plano de Execução (Execution Plan) e Tuning Básico</h2>
+            <p>O SGBD deve executar consultas e atualizações com <strong>eficiência</strong>. O <em>tuning</em> básico inclui
+               uso adequado de índices e um projeto consistente.</p>
+            <table class='box-table tip-table'>
+                <tr>
+                    <td class='box-content tip note' role='note' aria-labelledby='tip-title-6-4'>
+                        <div id='tip-title-6-4' class='box-title'><img src='../images/icon-observacao.png' class='icon-img' alt='Observação'><strong>Dicas de Tuning</strong></div>
+                        <div>
+                            <ul>
+                                <li>Utilize índices para filtros frequentes em <code>WHERE</code>, junções (<code>PK/FK</code>) e ordenações.</li>
+                                <li>Mantenha o esquema normalizado; reserve desnormalização para necessidades claras.</li>
+                                <li>Monitore desempenho — responsabilidade central do <strong>DBA</strong>.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <h3>EXPLAIN e EXPLAIN ANALYZE</h3>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 6.3 — </strong>Plano de execução e estatísticas de tempo</figcaption>
+                <pre class='code sql'>
+-- Plano estimado (não executa a consulta)
+EXPLAIN SELECT *
+FROM EMPRESTIMO
+WHERE Codigo_Livro = 12345;
+
+-- Plano com execução (coleta tempos e buffers)
+EXPLAIN (ANALYZE, BUFFERS, VERBOSE) SELECT L.Titulo, COUNT(E.Codigo_Livro) AS total
+FROM LIVRO AS L
+JOIN EMPRESTIMO AS E ON L.Codigo = E.Codigo_Livro
+GROUP BY L.Titulo
+ORDER BY total DESC
+LIMIT 10;
+                </pre>
+            </figure>
+            <p>Este SQL utiliza <strong>EXPLAIN</strong> para inspecionar o plano estimado e <strong>EXPLAIN ANALYZE</strong> para executar e medir tempos/buffers, ajudando a diagnosticar gargalos e validar o efeito de índices.</p>
+            <p class='small'>Fonte: <a href='https://www.postgresql.org/docs/current/sql-explain.html' target='_blank' rel='noopener'>PostgreSQL Docs — EXPLAIN</a>.</p>
+
+            <h3>Administração básica: VACUUM/ANALYZE e Autovacuum</h3>
+            <table class='content-table'>
+                <caption><strong>Tabela 6.4 - </strong>Manutenção de tabelas e estatísticas</caption>
+                <thead>
+                    <tr>
+                        <th>Comando</th>
+                        <th>Finalidade</th>
+                        <th>Quando usar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>VACUUM</code></td><td>Remove tuplas mortas e atualiza mapa de visibilidade</td><td>Rotina em tabelas atualizadas</td></tr>
+                    <tr><td><code>ANALYZE</code></td><td>Atualiza estatísticas do otimizador</td><td>Após cargas grandes; periodicamente</td></tr>
+                    <tr><td><code>VACUUM FULL</code></td><td>Reescreve tabela, devolve espaço ao SO</td><td>Casos especiais de <em>bloat</em>; requer lock exclusivo</td></tr>
+                    <tr><td><code>vacuumdb -j N</code></td><td>Executa VACUUM/ANALYZE em paralelo</td><td>Grandes bases; ajustar <code>max_connections</code></td></tr>
+                    <tr><td><strong>Autovacuum</strong></td><td>Daemon automático de manutenção</td><td>Padrão; ajustar parâmetros conforme carga</td></tr>
+                </tbody>
+            </table>
+            <p class='small'>Fonte: <a href='https://www.postgresql.org/docs/current/sql-vacuum.html' target='_blank' rel='noopener'>PostgreSQL Docs — VACUUM</a> · <a href='https://www.postgresql.org/docs/current/routine-vacuuming.html' target='_blank' rel='noopener'>Rotina de Vacuum</a>.</p>
+        </section>
+
+        <section id='sec6-5'>
+            <h2>6.5 Estudo de Caso: Otimizando Consultas Críticas da Biblioteca</h2>
+            <table class='box-table case-table'>
+                <tr>
+                    <td class='box-content case' role='note' aria-labelledby='case-title-6-5'>
+                        <div id='case-title-6-5' class='box-title'><img src='../images/icon-estudodecaso.png' class='icon-img' alt='Estudo de Caso'><strong>Estudo de Caso</strong></div>
+                        <div>
+                            <p><strong>Contexto</strong>: consultas críticas em Biblioteca sobre <em>alunos</em>, <em>livros</em> e <em>empréstimos</em>.</p>
+                            <p><strong>Diagnóstico</strong>: buscas por <code>LIVRO.Titulo</code> e <code>ALUNO.Nome</code> são lentas em grandes volumes.</p>
+                            <p><strong>Atividades</strong>:</p>
+                            <ol>
+                                <li>Proponha intervenções (índices/chaves) para otimizar as consultas críticas.</li>
+                                <li>Explique o impacto esperado e como validar com <code>EXPLAIN/ANALYZE</code>.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <p><em>Consulte os gabaritos na seção 6.8.</em></p>
+        </section>
+
+        <section id='sec6-6'>
+            <h2>6.6 Exercícios Complementares</h2>
+            <table class='box-table complementary-table'>
+                <tr>
+                    <td class='box-content complementary' role='note' aria-labelledby='comp-title-6-6'>
+                        <div id='comp-title-6-6' class='box-title'><img src='../images/icon-complementar.png' class='icon-img' alt='Exercícios Complementares'><strong>Exercícios Complementares</strong></div>
+                        <div>
+                            <p><strong>Cenário</strong>: Log de Acessos (<code>TB_LOG_ACESSO</code>) com <code>ID_Sessao</code>, <code>Data_Hora_Acesso</code>, <code>IP_Usuario</code>.</p>
+                            <p><strong>Objetivo</strong>: otimizar consultas por data/hora.</p>
+                            <ol>
+                                <li>Identifique o ponto crítico de busca e justifique.</li>
+                                <li>Crie um índice em <code>Data_Hora_Acesso</code> e explique o impacto esperado.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <p class='small'><em>Consulte os gabaritos na seção 6.8.</em></p>
+        </section>
+
+        <section id='sec6-7'>
+            <h2>6.7 Exercícios Integrados</h2>
+            <table class='box-table integrated-table'>
+                <tr>
+                    <td class='box-content integrated' role='note' aria-labelledby='int-title-6-7'>
+                        <div id='int-title-6-7' class='box-title'><img src='../images/icon-integrado.png' class='icon-img' alt='Exercícios Integrados'><strong>Exercícios Integrados</strong></div>
+                        <div>
+                            <p><strong>Cenário</strong>: domínio científico com <code>TB_AMOSTRA</code> e <code>TB_RESULTADO_ANALISE</code>.</p>
+                            <p>A tabela de resultados possui PK composta <code>(ID_Amostra, ID_Teste)</code> e atributo <code>Valor_Medido</code>.</p>
+                            <p><strong>Desafio</strong>: 99% das consultas exigem <code>Descricao_Amostra</code> junto com <code>Valor_Medido</code>.</p>
+                            <ol>
+                                <li>Proponha um índice (ou chave) que beneficie junções entre amostra e resultado.</li>
+                                <li>Discuta a <strong>desnormalização</strong> como solução controversa: copiar <code>Descricao_Amostra</code> para resultados. Quais trade-offs?</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <p class='small'><em>Consulte os gabaritos na seção 6.8.</em></p>
+        </section>
+
+        <!-- Gabaritos do Capítulo 6 -->
+        <section id='sec6-8'>
+            <h2>6.8 Gabaritos</h2>
+            <table class='box-table gabarito-table'>
+                <tr>
+                    <td class='box-content gabarito' role='note' aria-labelledby='gab-title-6-8'>
+                        <div id='gab-title-6-8' class='box-title'><img src='../images/icon-gabarito.png' class='icon-img' alt='Gabaritos'><strong>Gabaritos</strong></div>
+                        <div>
+                            <p><strong>Estudo de Caso — Biblioteca (Gabarito)</strong>:</p>
+                            <h4>1 — Intervenções</h4>
+                            <ul>
+                                <li>Criar índices em <code>LIVRO(Titulo)</code> e <code>ALUNO(Nome)</code>.</li>
+                            </ul>
+                            <h4>2 — Efeito esperado</h4>
+                            <ul>
+                                <li>Acelerar filtros por título e nome; reduzir varreduras sequenciais.</li>
+                            </ul>
+                            <figure class='listing'>
+                                <figcaption class='listing-title'><strong>Código 6.4 — </strong>Índices no domínio Biblioteca</figcaption>
+                                <pre class='code sql'>
+-- DDL: Índice no campo Titulo da tabela LIVRO
+CREATE INDEX idx_titulo_livro ON LIVRO (Titulo);
+
+-- DDL: Índice no campo Nome da tabela ALUNO
+CREATE INDEX idx_nome_aluno ON ALUNO (Nome);
+                                </pre>
+                            </figure>
+                            <hr />
+                            <p><strong>Exercícios Complementares — Gabarito</strong>:</p>
+                            <h4>1 — Ponto crítico</h4>
+                            <ul>
+                                <li><code>Data_Hora_Acesso</code> concentra os filtros — ideal para indexação.</li>
+                            </ul>
+                            <h4>2 — Ação</h4>
+                            <ul>
+                                <li>Criar índice em <code>TB_LOG_ACESSO(Data_Hora_Acesso)</code> para acelerar consultas temporais.</li>
+                            </ul>
+                            <figure class='listing'>
+                                <figcaption class='listing-title'><strong>Código 6.5 — </strong>Índice para Log de Acessos</figcaption>
+                                <pre class='code sql'>
+-- Índice para acelerar consultas por Data/Hora
+CREATE INDEX idx_data_hora_acesso ON TB_LOG_ACESSO (Data_Hora_Acesso);
+                                </pre>
+                            </figure>
+                            <hr />
+                            <p><strong>Exercícios Integrados — Gabarito</strong>:</p>
+                            <h4>1 — Índices e chaves</h4>
+                            <ul>
+                                <li>Garantir PK composta <code>(ID_Amostra, ID_Teste)</code> e FK de resultados para amostra.</li>
+                                <li>Índices nas colunas de junção melhoram <em>JOIN</em> por igualdade.</li>
+                            </ul>
+                            <h4>2 — Desnormalização (trade-off)</h4>
+                            <ul>
+                                <li>Redundância controlada: copiar <code>Descricao_Amostra</code> para resultados reduz <em>JOIN</em> recorrente.</li>
+                                <li>Custos: atualização mais complexa e risco de inconsistência; aplicar quando ganhos práticos forem claros.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <div class='page-foot'>Prof. Rafael Vargas Mesquita — Apostila: Banco de Dados • Capítulo 6</div>
+    </div>
+</body>
+</html>

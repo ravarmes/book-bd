@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="330" viewBox="0 0 1000 330">
+  <defs>
+    <style>
+      .title{font-family:Segoe UI,Arial,sans-serif;font-size:22px;fill:#513095;font-weight:700}
+      .subtitle{font-family:Segoe UI,Arial,sans-serif;font-size:12px;fill:#666;font-style:italic}
+      .box{fill:#f2edff;stroke:#513095;stroke-width:2.5;filter:drop-shadow(2px 2px 4px rgba(81,48,149,0.2))}
+      .box-highlight{fill:#e3dbff;stroke:#513095;stroke-width:2.5;filter:drop-shadow(3px 3px 6px rgba(81,48,149,0.3))}
+      .chip{fill:#fff;stroke:#513095;stroke-width:1.5;filter:drop-shadow(1px 1px 2px rgba(81,48,149,0.15))}
+      .label{font-family:Segoe UI,Arial,sans-serif;font-size:16px;fill:#513095;font-weight:600}
+      .sub{font-size:13px;fill:#513095}
+      .chip-text{font-size:12px;fill:#513095;font-weight:500}
+      .arrow{stroke:#513095;stroke-width:3;fill:none;marker-end:url(#ah)}
+      .icon{fill:#513095}
+      .number-badge{fill:#ff6b6b;stroke:#fff;stroke-width:2}
+      .number-text{fill:#fff;font-size:14px;font-weight:700;font-family:Arial}
+    </style>
+    <marker id="ah" markerWidth="12" markerHeight="12" refX="9" refY="6" orient="auto">
+      <path d="M0,0 L9,6 L0,12 Z" fill="#513095" />
+    </marker>
+    <!-- Gradient for highlight -->
+    <linearGradient id="grad1" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f2edff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e3dbff;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Title -->
+  <text x="500" y="40" text-anchor="middle" class="title">Fluxo de Pré-processamento de Dados</text>
+  
+  <!-- Database icon and box -->
+  <rect x="30" y="80" rx="12" ry="12" width="150" height="75" class="box"/>
+  <g class="icon">
+    <circle cx="105" cy="95" r="15" fill="none" stroke="#513095" stroke-width="2"/>
+    <path d="M95,90 L95,100 Q95,105 105,105 Q115,105 115,100 L115,90" stroke="#513095" stroke-width="2" fill="none"/>
+    <ellipse cx="105" cy="90" rx="10" ry="4" fill="#513095"/>
+    <path d="M95,95 Q95,100 105,100 Q115,100 115,95" stroke="#513095" stroke-width="1.5" fill="none"/>
+  </g>
+  <text x="105" y="128" text-anchor="middle" class="label">Banco de Dados</text>
+  <text x="105" y="145" text-anchor="middle" class="sub">Fonte de Dados</text>
+  
+  <!-- Arrow 1 -->
+  <path class="arrow" d="M180,117 L220,117"/>
+  
+  <!-- SQL icon and box -->
+  <rect x="220" y="80" rx="12" ry="12" width="120" height="75" class="box"/>
+  <g class="icon">
+    <rect x="260" y="92" width="40" height="8" rx="2" fill="#513095" opacity="0.7"/>
+    <rect x="260" y="104" width="40" height="8" rx="2" fill="#513095" opacity="0.5"/>
+    <rect x="260" y="116" width="40" height="8" rx="2" fill="#513095" opacity="0.3"/>
+  </g>
+  <text x="280" y="142" text-anchor="middle" class="label">SQL Query</text>
+  
+  <!-- Arrow 2 -->
+  <path class="arrow" d="M340,117 L380,117"/>
+  
+  <!-- CSV icon and box -->
+  <rect x="380" y="80" rx="12" ry="12" width="120" height="75" class="box"/>
+  <g class="icon">
+    <rect x="422" y="92" width="36" height="40" rx="3" fill="none" stroke="#513095" stroke-width="2"/>
+    <path d="M426,100 L454,100 M426,108 L454,108 M426,116 L454,116 M426,124 L454,124" stroke="#513095" stroke-width="1.5"/>
+    <path d="M438,92 L438,132" stroke="#513095" stroke-width="1.5"/>
+  </g>
+  <text x="440" y="148" text-anchor="middle" class="label">CSV Export</text>
+  
+  <!-- Arrow 3 -->
+  <path class="arrow" d="M500,117 L540,117"/>
+  
+  <!-- Pandas icon and box -->
+  <rect x="540" y="70" rx="12" ry="12" width="150" height="95" class="box"/>
+  <g class="icon">
+    <circle cx="615" cy="95" r="12" fill="#513095" opacity="0.2"/>
+    <path d="M610,90 L610,100 M620,90 L620,100" stroke="#513095" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="608" cy="87" r="2" fill="#513095"/>
+    <circle cx="622" cy="87" r="2" fill="#513095"/>
+  </g>
+  <text x="615" y="128" text-anchor="middle" class="label">Pandas</text>
+  <text x="615" y="145" text-anchor="middle" class="sub">DataFrame</text>
+  <text x="615" y="158" text-anchor="middle" class="chip-text">Estrutura de dados</text>
+  
+  <!-- Arrow 4 -->
+  <path class="arrow" d="M690,117 L730,117"/>
+  
+  <!-- Pre-processing box (highlighted) -->
+  <rect x="730" y="70" rx="12" ry="12" width="240" height="95" fill="url(#grad1)" stroke="#513095" stroke-width="2.5" filter="drop-shadow(3px 3px 6px rgba(81,48,149,0.3))"/>
+  <g class="icon">
+    <circle cx="850" cy="98" r="18" fill="none" stroke="#513095" stroke-width="2.5"/>
+    <path d="M840,98 L845,103 L860,88" stroke="#513095" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  <text x="850" y="132" text-anchor="middle" class="label" font-size="18">Pré-processamento</text>
+  <text x="850" y="150" text-anchor="middle" class="sub">Preparação para ML</text>
+  
+  <!-- Processing steps with icons and numbered badges -->
+  
+  <!-- Row 1 -->
+  <!-- 1FN -->
+  <rect x="745" y="185" rx="8" ry="8" width="110" height="36" class="chip"/>
+  <circle cx="758" cy="203" r="10" class="number-badge"/>
+  <text x="758" y="208" text-anchor="middle" class="number-text">1</text>
+  <g class="icon" transform="translate(775, 195)">
+    <rect x="0" y="0" width="8" height="8" fill="#513095" opacity="0.6"/>
+    <rect x="10" y="0" width="8" height="8" fill="#513095" opacity="0.6"/>
+    <rect x="0" y="10" width="8" height="8" fill="#513095" opacity="0.6"/>
+  </g>
+  <text x="820" y="206" text-anchor="middle" class="chip-text">1FN</text>
+  
+  <!-- 2FN/3FN -->
+  <rect x="860" y="185" rx="8" ry="8" width="110" height="36" class="chip"/>
+  <circle cx="873" cy="203" r="10" class="number-badge"/>
+  <text x="873" y="208" text-anchor="middle" class="number-text">2</text>
+  <g class="icon" transform="translate(890, 195)">
+    <path d="M0,8 L8,0 L16,8 L8,16 Z" fill="none" stroke="#513095" stroke-width="1.5"/>
+    <circle cx="8" cy="8" r="3" fill="#513095"/>
+  </g>
+  <text x="935" y="206" text-anchor="middle" class="chip-text">2FN/3FN</text>
+  
+  <!-- Row 2 -->
+  <!-- NULL -->
+  <rect x="745" y="228" rx="8" ry="8" width="110" height="36" class="chip"/>
+  <circle cx="758" cy="246" r="10" class="number-badge"/>
+  <text x="758" y="251" text-anchor="middle" class="number-text">3</text>
+  <g class="icon" transform="translate(775, 238)">
+    <circle cx="8" cy="8" r="7" fill="none" stroke="#513095" stroke-width="2"/>
+    <path d="M4,4 L12,12 M12,4 L4,12" stroke="#513095" stroke-width="2"/>
+  </g>
+  <text x="820" y="249" text-anchor="middle" class="chip-text">NULL</text>
+  
+  <!-- Outliers -->
+  <rect x="860" y="228" rx="8" ry="8" width="110" height="36" class="chip"/>
+  <circle cx="873" cy="246" r="10" class="number-badge"/>
+  <text x="873" y="251" text-anchor="middle" class="number-text">4</text>
+  <g class="icon" transform="translate(890, 238)">
+    <circle cx="3" cy="10" r="2" fill="#513095"/>
+    <circle cx="8" cy="8" r="2" fill="#513095"/>
+    <circle cx="13" cy="9" r="2" fill="#513095"/>
+    <circle cx="16" cy="4" r="3" fill="#ff6b6b"/>
+  </g>
+  <text x="935" y="249" text-anchor="middle" class="chip-text">Outliers</text>
+  
+  <!-- Row 3 -->
+  <!-- Encoding -->
+  <rect x="745" y="271" rx="8" ry="8" width="110" height="36" class="chip"/>
+  <circle cx="758" cy="289" r="10" class="number-badge"/>
+  <text x="758" y="294" text-anchor="middle" class="number-text">5</text>
+  <g class="icon" transform="translate(773, 283)">
+    <text x="0" y="10" font-size="10" fill="#513095" font-weight="700">A→1</text>
+  </g>
+  <text x="820" y="292" text-anchor="middle" class="chip-text">Encoding</text>
+  
+  <!-- Normalização -->
+  <rect x="860" y="271" rx="8" ry="8" width="110" height="36" class="chip"/>
+  <circle cx="873" cy="289" r="10" class="number-badge"/>
+  <text x="873" y="294" text-anchor="middle" class="number-text">6</text>
+  <g class="icon" transform="translate(888, 283)">
+    <path d="M0,10 Q6,2 12,10" stroke="#513095" stroke-width="1.8" fill="none"/>
+    <circle cx="6" cy="6" r="1.2" fill="#513095"/>
+  </g>
+  <text x="935" y="292" text-anchor="middle" class="chip-text">Normalização</text>
+</svg>

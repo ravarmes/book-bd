@@ -1,0 +1,30 @@
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 840 160' role='img' aria-label='Estrutura básica do SELECT: SELECT, FROM, WHERE e ORDER BY'>
+  <style>
+    .box { fill:#e8e8ff; stroke:#4a4ab0; stroke-width:2; rx:8; ry:8; }
+    .txt { font-family:system-ui,Segoe UI,Arial,sans-serif; font-size:20px; fill:#1a1a44; font-weight:600; }
+    .arrow { stroke:#4a4ab0; stroke-width:2; marker-end:url(#m); }
+  </style>
+  <defs>
+    <marker id='m' viewBox='0 0 10 10' refX='9' refY='5' markerWidth='8' markerHeight='8' orient='auto'>
+      <path d='M 0 0 L 10 5 L 0 10 z' fill='#4a4ab0'/>
+    </marker>
+  </defs>
+
+  <rect x='30' y='30' width='160' height='60' class='box'/>
+  <text x='50' y='65' class='txt'>SELECT</text>
+
+  <rect x='230' y='30' width='160' height='60' class='box'/>
+  <text x='250' y='65' class='txt'>FROM</text>
+
+  <rect x='430' y='30' width='180' height='60' class='box'/>
+  <text x='450' y='65' class='txt'>WHERE</text>
+
+  <rect x='650' y='30' width='160' height='60' class='box'/>
+  <text x='670' y='65' class='txt'>ORDER BY</text>
+
+  <line x1='190' y1='60' x2='230' y2='60' class='arrow'/>
+  <line x1='390' y1='60' x2='430' y2='60' class='arrow'/>
+  <line x1='610' y1='60' x2='650' y2='60' class='arrow'/>
+
+  <text x='40' y='130' class='txt' style='font-size:16px;font-weight:500'>Consulta mínima: SELECT colunas FROM tabela WHERE condições ORDER BY atributos;</text>
+</svg>

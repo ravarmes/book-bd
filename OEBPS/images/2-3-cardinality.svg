@@ -1,43 +1,99 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 420" width="800" height="420" role="img" aria-label="Exemplos de cardinalidade e participação">
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="520" viewBox="0 0 1000 520">
   <defs>
     <style>
-      .box { fill:#eef6ff; stroke:#1e5aa6; stroke-width:2; }
-      .title { font: 700 16px 'Segoe UI', Arial, sans-serif; fill:#0b3d91; }
-      .label { font: 600 14px 'Segoe UI', Arial, sans-serif; fill:#08345e; }
-      .line { stroke:#3a4e67; stroke-width:2; }
-      .crow { fill:none; stroke:#3a4e67; stroke-width:2; }
-      .caption { font: 500 14px 'Segoe UI', Arial, sans-serif; fill:#3a4e67; }
+      text{font-family:Segoe UI,Tahoma,sans-serif}
+      .title{font-weight:700;font-size:18px}
+      .label{font-size:12px;fill:#333}
+      .panel{fill:#f7f8fb;stroke:#d0d0d0}
+      .person{fill:#ffd27d;stroke:#444}
+      .car{fill:#cde8ff;stroke:#444}
+      .wheel{fill:#333}
+      .line1{stroke:#e74c3c;stroke-width:3}
+      .line2{stroke:#2ecc71;stroke-width:3}
+      .line3{stroke:#3498db;stroke-width:3}
     </style>
   </defs>
 
-  <!-- Linha 1: 1:1 -->
-  <rect class="box" x="60" y="40" width="160" height="60" rx="8"/>
-  <text class="title" x="140" y="78" text-anchor="middle">PESSOA</text>
-  <rect class="box" x="580" y="40" width="160" height="60" rx="8"/>
-  <text class="title" x="660" y="78" text-anchor="middle">CPF</text>
-  <line class="line" x1="220" y1="70" x2="580" y2="70"/>
-  <text class="label" x="400" y="64" text-anchor="middle">1:1</text>
+  <!-- Painel 1: 1:N -->
+  <rect class="panel" x="20" y="40" width="300" height="440"/>
+  <text class="title" x="170" y="30" text-anchor="middle">Um para muitos</text>
+  <!-- pessoa -->
+  <circle class="person" cx="70" cy="150" r="12"/>
+  <rect class="person" x="60" y="165" width="20" height="50" rx="4"/>
+  <text class="label" x="50" y="230">Pessoa</text>
+  <!-- carros -->
+  <rect class="car" x="240" y="120" width="80" height="30" rx="8"/>
+  <circle class="wheel" cx="255" cy="155" r="6"/>
+  <circle class="wheel" cx="295" cy="155" r="6"/>
+  <rect class="car" x="240" y="200" width="80" height="30" rx="8"/>
+  <circle class="wheel" cx="255" cy="235" r="6"/>
+  <circle class="wheel" cx="295" cy="235" r="6"/>
+  <rect class="car" x="240" y="280" width="80" height="30" rx="8"/>
+  <circle class="wheel" cx="255" cy="315" r="6"/>
+  <circle class="wheel" cx="295" cy="315" r="6"/>
+  <text class="label" x="250" y="330">Carros</text>
+  <!-- ligações 1:N (vermelho) -->
+  <line class="line1" x1="80" y1="190" x2="240" y2="135"/>
+  <line class="line1" x1="80" y1="190" x2="240" y2="215"/>
+  <line class="line1" x1="80" y1="190" x2="240" y2="295"/>
 
-  <!-- Linha 2: 1:N -->
-  <rect class="box" x="60" y="150" width="160" height="60" rx="8"/>
-  <text class="title" x="140" y="188" text-anchor="middle">DEPARTAMENTO</text>
-  <rect class="box" x="580" y="150" width="160" height="60" rx="8"/>
-  <text class="title" x="660" y="188" text-anchor="middle">FUNCIONÁRIO</text>
-  <line class="line" x1="220" y1="180" x2="520" y2="180"/>
-  <!-- Crow's foot simplificado -->
-  <polyline class="crow" points="520,180 580,160 580,200 520,180"/>
-  <text class="label" x="400" y="174" text-anchor="middle">1:N</text>
-  <text class="caption" x="140" y="225" text-anchor="middle">Participação: Total em FUNCIONÁRIO</text>
+  <!-- Painel 2: 1:1 -->
+  <rect class="panel" x="350" y="40" width="300" height="440"/>
+  <text class="title" x="500" y="30" text-anchor="middle">Um para um</text>
+  <!-- pessoas -->
+  <circle class="person" cx="400" cy="120" r="10"/>
+  <rect class="person" x="392" y="132" width="16" height="40" rx="4"/>
+  <circle class="person" cx="400" cy="220" r="10"/>
+  <rect class="person" x="392" y="232" width="16" height="40" rx="4"/>
+  <circle class="person" cx="400" cy="320" r="10"/>
+  <rect class="person" x="392" y="332" width="16" height="40" rx="4"/>
+  <text class="label" x="380" y="390">Pessoa</text>
+  <!-- carros -->
+  <rect class="car" x="560" y="105" width="80" height="30" rx="8"/>
+  <circle class="wheel" cx="575" cy="140" r="6"/>
+  <circle class="wheel" cx="615" cy="140" r="6"/>
+  <rect class="car" x="560" y="205" width="80" height="30" rx="8"/>
+  <circle class="wheel" cx="575" cy="240" r="6"/>
+  <circle class="wheel" cx="615" cy="240" r="6"/>
+  <rect class="car" x="560" y="305" width="80" height="30" rx="8"/>
+  <circle class="wheel" cx="575" cy="340" r="6"/>
+  <circle class="wheel" cx="615" cy="340" r="6"/>
+  <text class="label" x="575" y="390">Carro</text>
+  <!-- ligações 1:1 (verde) -->
+  <line class="line2" x1="408" y1="152" x2="560" y2="120"/>
+  <line class="line2" x1="408" y1="252" x2="560" y2="220"/>
+  <line class="line2" x1="408" y1="352" x2="560" y2="320"/>
 
-  <!-- Linha 3: M:N -->
-  <rect class="box" x="60" y="260" width="160" height="60" rx="8"/>
-  <text class="title" x="140" y="298" text-anchor="middle">ALUNO</text>
-  <rect class="box" x="580" y="260" width="160" height="60" rx="8"/>
-  <text class="title" x="660" y="298" text-anchor="middle">LIVRO</text>
-  <line class="line" x1="220" y1="290" x2="580" y2="290"/>
-  <text class="label" x="400" y="284" text-anchor="middle">M:N</text>
-  <text class="caption" x="400" y="330" text-anchor="middle">Resolver como entidade associativa (EMPRESTIMO) no modelo lógico</text>
+  <!-- Painel 3: M:N -->
+  <rect class="panel" x="680" y="40" width="300" height="440"/>
+  <text class="title" x="830" y="30" text-anchor="middle">Muitos para muitos</text>
+  <!-- pessoas -->
+  <circle class="person" cx="730" cy="130" r="10"/>
+  <rect class="person" x="722" y="142" width="16" height="40" rx="4"/>
+  <circle class="person" cx="730" cy="220" r="10"/>
+  <rect class="person" x="722" y="232" width="16" height="40" rx="4"/>
+  <circle class="person" cx="730" cy="310" r="10"/>
+  <rect class="person" x="722" y="322" width="16" height="40" rx="4"/>
+  <text class="label" x="710" y="390">Pessoas</text>
+  <!-- carros -->
+  <rect class="car" x="840" y="120" width="80" height="30" rx="8"/>
+  <circle class="wheel" cx="855" cy="155" r="6"/>
+  <circle class="wheel" cx="895" cy="155" r="6"/>
+  <rect class="car" x="840" y="210" width="80" height="30" rx="8"/>
+  <circle class="wheel" cx="855" cy="245" r="6"/>
+  <circle class="wheel" cx="895" cy="245" r="6"/>
+  <rect class="car" x="840" y="300" width="80" height="30" rx="8"/>
+  <circle class="wheel" cx="855" cy="335" r="6"/>
+  <circle class="wheel" cx="895" cy="335" r="6"/>
+  <text class="label" x="850" y="390">Carros</text>
+  <!-- ligações M:N (azul) -->
+  <line class="line3" x1="738" y1="152" x2="840" y2="135"/>
+  <line class="line3" x1="738" y1="152" x2="840" y2="225"/>
+  <line class="line3" x1="738" y1="242" x2="840" y2="225"/>
+  <line class="line3" x1="738" y1="242" x2="840" y2="315"/>
+  <line class="line3" x1="738" y1="332" x2="840" y2="315"/>
+  <line class="line3" x1="738" y1="332" x2="840" y2="135"/>
 
-  <!-- Rodapé -->
-  <text class="caption" x="400" y="400" text-anchor="middle">Cardinalidade máxima (1:1, 1:N, M:N) e participação mínima indicada</text>
+  <!-- rodapé explicativo -->
+  <text class="label" x="500" y="500" text-anchor="middle">Exemplos ilustrativos de multiplicidade (classes) mapeados para cardinalidade no ER.</text>
 </svg>

@@ -1,0 +1,187 @@
+Olá, preciso que você altere o conteúdo do capítulo 8, tomando como base as seguintes considerações:
+
+CAPÍTULO 8
+
+---
+
+### **8.1 — O Banco de Dados como Fonte de Datasets: Exportação de Dados Limpos para Análise (CSV)**
+
+O banco de dados é o ponto de partida para qualquer projeto de análise.
+É nele que estão **os dados estruturados, consistentes e validados**, resultado de regras de negócio aplicadas no modelo relacional.
+Dessa forma, ao exportar consultas SQL cuidadosamente elaboradas — especialmente com *JOINs*, *GROUP BY* e filtros — é possível gerar **datasets prontos para uso em BI ou Machine Learning**.
+
+Os comandos SQL formam um **pipeline lógico**:
+
+```text
+SELECT → FROM → WHERE → ORDER BY → EXPORT (CSV)
+```
+
+Cada parte contribui para um *refinamento incremental* dos dados, como se fosse uma linha de produção que transforma registros em informações úteis.
+
+<div class="box-table tip-table">
+  <div class="box-content tip">
+    <div class="box-title"><strong>Exemplo prático</strong></div>
+    <p>Uma consulta que une as tabelas <code>ALUNO</code>, <code>LIVRO</code> e <code>EMPRESTIMO</code> gera um dataset de circulação da biblioteca.  
+       Esse dataset pode ser exportado em CSV e usado no Excel, Power BI ou Python (<code>pandas.read_csv()</code>).</p>
+  </div>
+</div>
+
+#### 🔁 Sugestão de imagem para substituir a Figura 8.1:
+
+**Título:** “Pipeline de Dados: do SELECT ao Dataset”
+**Descrição visual:** Um fluxo mostrando:
+**Banco de Dados → SELECT SQL → Export CSV → pandas → Modelo ML**
+**Prompt para gerar:**
+
+> Diagrama didático em estilo educacional mostrando um pipeline de dados: banco de dados relacional → consulta SQL (SELECT) → arquivo CSV → pandas DataFrame → modelo de machine learning.
+
+---
+
+### **8.2 — O Conceito de Dataset no Contexto de Machine Learning (ML)**
+
+Um *dataset* é mais do que um conjunto de dados: é **a representação limpa, coerente e organizada das informações que descrevem um fenômeno**.
+Em projetos de *Machine Learning*, cada linha representa uma **instância de observação** (ex.: um empréstimo), e cada coluna, uma **característica (feature)** usada pelo modelo.
+
+A criação de um dataset começa dentro do banco relacional.
+A normalização garante **integridade e consistência**, mas para o ML é necessário recompor as tabelas com *JOINs*, gerar colunas derivadas e exportar o resultado para análise.
+
+```text
+Nível Conceitual (Entidades e Relacionamentos)
+          ↓
+SQL e Recomposição (JOINs, agregações)
+          ↓
+Dataset Tabular (CSV ou DataFrame)
+          ↓
+Modelagem de Machine Learning
+```
+
+<div class="box-table tip-table">
+  <div class="box-content tip">
+    <div class="box-title"><strong>Conceito-chave</strong></div>
+    <p>Um dataset é o ponto de encontro entre o <strong>modelo de dados</strong> e o <strong>modelo de aprendizado</strong>.  
+       Ele traduz a lógica relacional para o formato vetorial usado em algoritmos.</p>
+  </div>
+</div>
+
+#### 💡 Sugestão de imagem para substituir a Figura 8.2:
+
+**Título:** “Do Banco Relacional ao Dataset para ML”
+**Descrição visual:**
+Fluxo de três camadas:
+**Banco Relacional (Entidades)** → **Dataset CSV (Tabelas Integradas)** → **DataFrame Pandas (Features para ML)**
+**Prompt:**
+
+> Ilustração de três camadas representando a transformação de dados: banco relacional → exportação CSV → dataframe Pandas → modelo de machine learning, estilo didático, com setas horizontais e ícones.
+
+---
+
+### **8.3 — Fontes de Dados: Plataformas de Datasets (Kaggle e Outras) e a Qualidade dos Dados**
+
+Além dos dados internos dos sistemas, existem várias fontes externas de datasets abertos — como **Kaggle**, **HuggingFace Datasets**, **Google Dataset Search** e **Data.gov.br**.
+Esses recursos são valiosos para fins educacionais e de pesquisa, mas frequentemente carecem de **estrutura, documentação e metadados de qualidade**.
+
+Os bancos de dados, por outro lado, possuem:
+
+* **Integridade referencial** garantida por chaves;
+* **Domínios bem definidos** para cada atributo;
+* **Histórico de origem e consistência**, que permite rastrear a procedência (*data lineage*).
+
+Essa estrutura é o que diferencia um *dataset confiável* de um *dataset apenas coletado*.
+
+<div class="box-table important-table">
+  <div class="box-content important">
+    <div class="box-title"><strong>Qualidade de Dados</strong></div>
+    <ul>
+      <li>Sem duplicidade e com regras de validação aplicadas.</li>
+      <li>Campos normalizados e com tipos padronizados.</li>
+      <li>Registro de origem e data de atualização.</li>
+    </ul>
+  </div>
+</div>
+
+#### 📊 Sugestão de imagem para substituir a Figura 8.3:
+
+**Título:** “Pirâmide Dado → Informação → Conhecimento → Ação”
+**Descrição visual:**
+Pirâmide de quatro níveis mostrando:
+**Dados (brutos)** → **Informação (organizada)** → **Conhecimento (interpretado)** → **Ação (decisão)**
+**Prompt:**
+
+> Pirâmide colorida e didática mostrando a hierarquia dado → informação → conhecimento → ação, usada em contextos de ciência de dados.
+
+---
+
+### **8.4 — Estratégias de Pré-processamento e Limpeza de Dados**
+
+O pré-processamento é uma das etapas mais demoradas da análise de dados.
+Grande parte dele pode ser **prevenida** com um bom modelo de banco de dados, mas outras tarefas exigem scripts complementares.
+
+Principais ações:
+
+1. **Tratamento de Atributos Não-Atômicos (1FN):** separar valores compostos ou múltiplos em tabelas auxiliares.
+2. **Redundância (2FN e 3FN):** reorganizar dados para evitar dependências parciais e transitivas.
+3. **Valores Nulos:** decidir entre imputar, descartar ou estimar com base em médias e correlações.
+4. **Outliers:** detectar valores extremos por desvio padrão ou IQR.
+5. **Codificação:** converter categorias em números via *One-Hot Encoding* ou *Target Encoding*.
+6. **Normalização:** escalar dados para faixas comparáveis (ex.: Min-Max, Z-score).
+
+<div class="box-table tip-table">
+  <div class="box-content tip">
+    <div class="box-title"><strong>Exemplo prático</strong></div>
+    <p>No dataset da biblioteca, valores nulos em <em>Data_Devolucao_Real</em> podem indicar empréstimos em aberto.  
+       No ML, isso pode ser codificado como “empréstimo ativo = 1”.</p>
+  </div>
+</div>
+
+#### 🔄 Sugestão de imagem para complementar a Figura 8.4:
+
+**Título:** “Fluxo de Pré-processamento”
+**Descrição visual:**
+Fluxo:
+**Modelagem Relacional → Consulta SQL → Export CSV → Limpeza no Pandas → Dataset Final para ML**
+**Prompt:**
+
+> Diagrama em estilo educacional mostrando o fluxo de pré-processamento de dados: modelagem de banco de dados → consulta SQL → exportação CSV → limpeza e transformação em Python (pandas).
+
+---
+
+### **8.5 — Estudo de Caso: Gerando um Dataset de Empréstimos a partir do Banco da Biblioteca**
+
+O estudo de caso da biblioteca mostra como **dados transacionais** podem ser convertidos em **insights analíticos**.
+A partir das tabelas `ALUNO`, `LIVRO` e `EMPRESTIMO`, podemos gerar um dataset consolidado contendo colunas derivadas, como *Dias_Atraso*, e explorar padrões de comportamento.
+
+#### Exemplos de perguntas exploratórias:
+
+* Quais alunos apresentam maior frequência de atrasos?
+* Quais gêneros de livros são mais emprestados por faixa etária?
+* Há diferença no número médio de empréstimos por turma?
+* Qual a distribuição de tempo entre empréstimo e devolução?
+
+Essas análises permitem que o dataset sirva como base tanto para **relatórios de gestão** quanto para **modelos de previsão de atrasos**.
+
+<div class="box-table case-table">
+  <div class="box-content case">
+    <div class="box-title"><strong>Extensão do Estudo de Caso</strong></div>
+    <p>Após gerar o CSV com a consulta SQL, importe-o em um notebook Python e aplique estatísticas descritivas:  
+       <code>df.describe()</code>, <code>df.groupby('Turma').mean()</code> ou <code>sns.histplot()</code> para visualização.</p>
+  </div>
+</div>
+
+#### 📈 Sugestão de nova figura:
+
+**Título:** “Dataset de Empréstimos — Da Base Relacional à Análise”
+**Descrição visual:**
+Fluxo:
+**Banco Biblioteca (tabelas)** → **Consulta SQL (JOIN)** → **Dataset CSV** → **Exploração em Python (gráficos)**
+**Prompt:**
+
+> Diagrama com ícones mostrando o fluxo de criação de um dataset de empréstimos de biblioteca: tabelas relacionais → SQL JOIN → CSV → pandas análise exploratória.
+
+---
+
+## ✅ Observações Finais para o Claude / Ferramenta Trae
+
+* Mantenha o **HTML semântico original**, apenas substituindo ou adicionando `<p>`, `<figure>`, `<div>` e `<ul>`.
+* Adicione **comentários HTML** (`<!-- Sugestão de nova figura -->`) para marcar onde cada imagem pode ser inserida.
+* Gere o conteúdo com tom **didático e técnico equilibrado**, ideal para cursos técnicos e de graduação.
+* Preserve a coerência terminológica com os capítulos anteriores.

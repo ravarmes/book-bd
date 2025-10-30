@@ -1,0 +1,403 @@
+<!doctype html>
+<html lang='pt-BR'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <title>Capítulo 7 — Integração Web e Business Intelligence (BI)</title>
+    <link rel='stylesheet' type='text/css' href='../css/style.css' />
+    <meta name='description' content='Publicação do banco no Supabase (DBaaS), acesso via API REST, conexão com Power BI, análise descritiva (SELECT, JOIN, GROUP BY, HAVING), criação de views e dashboards, estudo prático com a Biblioteca.' />
+</head>
+
+<body>
+    <div class='container'>
+
+        <header>
+            <h1 id='cap7'>CAPÍTULO 7 – Integração Web e <em>Business Intelligence</em> (BI)</h1>
+            <p class='lead'>Como transformar <strong>dados brutos</strong> em <strong>informação visual</strong> que apoia a
+               <strong>tomada de decisão</strong>. Integração com <strong>Supabase</strong> (DBaaS), acesso via <strong>API REST</strong>,
+               conexão com <strong>Power BI</strong> e organização de consultas com <strong>views</strong>.</p>
+        </header>
+        <hr />
+
+        <!-- Ferramentas -->
+        <table class='box-table tip-table'>
+            <tr>
+                <td class='box-content tip definition' role='note' aria-labelledby='def-title-7-0'>
+                    <div id='def-title-7-0' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Definição'><strong>Ferramentas</strong></div>
+                    <div>
+                        <p><strong>Supabase</strong> (PostgreSQL gerenciado, API REST automática) e <strong>Power BI</strong> (visualização).
+                           A arquitetura utilizada é <em>Cliente–Servidor em Três Camadas</em> (dados, negócio, apresentação).</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <section id='sec7-1'>
+            <h2>7.1 Introdução ao Business Intelligence (BI): A Análise Visual de Dados</h2>
+            <p>O <strong>BI</strong> organiza, analisa e compartilha informações para suportar a gestão.
+               Ferramentas de BI operam no <strong>Nível de Visão</strong>, onde os dados já foram filtrados,
+               agregados e relacionados conforme o interesse dos usuários.</p>
+            <ul>
+                <li><strong>Múltiplas visões dos dados</strong>: cada perfil vê apenas o subconjunto relevante.</li>
+                <li><strong>Consultas complexas</strong>: uso de <code>JOIN</code>, <code>GROUP BY</code>, funções de agregação (<code>SUM</code>, <code>AVG</code>, <code>COUNT</code>) e filtros por grupos (<code>HAVING</code>).</li>
+            </ul>
+            <h3>Breve teoria</h3>
+            <ul>
+                <li><strong>Análise Descritiva</strong>: o que aconteceu.</li>
+                <li><strong>Análise Diagnóstica</strong>: por que aconteceu.</li>
+                <li><strong>Análise Preditiva</strong>: o que pode acontecer.</li>
+                <li><strong>Análise Prescritiva</strong>: como agir.</li>
+            </ul>
+            <h3>Prática introdutória</h3>
+            <p>Crie um pequeno conjunto de dados fictício de <code>emprestimo</code> e gere um gráfico no Power BI com a <strong>quantidade de empréstimos por aluno</strong> para perceber padrões de uso.</p>
+            <figure>
+                <img src='../images/7-1-loans_per_student.svg' alt='Empréstimos por aluno (exemplo).' />
+                <figcaption class='tight-caption'><strong>Figura 7.1 — </strong>Empréstimos por aluno (exemplo). Base para visualizações.</figcaption>
+            </figure>
+            <table class='content-table'>
+                <caption><strong>Tabela 7.1 - </strong>Componentes de BI com apoio do SQL</caption>
+                <thead>
+                    <tr>
+                        <th>Componente</th>
+                        <th>Objetivo</th>
+                        <th>SQL de Base</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Resumo</td><td>Sintetiza grande volume</td><td><code>GROUP BY</code> + agregações</td></tr>
+                    <tr><td>Segmentação</td><td>Filtra por perfis/grupos</td><td><code>WHERE</code> / <code>HAVING</code></td></tr>
+                    <tr><td>Relacionamento</td><td>Combina tabelas</td><td><code>JOIN</code></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id='sec7-2'>
+            <h2>7.2 Conexão com Power BI e Análise Descritiva de Dados</h2>
+            <p>O Power BI conecta-se ao PostgreSQL (local ou Supabase) para <strong>extrair</strong>
+               e <strong>resumir</strong> dados.</p>
+            <ol>
+                <li><strong>Extração</strong>: consultas <code>SELECT</code> com <code>JOIN</code> e agregações (<code>SUM</code>, <code>AVG</code>, <code>COUNT</code>).</li>
+                <li><strong>Otimização</strong>: <strong>índices</strong> aceleram filtros e ordenações.</li>
+                <li><strong>Filtragem e Agrupamento</strong>: <code>GROUP BY</code> e <code>HAVING</code> para analisar subgrupos.</li>
+            </ol>
+            <figure>
+                <img src='../images/7-2-sql_pipeline.svg' alt='Pipeline SQL para análise: SELECT, FROM, JOIN, WHERE, GROUP BY, HAVING, ORDER BY.' />
+                <figcaption><strong>Figura 7.2 — </strong>Camadas SQL: da extração à agregação para visualização.</figcaption>
+            </figure>
+
+            <h3>Passos práticos</h3>
+            <ol>
+                <li>Abrir o Power BI Desktop.</li>
+                <li>Obter Dados → <strong>PostgreSQL Database</strong>.</li>
+                <li>Informar os dados de conexão do banco local.</li>
+                <li>Selecionar as tabelas <code>aluno</code>, <code>livro</code>, <code>emprestimo</code> e <code>reserva</code>.</li>
+            </ol>
+            <h3>Limpeza e transformação (Power Query)</h3>
+            <ul>
+                <li>Renomear colunas.</li>
+                <li>Criar colunas calculadas (ex.: duração de empréstimo).</li>
+                <li>Filtrar empréstimos ativos.</li>
+            </ul>
+            <h3>Prática</h3>
+            <ul>
+                <li>Empréstimos por livro.</li>
+                <li>Empréstimos por mês.</li>
+                <li>Reservas por status (ativa, concluída, cancelada).</li>
+            </ul>
+            <p><strong>Mini-insight</strong>: essas visualizações revelam <em>livros de alta demanda</em> e <em>padrões de reserva</em>.</p>
+
+            <h3>Modos de conexão do Power BI</h3>
+            <table class='content-table'>
+                <caption><strong>Tabela 7.2 - </strong>Import vs DirectQuery vs Live Connection</caption>
+                <thead>
+                    <tr>
+                        <th>Modo</th>
+                        <th>Características</th>
+                        <th>Quando usar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Import</strong></td><td>Copia dados para o modelo do Power BI; desempenho alto; recursos completos</td><td>Datasets moderados; atualização periódica</td></tr>
+                    <tr><td><strong>DirectQuery</strong></td><td>Consulta diretamente a origem; dados sempre atualizados; algumas limitações de modelagem/transformação</td><td>Grandes volumes; requisito de dados em tempo quase real</td></tr>
+                    <tr><td><strong>Live Connection</strong></td><td>Conecta-se a modelos externos (p.ex. Analysis Services); sem importação local</td><td>Governança centralizada; compartilhamento de semântica corporativa</td></tr>
+                </tbody>
+            </table>
+            <p class='small'>Fonte: <a href='https://learn.microsoft.com/power-bi/connect-data/desktop-directquery-about' target='_blank' rel='noopener'>Microsoft Learn — DirectQuery</a> · <a href='https://learn.microsoft.com/power-bi/connect-data/desktop-report-lifecycle-datasets' target='_blank' rel='noopener'>Live Connection</a>.</p>
+        </section>
+
+        <section id='sec7-3'>
+            <h2>7.3 Criando Dashboards e Relatórios Visuais</h2>
+            <p>Dashboards materializam o <strong>Nível de Visão</strong>, apresentando apenas o que importa ao usuário.</p>
+            <h3>Conceito</h3>
+            <p>Um <strong>dashboard</strong> é um painel interativo que consolida múltiplas visões de um mesmo conjunto de dados, permitindo monitorar e explorar resultados em tempo real.</p>
+            <p>KPIs (indicadores-chave) no contexto da Biblioteca:</p>
+            <ul>
+                <li>Total de empréstimos.</li>
+                <li>Livros mais emprestados.</li>
+                <li>Alunos mais ativos.</li>
+                <li>Média de avaliações.</li>
+            </ul>
+            <ul>
+                <li><strong>Vantagem</strong>: simplifica a interação e foca no objetivo.</li>
+                <li><strong>Views</strong>: <code>CREATE VIEW</code> salva consultas complexas como tabelas virtuais,
+                    reduzindo esforço nas requisições do BI.</li>
+            </ul>
+            <h3>Prática completa</h3>
+            <ul>
+                <li>Gráfico de barras: <em>Top 5 livros mais emprestados</em>.</li>
+                <li>Gráfico de linha: <em>Empréstimos por mês</em>.</li>
+                <li>Cartão (Card): <em>Total de reservas ativas</em>.</li>
+                <li>Filtro interativo: <em>Filtrar por aluno</em>.</li>
+            </ul>
+            <table class='content-table'>
+                <caption><strong>Tabela 7.3 - </strong>Elementos usuais de um Dashboard</caption>
+                <thead>
+                    <tr>
+                        <th>Elemento</th>
+                        <th>Uso</th>
+                        <th>Origem</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Gráfico de Barras</td><td>Comparar volumes</td><td>Agregação com <code>GROUP BY</code></td></tr>
+                    <tr><td>Gráfico de Linha</td><td>Distribuição temporal</td><td>Agregação por período (mês)</td></tr>
+                    <tr><td>Cartão (Card)</td><td>Valor único (KPIs)</td><td>Agregação (<code>SUM</code>, <code>AVG</code>)</td></tr>
+                    <tr><td>Filtro</td><td>Selecionar subconjuntos</td><td>Dimensões (aluno, livro)</td></tr>
+                </tbody>
+            </table>
+            <p><strong>Mini-desafio</strong>: adicione um gráfico com a <em>nota média de avaliação por livro</em> (usando a tabela <code>avaliacao</code>).</p>
+        </section>
+
+        <section id='sec7-4'>
+            <h2>7.4 Publicando o Banco no Supabase (DBaaS)</h2>
+            <h3>Introdução</h3>
+            <ul>
+                <li><strong>DBaaS</strong> (<em>Database as a Service</em>): provê banco gerenciado na nuvem, com escalabilidade, segurança e alta disponibilidade.</li>
+                <li><strong>Supabase</strong>: solução gratuita (tier), segura e baseada em <strong>PostgreSQL</strong>, com API REST automática e autenticação.</li>
+            </ul>
+            <table class='box-table important-table'>
+                <tr>
+                    <td class='box-content important' role='note' aria-labelledby='imp-title-7-4'>
+                        <div id='imp-title-7-4' class='box-title'><img src='../images/icon-importante.png' class='icon-img' alt='Importante'><strong>Arquitetura de Três Camadas</strong></div>
+                        <div>
+                            <ul>
+                                <li><strong>Dados</strong> (Servidor de Dados): repositório e execução das consultas.</li>
+                                <li><strong>Negócio</strong> (Servidor de Aplicação): regras de negócio e segurança.</li>
+                                <li><strong>Apresentação</strong> (Cliente): dashboards, relatórios e interface do usuário.</li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure>
+                <img src='../images/7-3-supabase_dbaas.svg' alt='Arquitetura Supabase com Cliente, API REST (PostgREST) e PostgreSQL da Biblioteca.' />
+                <figcaption><strong>Figura 7.3 — </strong>Fluxo DBaaS com Supabase para a Biblioteca.</figcaption>
+            </figure>
+
+            <h3>Passos práticos</h3>
+            <ol>
+                <li>Acesse <code>https://supabase.com</code>.</li>
+                <li>Crie uma conta e um novo projeto.</li>
+                <li>Copie as credenciais (host, port, user, password, database).</li>
+                <li>No painel SQL do Supabase, cole e execute o <strong>script do banco da biblioteca</strong>.</li>
+                <li>Confirme se as tabelas foram criadas.</li>
+            </ol>
+
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 7.1 — </strong>Consulta: Livros mais emprestados</figcaption>
+                <pre class='code sql'>
+SELECT l.titulo, COUNT(e.id_emprestimo) AS total_emprestimos
+FROM emprestimo e
+JOIN exemplar ex ON e.cod_exemplar = ex.cod_exemplar
+JOIN livro l ON ex.isbn = l.isbn
+GROUP BY l.titulo
+ORDER BY total_emprestimos DESC;
+                </pre>
+            </figure>
+            <p><strong>Resultado esperado</strong>: banco da biblioteca publicado e consultável via web.</p>
+        </section>
+
+        <section id='sec7-5'>
+            <h2>7.5 API REST do Supabase: Acesso ao Banco via Web</h2>
+            <p>A <strong>API REST</strong> do Supabase disponibiliza endpoints para inserção, consulta e atualização,
+               traduzindo requisições HTTP em comandos SQL executados pelo SGBD.</p>
+            <h3>Objetivo</h3>
+            <p>Mostrar que o Supabase cria automaticamente uma <strong>API RESTful</strong> que permite acessar os dados da Biblioteca via navegador ou requisições HTTP.</p>
+            <table class='box-table tip-table'>
+                <tr>
+                    <td class='box-content tip' role='note' aria-labelledby='imp-title-7-5'>
+                        <div id='imp-title-7-5' class='box-title'><img src='../images/icon-observacao.png' class='icon-img' alt='Observação'><strong>Segurança (DCL)</strong></div>
+                        <div>
+                            <p>Regras de acesso e filtros são definidos na camada de negócio e configurados via <strong>DCL</strong>
+                               (controle de acesso). A API deve expor apenas o necessário.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <h3>Exemplo prático</h3>
+            <ul>
+                <li>Acesse o <em>API Playground</em> no painel do Supabase.</li>
+                <li>Faça a requisição REST:</li>
+            </ul>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 7.2 — </strong>Consulta REST de Livros</figcaption>
+                <pre class='code http'>
+GET https://&lt;projeto&gt;.supabase.co/rest/v1/livro?select=titulo,isbn
+                </pre>
+            </figure>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Retorno — </strong>JSON esperado</figcaption>
+                <pre class='code json'>
+[
+  {"titulo": "Dom Casmurro", "isbn": 1234},
+  {"titulo": "O Cortiço", "isbn": 2345}
+]
+                </pre>
+            </figure>
+
+            <h3>Filtros comuns (PostgREST)</h3>
+            <table class='content-table'>
+                <caption><strong>Tabela 7.5.1 - </strong>Operadores de filtro na API REST</caption>
+                <thead>
+                    <tr>
+                        <th>Operador</th>
+                        <th>Exemplo</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>eq</code></td><td><code>?cpf=eq.12345678900</code></td><td>Igualdade</td></tr>
+                    <tr><td><code>ilike</code></td><td><code>?nome=ilike.*silva*</code></td><td>Busca textual (case-insensitive)</td></tr>
+                    <tr><td><code>gt / gte</code></td><td><code>?total=gt.100</code></td><td>Maior / maior ou igual</td></tr>
+                    <tr><td><code>lt / lte</code></td><td><code>?quantidade=lte.10</code></td><td>Menor / menor ou igual</td></tr>
+                    <tr><td><code>in</code></td><td><code>?status=in.("novo","pago")</code></td><td>Pertence ao conjunto</td></tr>
+                    <tr><td><code>is</code></td><td><code>?data_entrega=is.null</code></td><td>Nulidade / booleanos</td></tr>
+                </tbody>
+            </table>
+
+            <h3>Prática</h3>
+            <p>Listar exemplares disponíveis:</p>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 7.3 — </strong>Consulta REST de Exemplares Disponíveis</figcaption>
+                <pre class='code http'>
+GET https://&lt;projeto&gt;.supabase.co/rest/v1/exemplar?status=eq.disponível
+                </pre>
+            </figure>
+
+            <h3>Integração com Power BI</h3>
+            <ul>
+                <li>Conectar via <strong>PostgreSQL connection string</strong>.</li>
+                <li>Conectar via <strong>API REST (conector Web)</strong>.</li>
+            </ul>
+            <p>Isso permite atualizar relatórios automaticamente a partir do banco na nuvem.</p>
+
+            <table class='box-table tip-table'>
+                <tr>
+                    <td class='box-content tip' role='note' aria-labelledby='obs-title-7-5'>
+                        <div id='obs-title-7-5' class='box-title'><img src='../images/icon-observacao.png' class='icon-img' alt='Observação'><strong>Observação adicional (exportação CSV)</strong></div>
+                        <div>
+                            <p>O Power BI permite <strong>exportar</strong> tabelas ou relatórios em <strong>CSV</strong>. Esses arquivos podem ser reimportados no Supabase (painel SQL → “Import Data”).</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec7-6'>
+            <h2>7.6 Criando um Frontend Web com a API do Supabase</h2>
+            <p>Vamos construir uma página simples em HTML e JavaScript que consome a API REST do Supabase para exibir dados da Biblioteca.</p>
+
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 7.3 — </strong>Frontend: Lista de Alunos</figcaption>
+                <pre class='code html'>
+&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;pt-BR&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;Alunos da Biblioteca&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h2&gt;Lista de Alunos&lt;/h2&gt;
+  &lt;table border=&quot;1&quot; id=&quot;tabelaAlunos&quot;&gt;
+    &lt;tr&gt;&lt;th&gt;Matrícula&lt;/th&gt;&lt;th&gt;Nome&lt;/th&gt;&lt;/tr&gt;
+  &lt;/table&gt;
+
+  &lt;script&gt;
+    async function carregarAlunos() {
+      const url = &quot;https://&lt;projeto&gt;.supabase.co/rest/v1/aluno?select=matricula,nome&quot;;
+      const res = await fetch(url, {
+        headers: { apikey: &quot;&lt;chave-anon-pública&gt;&quot; }
+      });
+      const alunos = await res.json();
+      const tabela = document.getElementById(&quot;tabelaAlunos&quot;);
+      alunos.forEach(a =&gt; {
+        tabela.innerHTML += `&lt;tr&gt;&lt;td&gt;${a.matricula}&lt;/td&gt;&lt;td&gt;${a.nome}&lt;/td&gt;&lt;/tr&gt;`;
+      });
+    }
+    carregarAlunos();
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+                </pre>
+            </figure>
+
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 7.4 — </strong>Frontend: Lista de Empréstimos (JOIN simplificado)</figcaption>
+                <pre class='code html'>
+&lt;h2&gt;Empréstimos&lt;/h2&gt;
+&lt;table border=&quot;1&quot; id=&quot;tabelaEmprestimos&quot;&gt;
+  &lt;tr&gt;&lt;th&gt;Livro&lt;/th&gt;&lt;th&gt;Aluno&lt;/th&gt;&lt;th&gt;Data&lt;/th&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;script&gt;
+  async function carregarEmprestimos() {
+    const url = &quot;https://&lt;projeto&gt;.supabase.co/rest/v1/emprestimo?select=livro(titulo),aluno(nome),data_emprestimo&quot;;
+    const res = await fetch(url, { headers: { apikey: &quot;&lt;chave-anon-pública&gt;&quot; } });
+    const emprestimos = await res.json();
+    const tabela = document.getElementById('tabelaEmprestimos');
+    emprestimos.forEach(e =&gt; {
+      tabela.innerHTML += `&lt;tr&gt;&lt;td&gt;${e.livro?.titulo ?? '-'}&lt;/td&gt;&lt;td&gt;${e.aluno?.nome ?? '-'}&lt;/td&gt;&lt;td&gt;${e.data_emprestimo}&lt;/td&gt;&lt;/tr&gt;`;
+    });
+  }
+  carregarEmprestimos();
+&lt;/script&gt;
+                </pre>
+            </figure>
+
+            <p><strong>Conclusão</strong>: os dados da Biblioteca estão publicados e acessíveis na web. O ciclo completo: <em>Banco → Supabase → API REST → Frontend</em>.</p>
+        </section>
+
+        <section id='sec7-7'>
+            <h2>7.7 Encerramento do Capítulo</h2>
+            <ul>
+                <li>Conexão do Power BI ao banco local e ao Supabase.</li>
+                <li>Publicação do banco da Biblioteca na nuvem.</li>
+                <li>Acesso via API REST e criação de um frontend simples.</li>
+            </ul>
+        </section>
+
+        <section id='sec7-8'>
+            <h2>7.8 Estudo de Caso</h2>
+            <table class='box-table case-table'>
+                <tr>
+                    <td class='box-content case' role='note' aria-labelledby='case-title-7-8'>
+                        <div id='case-title-7-8' class='box-title'><img src='../images/icon-estudodecaso.png' class='icon-img' alt='Estudo de Caso'><strong>Estudo de Caso:</strong></div>
+                        <div>
+                            <p>Desenvolva um painel no Power BI conectado ao Supabase mostrando:</p>
+                            <ul>
+                                <li>Total de empréstimos por mês.</li>
+                                <li>Top 5 livros mais emprestados.</li>
+                                <li>Alunos com mais avaliações registradas.</li>
+                                <li>Taxa de reservas concluídas.</li>
+                            </ul>
+                            <p><strong>Complemento</strong>: personalize a página HTML para mostrar livros disponíveis com botão “Reservar”.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+    </div>
+</body>
+</html>

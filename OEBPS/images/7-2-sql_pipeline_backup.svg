@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="940" height="420" viewBox="0 0 940 420" role="img" aria-labelledby="title desc">
+  <title id="title">Figura 7.2 — Camadas SQL para análise com Power BI</title>
+  <desc id="desc">Pipeline SQL orientado à análise: SELECT → FROM → JOIN → WHERE → GROUP BY → HAVING → ORDER BY. Mostra o fluxo típico para extrair, filtrar, agregar e ordenar dados antes da visualização no Power BI.</desc>
+  <defs>
+    <style><![CDATA[
+      .frame { fill:#f7f9fc; stroke:#d0d8e8; stroke-width:1; rx:8; }
+      .title { font-family: Arial, Helvetica, sans-serif; font-size:22px; fill:#164a5b; font-weight:bold; }
+      .box { fill:#e9e9ff; stroke:#4f46e5; stroke-width:3; rx:16; }
+      .label { font-family: Arial, Helvetica, sans-serif; font-size:20px; fill:#1f2a44; font-weight:bold; }
+      .arrow { stroke:#4f46e5; stroke-width:3; marker-end:url(#arrowhead); }
+      .note { font-family: Arial, Helvetica, sans-serif; font-size:14px; fill:#303a52; }
+    ]]></style>
+    <marker id="arrowhead" markerWidth="12" markerHeight="8" refX="12" refY="4" orient="auto">
+      <polygon points="0 0, 12 4, 0 8" fill="#4f46e5" />
+    </marker>
+  </defs>
+
+  <rect x="20" y="20" width="900" height="380" class="frame" />
+  <text x="470" y="60" text-anchor="middle" class="title">Pipeline SQL para Análise</text>
+
+  <!-- Boxes -->
+  <rect x="60" y="120" width="120" height="80" class="box" />
+  <text x="120" y="170" text-anchor="middle" class="label">SELECT</text>
+
+  <rect x="210" y="120" width="120" height="80" class="box" />
+  <text x="270" y="170" text-anchor="middle" class="label">FROM</text>
+
+  <rect x="360" y="120" width="120" height="80" class="box" />
+  <text x="420" y="170" text-anchor="middle" class="label">JOIN</text>
+
+  <rect x="510" y="120" width="120" height="80" class="box" />
+  <text x="570" y="170" text-anchor="middle" class="label">WHERE</text>
+
+  <rect x="660" y="120" width="120" height="80" class="box" />
+  <text x="720" y="170" text-anchor="middle" class="label">GROUP BY</text>
+
+  <rect x="60" y="230" width="120" height="80" class="box" />
+  <text x="120" y="280" text-anchor="middle" class="label">HAVING</text>
+
+  <rect x="210" y="230" width="120" height="80" class="box" />
+  <text x="270" y="280" text-anchor="middle" class="label">ORDER BY</text>
+
+  <!-- Arrows upper row -->
+  <line x1="180" y1="160" x2="210" y2="160" class="arrow" />
+  <line x1="330" y1="160" x2="360" y2="160" class="arrow" />
+  <line x1="480" y1="160" x2="510" y2="160" class="arrow" />
+  <line x1="630" y1="160" x2="660" y2="160" class="arrow" />
+  <line x1="780" y1="160" x2="860" y2="160" class="arrow" />
+
+  <!-- Arrows lower row -->
+  <line x1="120" y1="200" x2="120" y2="230" class="arrow" />
+  <line x1="660" y1="200" x2="270" y2="230" class="arrow" />
+
+  <!-- Notes -->
+  <text x="470" y="330" text-anchor="middle" class="note">Consulta mínima: SELECT colunas FROM tabela WHERE condições ORDER BY atributos</text>
+  <text x="470" y="350" text-anchor="middle" class="note">Consulta analítica: SELECT colunas, SUM/AVG/COUNT FROM tabela JOIN ... WHERE ... GROUP BY ... HAVING ... ORDER BY ...</text>
+</svg>

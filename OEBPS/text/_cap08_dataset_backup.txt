@@ -1,0 +1,110 @@
+### CAPÍTULO 8 – Análise de Dados, *Datasets* e Preparação para Machine Learning
+
+Após a implementação e manipulação dos dados, o valor fundamental de um Sistema de Banco de Dados (SBD) reside em sua capacidade de transformar **dados brutos** em **informação organizada** e **conhecimento**, que serve de apoio à tomada de decisões em empresas e governos. Essa transformação é o ponto de partida para a Análise de Dados e, subsequentemente, para a aplicação de técnicas avançadas como o *Machine Learning*.
+
+## 8.1 O Banco de Dados como Fonte de Datasets: Exportação de Dados Limpos para Análise (CSV).
+
+Um **Banco de Dados (BD)** é uma coleção de dados relacionados, projetada, construída e populada para um propósito específico, representando algum aspecto do mundo real. O BD é uma fonte primária de dados estruturados e persistentes.
+
+A extração de dados do BD, geralmente realizada através do comando `SELECT` (DQL), permite a criação de um *dataset* (conjunto de dados) para análise.
+
+**Extração e Limpeza Inerente:**
+
+O processo de modelagem, com a garantia das restrições de integridade, assegura que os dados extraídos já possuam um alto grau de limpeza e coerência:
+
+1.  **Integridade de Domínio:** Garante que os tipos de dados (como `INT`, `VARCHAR`, `DATE`) e seus tamanhos estejam corretamente associados aos atributos.
+2.  **Integridade Referencial:** Garante que os valores em chaves estrangeiras (`FK`) referenciem chaves primárias (`PK`) válidas em outras tabelas, prevenindo inconsistências nos relacionamentos.
+3.  **Não-Nulidade:** A restrição `NOT NULL` garante que atributos obrigatórios (como chaves primárias) contenham conteúdo, evitando a ausência de valores cruciais.
+
+**Geração de Dados Estruturados:**
+
+A SQL permite que dados distribuídos por múltiplas tabelas (devido à normalização) sejam recombinados de forma organizada para a exportação (como um arquivo CSV - *Comma Separated Values*):
+
+*   **Junções (JOINs):** Essenciais para juntar os dados distribuídos por múltiplas tabelas, combinando-os através de condições de junção (geralmente via PK/FK) para formar um registro coerente.
+*   **Consultas Complexas:** Cláusulas como `GROUP BY`, `HAVING` e Funções de Agregação (`SUM`, `AVG`, `COUNT`) sumarizam e consolidam os dados, transformando-os em *informação* pronta para relatórios ou análise.
+
+## 8.2 O Conceito de Dataset no Contexto de Machine Learning (ML).
+
+Embora as fontes não definam explicitamente *Machine Learning* ou *Dataset*, elas estabelecem a importância da **informação organizada** para a **tomada de decisão**. Um **Dataset**, nesse contexto, é a representação dessa informação organizada e estruturada, geralmente na forma de uma ou mais tabelas coerentes e inter-relacionadas.
+
+O BD, através de seu processo de modelagem, visa a **normalização** dos dados para garantir que cada item lógico seja armazenado idealmente em apenas um lugar, assegurando a consistência e minimizando a redundância. Essa estrutura limpa e sem anomalias (de inserção, atualização ou exclusão) é exatamente o que é exigido para alimentar modelos de *Machine Learning*.
+
+## 8.3 Fontes de Dados: Plataformas de Datasets (Kaggle e Outras) e a Qualidade dos Dados.
+
+A qualidade dos dados é um fator crítico para qualquer análise. A abordagem de banco de dados, ao usar um **Sistema Gerenciador de Banco de Dados (SGBD)**, fornece várias capacidades intrínsecas para garantir essa qualidade:
+
+1.  **Controle de Redundância e Consistência:** A normalização é utilizada para armazenar cada item de dado em apenas um local, prevenindo a inconsistência que ocorreria se a mesma informação fosse armazenada em múltiplos lugares (redundância).
+2.  **Imposição de Restrições de Integridade:** O SGBD impõe automaticamente restrições (como integridade referencial, chave/unicidade e domínio) que limitam os dados a serem armazenados, garantindo que a maioria das regras de negócio seja atendida.
+
+Diferentemente de *datasets* brutos ou provenientes de fontes menos controladas (como plataformas genéricas de dados), os dados extraídos de um SGBD relacional bem modelado já passaram por rigorosos controles de integridade.
+
+## 8.4 Estratégias de Pré-processamento e Limpeza de Dados.
+
+O pré-processamento de dados é o processo de preparar os dados para análise, e muitas tarefas de limpeza são resolvidas durante o projeto do BD:
+
+### 1. Tratamento de Atributos Não-Atômicos (1FN)
+
+A **Primeira Forma Normal (1FN)** exige que todos os atributos sejam **atômicos** (simples) e de **valor único**.
+
+*   **Atributos Multi-Valorados:** Devem ser eliminados, criando-se novas tabelas para armazená-los, que se relacionam com a tabela original via chave estrangeira.
+*   **Atributos Compostos:** Devem ser decompostos em seus atributos simples (atômicos) e inseridos diretamente na tabela.
+
+### 2. Tratamento de Redundância e Dependências Funcionais (2FN e 3FN)
+
+A redundância é a principal causa de anomalias. A normalização atua como uma estratégia de pré-processamento para resolver dependências problemáticas:
+
+*   **Segunda Forma Normal (2FN):** Remove a **dependência funcional parcial**, garantindo que atributos não-chave dependam da *totalidade* da chave primária composta.
+*   **Terceira Forma Normal (3FN):** Remove a **dependência funcional transitiva**, garantindo que atributos não-chave não dependam de outros atributos não-chave.
+
+### 3. Gerenciamento de Valores Nulos
+
+O BD deve ser projetado para minimizar valores nulos (`NULL`) em campos cruciais, usando a restrição `NOT NULL`. O valor nulo, quando permitido, representa a **inexistência de um valor** e significa que o atributo não é aplicável ou não foi fornecido. O pré-processamento para ML precisará decidir se esses valores nulos serão preenchidos (imputação) ou se os registros serão descartados.
+
+## 8.5 ESTUDO DE CASO: Gerando um Dataset de Empréstimos a partir do Banco da Biblioteca. (Prática relacionada ao conteúdo do capítulo no contexto do sistema da biblioteca.)
+
+Considerando o Modelo Relacional da **Biblioteca** (com tabelas como `LIVRO`, `ALUNO`, e `EMPRESTIMO`), o objetivo é gerar um *dataset* estruturado para prever, por exemplo, o risco de atraso ou o volume de empréstimos futuros.
+
+O dataset deve conter dados consolidados, como o nome do aluno (da tabela `ALUNO`), o título do livro (da tabela `LIVRO`), e o histórico do empréstimo (da tabela `EMPRESTIMO`).
+
+**Consulta de Extração para Dataset (Exemplo de DQL):**
+
+Para gerar um dataset que inclua dados sobre quem emprestou o quê, e quando, é necessário realizar *JOINs* complexos para ligar as informações e criar colunas derivadas.
+
+```sql
+SELECT
+    A.Matricula,
+    A.Nome AS Nome_Aluno,
+    L.Titulo AS Titulo_Livro,
+    E.Data_Emprestimo,
+    E.Data_Devolucao_Real,
+    -- Coluna Derivada: Calcula o Atraso (Exemplo Conceitual)
+    (E.Data_Devolucao_Real - E.Data_Devolucao_Prevista) AS Dias_Atraso
+FROM
+    ALUNO AS A
+INNER JOIN
+    EMPRESTIMO AS E ON A.Matricula = E.Matricula_Aluno
+INNER JOIN
+    LIVRO AS L ON E.Codigo_Livro = L.Codigo
+ORDER BY
+    A.Nome, E.Data_Emprestimo;
+```
+
+Este comando SQL, executado no SGBD (ex: PostgreSQL via pgAdmin), gera um conjunto de resultados que é coerente (devido aos `INNER JOINs` via chaves estrangeiras) e enriquecido com dados derivados (`Dias_Atraso`), pronto para ser exportado como um arquivo CSV e utilizado em algoritmos de ML.
+
+## 8.6 EXERCÍCIOS COMPLEMENTARES: Preparação de Datasets em Domínios de Internet. (Exercícios para fixação de conceitos e exercícios práticos do capítulo sobre outros domínios de problemas.)
+
+Considere o domínio de dados de Internet/Web. Muitos sistemas de informação web utilizam arquiteturas cliente-servidor (três camadas) onde o SGBD armazena as informações.
+
+**Cenário:** Uma tabela `USUARIO_WEB` armazena dados de cadastro, onde o atributo `Telefone(s)` é multi-valorado, e o atributo `Nome_Completo` é composto por `Nome` e `Sobrenome`.
+
+**Objetivo:** Aplicar as regras de normalização (pré-processamento) para gerar um *dataset* limpo a partir desta tabela.
+
+1.  **Aplicação da 1FN (Tratamento de Atributo Composto e Multi-Valorado):**
+    *   Como você eliminaria a não-atomicidade do atributo `Telefone(s)`?
+    *   Como você eliminaria o atributo composto `Nome_Completo`?
+
+2.  **Resultado no Modelo Relacional (Dataset Limpo):**
+    Assumindo que `Usuario_ID` é a chave primária da tabela `USUARIO_WEB`, descreva as tabelas resultantes após a aplicação da 1FN.
+
+3.  **Geração do Dataset Final:**
+    Escreva uma consulta SQL para juntar o nome, sobrenome e a lista de telefones do usuário em uma única extração (usando `JOIN` e, se necessário, funções de concatenação) para formar o *dataset* final.

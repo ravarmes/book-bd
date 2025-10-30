@@ -453,6 +453,7 @@ figure.listing pre.code {
 .codeblock .box-content { box-shadow: inset 12px 0 0 var(--accent-4-dark); }
 .tip .box-content, .box-content.tip { box-shadow: inset 12px 0 0 var(--tip-stripe); }
 .warning .box-content, .box-content.warning { box-shadow: inset 12px 0 0 var(--danger-color-dark); }
+.important .box-content, .box-content.important { box-shadow: inset 12px 0 0 var(--danger-color-dark); }
 /* Faixa esquerda Gabarito */
 .gabarito .box-content, .box-content.gabarito { box-shadow: inset 12px 0 0 var(--gabarito-color-dark); }
 /* Removido: não anular a faixa dos blocos de Aviso */
@@ -460,6 +461,7 @@ figure.listing pre.code {
 /* Bordas externas das tabelas: unificar padrão (todos os lados) */
 .tip-table { border: 1px solid var(--tip-border); }
 .warning-table { border: 1px solid var(--danger-color); }
+.important-table { border: 1px solid var(--danger-color); }
 .case-table { border: 1px solid var(--accent-3); }
 .exercise-table { border: 1px solid var(--accent-1); }
 .answer-table { border: 1px solid var(--warn-color); }
@@ -510,6 +512,7 @@ figure.listing pre.code {
 .codeblock .box-content, .box-content.codeblock { background: #f7f9f7; }
 .tip .box-content, .box-content.tip { background: #e5e5e5; }
 .warning .box-content, .box-content.warning { background: #ffecec; }
+.important .box-content, .box-content.important { background: #ffecec; }
 .answer .box-content, .box-content.answer { background: #fff3cd; }
 /* Fundo do bloco Gabarito */
 .gabarito .box-content, .box-content.gabarito { background: #fdf2f8; }
@@ -520,7 +523,8 @@ figure.listing pre.code {
 .box-content.integrated > .box-title,
 /* removed: .box-content.answer > .box-title */
 .box-content.tip > .box-title,
-.box-content.warning > .box-title {
+.box-content.warning > .box-title,
+.box-content.important > .box-title {
   display: block;
   background: inherit; /* usa a cor do fundo do bloco */
   /* Não cobrir a faixa lateral esquerda */

@@ -5,28 +5,56 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Apostila de Banco de Dados — Navegação</title>
   <style>
+    :root { color-scheme: light dark; }
     body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 2rem; line-height: 1.6; }
-    h1 { margin-bottom: 0.5rem; }
-    .desc { color: #555; margin-top: 0; }
-    ul { list-style: none; padding-left: 0; }
-    li { margin: 0.5rem 0; }
+    h1 { margin-bottom: 0.25rem; }
+    .desc { color: #666; margin-top: 0; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0.75rem; margin-top: 1rem; }
+    .card { border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem 1rem; background: #fff; }
+    .card h2 { margin: 0 0 0.5rem 0; font-size: 1rem; }
+    ul { list-style: none; padding-left: 0; margin: 0; }
+    li { margin: 0.4rem 0; }
     a { text-decoration: none; color: #1055cc; }
     a:hover { text-decoration: underline; }
+    .meta { margin-top: 1rem; font-size: 0.9rem; color: #555; }
+    @media (prefers-color-scheme: dark) {
+      body { background: #111; color: #eee; }
+      .card { border-color: #333; background: #1a1a1a; }
+      .desc, .meta { color: #aaa; }
+    }
   </style>
 </head>
 <body>
   <h1>Apostila de Banco de Dados</h1>
-  <p class="desc">Escolha uma seção para abrir. Para o Sumário (nav.xhtml), o GitHub Pages deve exibir normalmente; localmente, use os capítulos abaixo.</p>
-  <ul>
-    <li>➡️ <a href="OEBPS/nav.xhtml">Sumário (toc)</a></li>
-    <li>📘 <a href="OEBPS/text/capa.html">Capa</a></li>
-    <li>🧩 <a href="OEBPS/text/cap00_modelo.html">Modelo</a></li>
-    <li>📚 <a href="OEBPS/text/cap01_intro.html">Capítulo 1 – Introdução</a></li>
-    <li>🧠 <a href="OEBPS/text/cap02_modelagem_conceitual.html">Capítulo 2 – Modelagem</a></li>
-    <li>🔗 <a href="OEBPS/text/cap03_modelagem_logica.html">Capítulo 3 – Modelo Lógico Relacional</a></li>
-  </ul>
-  <hr />
-  <p>Se preferir, você pode configurar este index para redirecionar automaticamente para o sumário adicionando:
-  <code>&lt;meta http-equiv="refresh" content="0; url=OEBPS/nav.xhtml" /&gt;</code> dentro da &lt;head&gt;.</p>
+  <p class="desc">Escolha abaixo uma seção do livro. O sumário oficial está em <code>OEBPS/nav.xhtml</code>.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h2>Navegação principal</h2>
+      <ul>
+        <li>➡️ <a href="OEBPS/nav.xhtml">Sumário (toc)</a></li>
+        <li>📘 <a href="OEBPS/text/capa.html">Capa</a></li>
+        <li>🧩 <a href="OEBPS/text/cap00_modelo.html">Modelo</a></li>
+      </ul>
+    </div>
+    <div class="card">
+      <h2>Capítulos</h2>
+      <ul>
+        <li>1 — <a href="OEBPS/text/cap01_intro.html">Introdução</a></li>
+        <li>2 — <a href="OEBPS/text/cap02_modelagem_conceitual.html">Modelagem Conceitual</a></li>
+        <li>3 — <a href="OEBPS/text/cap03_modelagem_logica.html">Modelagem Lógica Relacional</a></li>
+        <li>4 — <a href="OEBPS/text/cap04_linguagem_sql.html">Linguagem SQL</a></li>
+        <li>5 — <a href="OEBPS/text/cap05_consultas_avancadas.html">Consultas Avançadas</a></li>
+        <li>6 — <a href="OEBPS/text/cap06_otimizacao.html">Otimização</a></li>
+        <li>7 — <a href="OEBPS/text/cap07_web_powerbi.html">Web &amp; Power BI</a></li>
+        <li>8 — <a href="OEBPS/text/cap08_dataset.html">Dataset</a></li>
+        <li>9 — <a href="OEBPS/text/cap09_ia.html">IA</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="meta">Dica: para redirecionar automaticamente para o Sumário, adicione na &lt;head&gt;: 
+    <code>&lt;meta http-equiv="refresh" content="0; url=OEBPS/nav.xhtml" /&gt;</code>.
+  </p>
 </body>
 </html>

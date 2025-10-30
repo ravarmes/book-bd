@@ -1,0 +1,184 @@
+### CAPÍTULO 5 – Consultas Avançadas: Extraindo *Insights* de Dados Relacionados
+
+O comando `SELECT` é a principal instrução para consultas em um sistema de banco de dados, sendo uma das cláusulas mais simples e, ao mesmo tempo, mais extensas da SQL devido à sua ortogonalidade e às suas diversas funções, operadores e cláusulas não obrigatórias. A Consulta Avançada permite ir além das buscas simples e é essencial para extrair *insights* e relatórios complexos dos dados armazenados.
+
+🖥️ **Ferramenta:** pgAdmin (PostgreSQL)
+
+O **pgAdmin** é a interface (*front-end*) que facilita o uso da SQL no SGBD PostgreSQL. As consultas apresentadas neste capítulo utilizam comandos SQL padronizados (ISO/IEC 9075), que são reconhecidos por SGBDs relacionais como o PostgreSQL.
+
+## 5.1 Junções (JOINs) e Relacionamentos entre Tabelas.
+
+Quando um banco de dados é submetido ao processo de **normalização**, a informação de um tipo de entidade pode ser distribuída por duas ou mais tabelas no modelo lógico. O comando `JOIN` permite **juntar** os dados distribuídos por múltiplas tabelas, apresentando-os no resultado de um único `SELECT`.
+
+É importante notar a diferença fundamental entre `JOIN` e `UNION`: no comando `JOIN`, cada registro resultante é composto por atributos provenientes de duas ou mais tabelas relacionadas. Já no comando `UNION`, cada registro mostrado pertence a apenas uma tabela, mas os resultados de duas ou mais tabelas são combinados verticalmente.
+
+A cláusula `JOIN` é usada junto com uma **condição de junção** (operador `ON`) que combina as tuplas das tabelas sempre que o valor de um atributo em uma tabela for igual ao valor de um atributo na outra (geralmente via chaves primárias/estrangeiras).
+
+### Tipos de Junções (JOINs)
+
+1.  **INNER JOIN (Junção Interna):** Com a cláusula `INNER`, o resultado da consulta incluirá apenas os registros que possuem referências correspondentes em **ambas** as tabelas envolvidas na junção. Se a palavra-chave `INNER` for omitida, a junção padrão é o *Inner Join*.
+2.  **OUTER JOIN (Junção Externa):** Com a cláusula `OUTER`, serão mostrados os registros que tenham **ou não** referência nas tabelas.
+
+    *   **LEFT OUTER JOIN:** Mostra **todos** os registros da tabela listada à esquerda do `JOIN` (primeira tabela), preenchendo com valores nulos (`NULL`) os atributos da tabela da direita onde não houver correspondência.
+    *   **RIGHT OUTER JOIN:** Mostra **todos** os registros da tabela listada à direita do `JOIN` (segunda tabela), preenchendo com nulos os atributos da tabela da esquerda onde não houver correspondência.
+    *   **FULL OUTER JOIN:** Mostra **todos** os registros de ambas as tabelas envolvidas, independentemente de haver correspondência, preenchendo com nulos onde a correspondência não existir.
+
+## 5.2 Funções de Agregação, Agrupamentos (GROUP BY) e Filtragem Avançada (HAVING).
+
+A SQL oferece funções de agregação, que são utilizadas para sumarizar informações de múltiplas tuplas (registros) em uma única tupla de resumo.
+
+**Funções de Agregação Principais (podem ser usadas na cláusula `SELECT`):**
+
+*   `COUNT`: Retorna o número total de registros na seleção.
+*   `SUM`: Retorna o somatório dos valores de um campo numérico.
+*   `AVG`: Retorna a média aritmética dos valores de um campo numérico.
+*   `MAX`: Retorna o valor mais alto (máximo) de um campo.
+*   `MIN`: Retorna o valor mais baixo (mínimo) de um campo.
+
+### Cláusula GROUP BY
+
+Quando se deseja aplicar funções de agregação a subgrupos de tuplas em uma relação (em vez de aplicar à tabela inteira), utiliza-se a cláusula `GROUP BY`. Esta cláusula particiona as tabelas em conjuntos de tuplas sem sobreposição (grupos), com base nos valores de um ou mais atributos. Os atributos especificados na cláusula `GROUP BY` devem também aparecer na cláusula `SELECT`.
+
+### Cláusula HAVING
+
+A cláusula `HAVING` é utilizada para filtrar os resultados de uma ou mais funções agrupadas pela cláusula `GROUP BY`, pois o `WHERE` não pode ser usado para impor condições sobre funções de agregação em grupos.
+
+O `HAVING` testa as propriedades de grupo envolvendo funções agregadas, enquanto o `WHERE` restringe os resultados obtidos antes que os grupos sejam formados.
+
+## 5.3 Subconsultas e Operadores Lógicos.
+
+### Subconsultas (Nested Queries)
+
+A SQL permite que os resultados de uma consulta sejam utilizados para filtrar os dados de outra consulta, um processo conhecido como *Nested Queries* (Ninhos de Pesquisa). Uma subconsulta é uma declaração `SELECT` aninhada dentro de outra declaração `SELECT`.
+
+**Exemplo:** Selecionar clientes cuja `ID` esteja contida nos resultados de uma subconsulta que lista `ID`s de pedidos com valor superior a um limite.
+
+### Operadores Lógicos
+
+A cláusula `WHERE` (usada tanto em consultas simples quanto em subconsultas e comandos DML como `DELETE` e `UPDATE`) utiliza operadores lógicos para combinar condições complexas:
+
+*   **`AND` (E Lógico):** Retorna `VERDADEIRO` apenas se **todas** as condições enumeradas forem atendidas.
+*   **`OR` (OU Lógico):** Retorna `VERDADEIRO` se **pelo menos uma** das condições for atendida.
+*   **`NOT` (Negação):** Usado para negar uma condição.
+
+**Regras de Precedência:** As condições complexas seguem uma ordem de precedência: expressões entre parênteses têm a mais alta precedência, seguidas por operadores de comparação, pelo `AND`, e, por último, pelo `OR`.
+
+## 5.4 Criando Visões e Consultas Reutilizáveis.
+
+A DDL (Data Definition Language) inclui comandos que definem a estrutura, como o `CREATE VIEW`.
+
+Uma **VIEW (Visão)** é um comando `SELECT` salvo dentro do banco de dados e funciona como uma **tabela virtual**.
+
+**Vantagens da Criação de Views:**
+
+*   **Simplificação de Consultas:** A `VIEW` simplifica o uso de comandos `SELECT` complexos, pois permite que comandos `SELECT` subsequentes sejam aplicados sobre ela, como se fosse uma tabela real.
+*   **Segurança e Personalização:** Possibilita mostrar ao usuário uma versão personalizada ou simplificada das tabelas do banco de dados, ou seja, pode descrever apenas partes dos dados.
+*   **Reutilização:** Salva consultas complexas, permitindo que a lógica de extração de dados seja reutilizada sem reescrever o código completo.
+
+## 5.5 ESTUDO DE CASO: Relatórios da Biblioteca (Empréstimos mais populares, Histórico de Atrasos).
+
+Para realizar relatórios complexos no contexto da Biblioteca, assumindo tabelas como `LIVRO`, `ALUNO`, e `EMPRESTIMO` (com chaves estrangeiras que ligam alunos e livros, além de armazenar datas de empréstimo e devolução), utilizamos Junções e Funções de Agregação.
+
+**1. Empréstimos Mais Populares (Agregação e Agrupamento)**
+Para identificar quais livros foram emprestados mais vezes, é necessário contar os registros na tabela de empréstimos, agrupando pelo título do livro (requer `JOIN` entre `LIVRO` e `EMPRESTIMO`).
+
+```sql
+SELECT
+    L.Titulo,
+    COUNT(E.Codigo_Livro) AS Total_Emprestimos
+FROM
+    LIVRO AS L
+JOIN
+    EMPRESTIMO AS E ON L.Codigo = E.Codigo_Livro
+GROUP BY
+    L.Titulo
+ORDER BY
+    Total_Emprestimos DESC;
+```
+
+**2. Histórico de Atrasos (Condições Avançadas e Junções)**
+Um atraso ocorre quando a data de devolução real é posterior à data de devolução prevista (ou se a data real ainda é `NULL`, mas a data prevista já passou).
+
+```sql
+SELECT
+    A.Nome AS Nome_Aluno,
+    L.Titulo AS Titulo_Livro,
+    E.Data_Devolucao_Prevista,
+    E.Data_Devolucao_Real
+FROM
+    ALUNO AS A
+JOIN
+    EMPRESTIMO AS E ON A.Matricula = E.Matricula_Aluno
+JOIN
+    LIVRO AS L ON E.Codigo_Livro = L.Codigo
+WHERE
+    E.Data_Devolucao_Real > E.Data_Devolucao_Prevista;
+-- Ou para listar livros que deveriam ter sido devolvidos e ainda não foram (lógica dependente do SGBD):
+-- WHERE E.Data_Devolucao_Real IS NULL AND E.Data_Devolucao_Prevista < CURRENT_DATE;
+```
+
+## 5.6 EXERCÍCIOS COMPLEMENTARES: Consultas complexas em domínios variados (Ex: Análise de vendas de um E-commerce).
+
+Considerando um domínio de E-commerce com tabelas que separam dados de clientes e pedidos (um cliente faz vários pedidos, 1:N), realize as seguintes consultas avançadas:
+
+**Cenário Base Simplificado:** `CLIENTE` (CPF, Nome), `REGISTRO_VENDA` (ID, Cliente_CPF FK, Valor_total).
+
+1.  **Valor Médio das Vendas:** Calcule o valor médio (`AVG`) de todos os pedidos registrados.
+
+    ```sql
+    SELECT AVG(Valor_total) AS Valor_Medio_Vendas
+    FROM REGISTRO_VENDA;
+    ```
+
+2.  **Agrupamento por Cliente com Filtragem (HAVING):** Recupere o nome e o CPF dos clientes, juntamente com o número total de pedidos (`COUNT`), mas apenas para aqueles clientes que realizaram mais de 5 pedidos.
+
+    ```sql
+    SELECT
+        C.Nome,
+        C.CPF,
+        COUNT(RV.ID) AS Numero_Total_Pedidos
+    FROM
+        CLIENTE AS C
+    JOIN
+        REGISTRO_VENDA AS RV ON C.CPF = RV.Cliente_CPF
+    GROUP BY
+        C.Nome, C.CPF
+    HAVING
+        COUNT(RV.ID) > 5;
+    ```
+
+## 5.7 EXERCÍCIOS INTEGRADOS: Análise Estatística de Dados Demográficos (Geografia) e Frequência em Práticas Corporais (Ed. Física).
+
+### 1. Análise Estatística de Dados Demográficos (Geografia)
+
+Assumindo uma tabela `CIDADE` com informações demográficas (`Nome`, `Populacao`).
+
+**Consulta:** Determine a menor população registrada (`MIN`) e o total da população (`SUM`) de todas as cidades no banco de dados.
+
+```sql
+SELECT
+    MIN(Populacao) AS Menor_Populacao,
+    SUM(Populacao) AS Populacao_Total
+FROM
+    CIDADE;
+```
+
+### 2. Frequência em Práticas Corporais (Ed. Física)
+
+Assumindo a modelagem lógica do Capítulo 3.8: `TB_ALUNO` (Matricula, Nome) e `TB_REGISTRO_PRATICA` (Matricula_Aluno FK, Duração).
+
+**Consulta:** Liste a média de duração das práticas corporais (`AVG(Duração)`) realizadas por cada aluno, ordenando o resultado pela média de forma decrescente.
+
+```sql
+SELECT
+    A.Nome,
+    AVG(RP.Duração) AS Media_Duracao_Pratica
+FROM
+    TB_ALUNO AS A
+JOIN
+    TB_REGISTRO_PRATICA AS RP ON A.Matricula = RP.Matricula_Aluno
+GROUP BY
+    A.Nome
+ORDER BY
+    Media_Duracao_Pratica DESC;
+```

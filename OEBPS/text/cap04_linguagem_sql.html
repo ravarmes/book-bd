@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang='pt-BR'>
+
+<head>
+    <meta charset='utf-8' />
+    <meta name='viewport' content='width=device-width,initial-scale=1' />
+    <title>Capítulo 4 — Linguagem SQL: Definição, Manipulação e Segurança de Dados</title>
+    <link rel='stylesheet' type='text/css' href='../css/style.css' />
+    <meta name='description' content='Conceitos de SQL (DDL, DML, DQL, DCL, DTL), exemplos de CREATE/ALTER/DROP, INSERT/UPDATE/DELETE, COMMIT/ROLLBACK, consultas básicas com SELECT/WHERE/ORDER BY, segurança com papéis e permissões, estudo de caso e exercícios.' />
+</head>
+
+<body>
+    <div class='container'>
+
+        <header>
+            <h1 id='cap4'>CAPÍTULO 4 – Linguagem SQL: Definição, Manipulação e Segurança de Dados</h1>
+            <p class='lead'>A <strong>Structured Query Language (SQL)</strong> é a linguagem padrão para bancos de dados 
+                relacionais. Este capítulo cobre os subconjuntos <strong>DDL</strong>, <strong>DML</strong>, 
+                <strong>DQL</strong> (consultas), <strong>DCL</strong> (controle de acesso) e 
+                <strong>DTL</strong> (transações), com exemplos práticos, figuras didáticas e exercícios.</p>
+        </header>
+        <hr />
+
+        <!-- Ferramenta utilizada (nota breve) -->
+        <table class='box-table tip-table'>
+            <tr>
+                <td class='box-content tip definition' role='note' aria-labelledby='def-title-4-0'>
+                    <div id='def-title-4-0' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Definição'><strong>Ferramenta</strong></div>
+                    <div>
+                        <p><strong>pgAdmin (PostgreSQL)</strong> — interface gráfica para administrar e consultar o 
+                            <strong>PostgreSQL</strong>. Use-o para executar os exemplos de <em>DDL/DML/DQL/DCL/DTL</em> 
+                            deste capítulo.</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <section id='sec4-1'>
+            <h2>4.1 Introdução à SQL e seus Subconjuntos</h2>
+            <p>A SQL é uma linguagem <em>declarativa</em> padronizada (ISO/IEC 9075). Apesar do padrão, cada SGBDR 
+                possui um <em>dialeto</em> com pequenas variações (PostgreSQL, MySQL, etc.).</p>
+            <figure>
+                <img src='../images/4-1-sql_layers.svg' alt='Subconjuntos da SQL em camadas: DDL, DML, DQL, DCL, DTL.' />
+                <figcaption><strong>Figura 4.1 — </strong>Subconjuntos da SQL: definição, manipulação, consulta, controle de acesso e transações.</figcaption>
+            </figure>
+            <table class='content-table'>
+                <caption><strong>Tabela 4.1 - </strong>Subconjuntos da SQL e seus objetivos.</caption>
+                <thead>
+                    <tr>
+                        <th>Subconjunto</th>
+                        <th>Objetivo</th>
+                        <th>Exemplos</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>DDL</strong></td>
+                        <td>Definir/alterar estruturas</td>
+                        <td><code>CREATE</code>, <code>ALTER</code>, <code>DROP</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>DML</strong></td>
+                        <td>Manipular dados</td>
+                        <td><code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>DQL</strong></td>
+                        <td>Consultar dados</td>
+                        <td><code>SELECT</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>DCL</strong></td>
+                        <td>Controle de acesso</td>
+                        <td><code>GRANT</code>, <code>REVOKE</code>, <code>ROLE</code></td>
+                    </tr>
+                    <tr>
+                        <td><strong>DTL</strong></td>
+                        <td>Gerenciar transações</td>
+                        <td><code>COMMIT</code>, <code>ROLLBACK</code>, <code>SAVEPOINT</code></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id='sec4-2'>
+            <h2>4.2 DDL: Criação e Estrutura de Tabelas e Índices</h2>
+            <p>Use <strong>DDL</strong> para criar, alterar e remover <em>tabelas</em>, <em>índices</em> e demais objetos. 
+               O resultado é armazenado no <em>dicionário de dados</em> (metadados).</p>
+            <figure>
+                <img src='../images/4-2-ddl_flow.svg' alt='Fluxo DDL: CREATE, ALTER, DROP atualizando o dicionário de dados.' />
+                <figcaption><strong>Figura 4.2 — </strong>Fluxo DDL no SGBD.</figcaption>
+            </figure>
+            <table class='content-table'>
+                <caption><strong>Tabela 4.2 - </strong>Tipos de dados comuns (exemplos).</caption>
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>INT</code></td><td>Números inteiros</td></tr>
+                    <tr><td><code>VARCHAR(N)</code></td><td>Texto de tamanho variável</td></tr>
+                    <tr><td><code>CHAR(N)</code></td><td>Texto de tamanho fixo</td></tr>
+                    <tr><td><code>DATE</code></td><td>Datas</td></tr>
+                    <tr><td><code>NUMERIC</code>/<code>DECIMAL(P,E)</code></td><td>Valores com precisão (ex.: monetários)</td></tr>
+                </tbody>
+            </table>
+            <table class='box-table tip-table'>
+                <tr>
+                    <td class='box-content tip' role='note' aria-labelledby='def-title-4-2'>
+                        <div id='def-title-4-2' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Definição'><strong>Definição</strong></div>
+                        <div>
+                            <p><strong>PRIMARY KEY</strong> garante unicidade e não permite <code>NULL</code>. 
+                               <strong>FOREIGN KEY ... REFERENCES</strong> implementa relacionamentos e impõe integridade 
+                               referencial, podendo usar políticas <code>ON DELETE</code> (<em>RESTRICT</em>, 
+                               <em>CASCADE</em>, <em>SET NULL</em>).</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 4 — </strong>Exemplo mínimo de DDL (aluno, livro)</figcaption>
+                <pre class='code sql'>
+CREATE TABLE aluno (
+    matricula INTEGER NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    PRIMARY KEY (matricula)
+);
+
+CREATE TABLE livro (
+    isbn INTEGER NOT NULL,
+    titulo VARCHAR(150) NOT NULL,
+    PRIMARY KEY (isbn)
+);
+                </pre>
+            </figure>
+        </section>
+
+        <section id='sec4-3'>
+            <h2>4.3 DML: Inclusão, Exclusão e Alteração de Dados</h2>
+            <p>Use <strong>DML</strong> para <em>inserir</em>, <em>atualizar</em> e <em>excluir</em> registros.</p>
+            <figure class='listing'>
+                <figcaption class='listing-title'><strong>Código 5 — </strong>Exemplos de <code>INSERT</code>, <code>UPDATE</code> e <code>DELETE</code></figcaption>
+                <pre class='code sql'>
+INSERT INTO aluno (matricula, nome) VALUES (1001, 'Maria Silva');
+UPDATE aluno SET nome = 'Maria S.' WHERE matricula = 1001;
+DELETE FROM aluno WHERE matricula = 1001;
+                </pre>
+            </figure>
+            <table class='box-table warning-table'>
+                <tr>
+                    <td class='box-content warning' role='note' aria-labelledby='imp-title-4-3'>
+                        <div id='imp-title-4-3' class='box-title'><img src='../images/icon-importante.png' class='icon-img' alt='Importante'><strong>Importante</strong></div>
+                        <div>
+                            <p>Use <strong>WHERE</strong> com cuidado em <code>UPDATE</code>/<code>DELETE</code>. Sem filtro, 
+                               <strong>todos</strong> os registros podem ser alterados/excluídos.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec4-4'>
+            <h2>4.4 Transações: COMMIT, ROLLBACK e SAVEPOINT</h2>
+            <p>Transações seguem as propriedades <strong>ACID</strong> (Atomicidade, Consistência, Isolamento, 
+               Durabilidade). Após executar DML, os dados só são persistidos com <strong>COMMIT</strong>; 
+               <strong>ROLLBACK</strong> desfaz alterações; <strong>SAVEPOINT</strong> define pontos intermediários.</p>
+            <figure>
+                <img src='../images/4-4-transactions.svg' alt='Fluxo de transação com COMMIT, ROLLBACK e SAVEPOINT.' />
+                <figcaption><strong>Figura 4.3 — </strong>Estados de transação e comandos de controle.</figcaption>
+            </figure>
+        </section>
+
+        <section id='sec4-5'>
+            <h2>4.5 Consultas (DQL) e Ordenações</h2>
+            <p>O comando <strong>SELECT</strong> recupera dados com as cláusulas <code>SELECT</code>, 
+               <code>FROM</code> e <code>WHERE</code>; <code>ORDER BY</code> define ordenação ascendente/descendente.</p>
+            <figure>
+                <img src='../images/4-5-select_basic.svg' alt='Estrutura básica do SELECT: SELECT, FROM e WHERE.' />
+                <figcaption><strong>Figura 4.4 — </strong>Estrutura mínima de uma consulta.</figcaption>
+            </figure>
+            <table class='content-table'>
+                <caption><strong>Tabela 4.3 - </strong>Operadores na cláusula <code>WHERE</code> (exemplos).</caption>
+                <thead>
+                    <tr>
+                        <th>Operador</th>
+                        <th>Significado</th>
+                        <th>Exemplo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td><code>=</code></td><td>Igual</td><td><code>WHERE nome = 'Tadeu'</code></td></tr>
+                    <tr><td><code>&lt;&gt;</code> / <code>!=</code></td><td>Diferente</td><td><code>WHERE nome != 'Tadeu'</code></td></tr>
+                    <tr><td><code>&gt;</code>, <code>&lt;</code></td><td>Maior/Menor</td><td><code>WHERE salario &gt; 1000</code></td></tr>
+                    <tr><td><code>BETWEEN A AND B</code></td><td>Intervalo</td><td><code>WHERE idade BETWEEN 10 AND 20</code></td></tr>
+                    <tr><td><code>LIKE</code></td><td>Padronização</td><td><code>WHERE endereco LIKE '%Ipatinga%'</code></td></tr>
+                    <tr><td><code>IS NULL</code></td><td>Nulo</td><td><code>WHERE departamento_id IS NULL</code></td></tr>
+                    <tr><td><code>AND</code> / <code>OR</code></td><td>Combinar condições</td><td><code>WHERE a IS NOT NULL AND id = 1</code></td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <section id='sec4-6'>
+            <h2>4.6 DCL: Usuários, Papéis e Permissões</h2>
+            <p>Controle de acesso com <strong>DCL</strong> (DBA). Crie contas e papéis e conceda permissões de leitura/alteração conforme necessário.</p>
+            <table class='box-table tip-table'>
+                <tr>
+                    <td class='box-content tip' role='note' aria-labelledby='def-title-4-6'>
+                        <div id='def-title-4-6' class='box-title'><img src='../images/icon-definicao.png' class='icon-img' alt='Definição'><strong>Definição</strong></div>
+                        <div>
+                            <p><strong>GRANT</strong> concede privilégios; <strong>REVOKE</strong> remove. 
+                               Ex.: permitir que apenas <code>bibliotecario</code> faça <code>INSERT</code>/<code>UPDATE</code> 
+                               em <code>livro</code>, enquanto <code>aluno_consulta</code> usa somente <code>SELECT</code>.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec4-7'>
+            <h2>4.7 Estudo de Caso: Banco da Biblioteca</h2>
+            <table class='box-table case-table'>
+                <tr>
+                    <td class='box-content case' role='note' aria-labelledby='case-title-4-7'>
+                        <div id='case-title-4-7' class='box-title'><img src='../images/icon-estudodecaso.png' class='icon-img' alt='Estudo de Caso'><strong>Estudo de Caso</strong></div>
+                        <div>
+                            <p><strong>Objetivo</strong>: Criar e proteger o banco da <em>Biblioteca</em> usando 
+                                <strong>DDL</strong>, <strong>DML</strong>, <strong>DCL</strong> e <strong>DTL</strong>, 
+                                considerando o esquema lógico do Capítulo 3.</p>
+                            <ul>
+                                <li><code>aluno(matricula PK, nome)</code></li>
+                                <li><code>livro(isbn PK, titulo)</code></li>
+                                <li><code>exemplar(cod_exemplar PK, isbn FK)</code></li>
+                                <li><code>emprestimo(id_emprestimo PK, matricula_aluno FK, cod_exemplar FK, data_emprestimo, data_prevista)</code></li>
+                                <li><code>devolucao(id_devolucao PK, id_emprestimo FK, data_devolucao)</code></li>
+                                <li><code>reserva(id_reserva PK, matricula_aluno FK, isbn FK, data_reserva, status)</code></li>
+                                <li><code>autor(id_autor PK, nome)</code></li>
+                                <li><code>livro_autor(isbn FK, id_autor FK) PK (isbn, id_autor)</code></li>
+                                <li><code>avaliacao(id_avaliacao PK, id_emprestimo FK, nota, data_avaliacao, comentario)</code></li>
+                                <li><code>telefone_aluno(matricula_aluno FK, telefone) PK (matricula_aluno, telefone)</code></li>
+                            </ul>
+                            <p class='small'>Nota: as políticas <code>ON DELETE</code> e demais ações são definidas neste capítulo.</p>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec4-8'>
+            <h2>4.8 Exercícios Complementares</h2>
+            <table class='box-table complementary-table'>
+                <tr>
+                    <td class='box-content complementary' role='note' aria-labelledby='comp-title-4-8'>
+                        <div id='comp-title-4-8' class='box-title'><img src='../images/icon-complementar.png' class='icon-img' alt='Exercícios Complementares'><strong>Exercícios Complementares</strong></div>
+                        <div>
+                            <h3>Locadora de Carros</h3>
+                            <p>Modele e manipule um domínio alternativo (<em>carro</em>, <em>cliente</em>, <em>locacao</em>):</p>
+                            <ul>
+                                <li>DDL: adicionar <code>cor VARCHAR(20)</code> em <code>carro</code>; alterar <code>modelo</code> para <code>VARCHAR(60)</code>.</li>
+                                <li>DML: incluir carro, atualizar preço de diária, registrar locação e excluir cliente.</li>
+                            </ul>
+
+                            <h3>Consultas com SELECT (Funcionários)</h3>
+                            <p>Use a tabela <code>funcionario(id, nome, salario, departamento_id)</code> e responda:</p>
+                            <ol>
+                                <li>Nome de todos os funcionários e seus salários.</li>
+                                <li>ID e nome com salário &gt; 1500.</li>
+                                <li>Todos os atributos do departamento 2.</li>
+                                <li>ID, nome e salário em ordem decrescente de salário.</li>
+                                <li>Nomes distintos (sem repetição).</li>
+                                <li>Nomes que começam com 'M'.</li>
+                                <li>Nome e salário com aumento calculado de 10% (sem alterar o banco).</li>
+                                <li>Funcionários com <code>departamento_id</code> <code>NULL</code>.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+
+        <section id='sec4-9'>
+            <h2>4.9 Exercícios Integrados: Interdisciplinar (Ensino Médio)</h2>
+            <table class='box-table integrated-table'>
+                <tr>
+                    <td class='box-content integrated' role='note' aria-labelledby='int-title-4-9'>
+                        <div id='int-title-4-9' class='box-title'><img src='../images/icon-integrado.png' class='icon-img' alt='Exercícios Integrados'><strong>Exercícios Integrados</strong></div>
+                        <div>
+                            <ol>
+                                <li><strong>História</strong>: crie <code>evento_historico(id, titulo, ano, periodo)</code>. Insira 5 eventos e consulte os do período "República" ordenados por ano.</li>
+                                <li><strong>Geografia</strong>: crie <code>estado(id, nome, regiao)</code> e <code>cidade(id, nome, estado_id, populacao)</code>. Liste cidades da região Sudeste com população &gt; 300k.</li>
+                                <li><strong>Biologia</strong>: crie <code>especie(id, nome_cientifico, genero)</code> e <code>habitat(id, tipo)</code> com tabela de associação <code>especie_habitat(especie_id, habitat_id)</code>. Consulte espécies por habitat "floresta".</li>
+                                <li><strong>Química</strong>: crie <code>elemento(id, simbolo, numero_atomico)</code> e <code>reacao(id, descricao)</code> com <code>reacao_elemento(reacao_id, elemento_id)</code>. Liste reações que utilizam elementos com <code>numero_atomico &gt;= 20</code>.</li>
+                                <li><strong>Português</strong>: crie <code>texto(id, titulo, autor, tipo)</code>. Consulte títulos de crônicas do autor "Machado" e conte quantos textos por tipo (<code>GROUP BY</code>).</li>
+                                <li><strong>Educação Física</strong>: crie <code>modalidade(id, nome)</code> e <code>aluno_modalidade(matricula_aluno, modalidade_id)</code>. Liste alunos por modalidade e calcule total por modalidade.</li>
+                            </ol>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+
+        <section id='sec4-11'>
+            <h2>4.11 Gabarito do Capítulo 4</h2>
+            <table class='box-table gabarito-table'>
+                <tr>
+                    <td class='box-content gabarito' role='note' aria-labelledby='gab-title-4-11'>
+                        <div id='gab-title-4-11' class='box-title'><img src='../images/icon-gabarito.png' class='icon-img' alt='Gabarito'><strong>Gabarito</strong></div>
+                        <div>
+                            <p><strong>DDL completo — Biblioteca</strong></p>
+                            <figure class='listing'>
+                                <figcaption class='listing-title'><strong>Código 6 — </strong>Script DDL (PK/FK e políticas <code>ON DELETE</code>)</figcaption>
+                                <pre class='code sql'>
+CREATE TABLE aluno (
+    matricula INTEGER PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE livro (
+    isbn INTEGER PRIMARY KEY,
+    titulo VARCHAR(150) NOT NULL
+);
+
+CREATE TABLE exemplar (
+    cod_exemplar INTEGER PRIMARY KEY,
+    isbn INTEGER NOT NULL,
+    FOREIGN KEY (isbn)
+    REFERENCES livro(isbn)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE emprestimo (
+    id_emprestimo INTEGER PRIMARY KEY,
+    matricula_aluno INTEGER NOT NULL,
+    cod_exemplar INTEGER NOT NULL,
+    data_emprestimo DATE NOT NULL,
+    data_prevista DATE NOT NULL,
+    FOREIGN KEY (matricula_aluno)
+    REFERENCES aluno(matricula)
+    ON DELETE RESTRICT,
+    FOREIGN KEY (cod_exemplar)
+    REFERENCES exemplar(cod_exemplar)
+    ON DELETE RESTRICT
+);
+
+CREATE TABLE devolucao (
+    id_devolucao INTEGER PRIMARY KEY,
+    id_emprestimo INTEGER NOT NULL,
+    data_devolucao DATE NOT NULL,
+    FOREIGN KEY (id_emprestimo)
+    REFERENCES emprestimo(id_emprestimo)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE reserva (
+    id_reserva INTEGER PRIMARY KEY,
+    matricula_aluno INTEGER NOT NULL,
+    isbn INTEGER NOT NULL,
+    data_reserva DATE NOT NULL,
+    status VARCHAR(20) NOT NULL
+    CHECK (status IN ('ativa','cancelada','atendida')),
+    FOREIGN KEY (matricula_aluno)
+    REFERENCES aluno(matricula)
+    ON DELETE CASCADE,
+    FOREIGN KEY (isbn)
+    REFERENCES livro(isbn)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE autor (
+    id_autor INTEGER PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE livro_autor (
+    isbn INTEGER NOT NULL,
+    id_autor INTEGER NOT NULL,
+    PRIMARY KEY (isbn, id_autor),
+    FOREIGN KEY (isbn)
+    REFERENCES livro(isbn)
+    ON DELETE CASCADE,
+    FOREIGN KEY (id_autor)
+    REFERENCES autor(id_autor)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE avaliacao (
+    id_avaliacao INTEGER PRIMARY KEY,
+    id_emprestimo INTEGER NOT NULL,
+    nota NUMERIC(3,1)
+    CHECK (nota BETWEEN 0 AND 10),
+    data_avaliacao DATE NOT NULL,
+    comentario VARCHAR(300),
+    FOREIGN KEY (id_emprestimo)
+    REFERENCES emprestimo(id_emprestimo)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE telefone_aluno (
+    matricula_aluno INTEGER NOT NULL,
+    telefone VARCHAR(20) NOT NULL,
+    PRIMARY KEY (matricula_aluno, telefone),
+    FOREIGN KEY (matricula_aluno)
+    REFERENCES aluno(matricula)
+    ON DELETE CASCADE
+);
+                                </pre>
+                            </figure>
+
+                            <p><strong>DTL</strong> — exemplo de transação</p>
+                            <pre class='code sql'>
+BEGIN;
+INSERT INTO reserva 
+    (id_reserva, matricula_aluno, isbn, data_reserva, status)
+VALUES (1, 1001, 123, CURRENT_DATE, 'ativa');
+SAVEPOINT s1;
+UPDATE reserva SET status = 'cancelada' WHERE id_reserva = 1;
+ROLLBACK TO s1;
+COMMIT;
+                            </pre>
+
+                            <p><strong>DQL</strong> — consultas de conferência</p>
+                            <pre class='code sql'>
+-- Reservas ativas
+SELECT r.id_reserva,
+       a.nome,
+       l.titulo
+FROM reserva r
+JOIN aluno a
+  ON a.matricula = r.matricula_aluno
+JOIN livro l
+  ON l.isbn = r.isbn
+WHERE r.status = 'ativa'
+ORDER BY r.data_reserva DESC;
+
+-- Empréstimos em aberto
+SELECT e.id_emprestimo,
+       al.nome,
+       ex.cod_exemplar
+FROM emprestimo e
+JOIN aluno al
+  ON al.matricula = e.matricula_aluno
+JOIN exemplar ex
+  ON ex.cod_exemplar = e.cod_exemplar
+WHERE NOT EXISTS (
+  SELECT 1
+  FROM devolucao d
+  WHERE d.id_emprestimo = e.id_emprestimo
+);
+                            </pre>
+
+                            <p><strong>DCL</strong> — papéis e permissões mínimas</p>
+                            <pre class='code sql'>
+CREATE ROLE bibliotecario;
+CREATE ROLE aluno_consulta;
+
+REVOKE ALL ON ALL TABLES IN SCHEMA public FROM PUBLIC;
+
+GRANT SELECT ON aluno TO aluno_consulta;
+GRANT SELECT ON livro TO aluno_consulta;
+GRANT SELECT ON exemplar TO aluno_consulta;
+GRANT SELECT ON reserva TO aluno_consulta;
+GRANT SELECT ON autor TO aluno_consulta;
+GRANT SELECT ON livro_autor TO aluno_consulta;
+
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON livro TO bibliotecario;
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON exemplar TO bibliotecario;
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON emprestimo TO bibliotecario;
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON devolucao TO bibliotecario;
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON reserva TO bibliotecario;
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON avaliacao TO bibliotecario;
+GRANT SELECT, INSERT, UPDATE, DELETE
+ON livro_autor TO bibliotecario;
+                            </pre>
+
+                            <p><strong>Gabarito — Exercícios Complementares (Locadora)</strong></p>
+                            <pre class='code sql'>
+-- DDL básico
+CREATE TABLE carro (
+    id_carro INTEGER PRIMARY KEY,
+    modelo VARCHAR(60) NOT NULL,
+    cor VARCHAR(20),
+    preco_diaria NUMERIC(10,2) NOT NULL
+);
+
+CREATE TABLE cliente (
+    id_cliente INTEGER PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE locacao (
+    id_locacao INTEGER PRIMARY KEY,
+    id_carro INTEGER NOT NULL,
+    id_cliente INTEGER NOT NULL,
+    data_saida DATE NOT NULL,
+    data_retorno DATE,
+    FOREIGN KEY (id_carro)
+      REFERENCES carro(id_carro)
+      ON DELETE RESTRICT,
+    FOREIGN KEY (id_cliente)
+      REFERENCES cliente(id_cliente)
+      ON DELETE RESTRICT
+);
+
+-- DML exemplos
+INSERT INTO carro (id_carro, modelo, cor, preco_diaria)
+VALUES (1, 'Onix', 'Prata', 120.00);
+
+UPDATE carro
+SET preco_diaria = 135.00
+WHERE id_carro = 1;
+
+INSERT INTO cliente (id_cliente, nome)
+VALUES (10, 'Ana Lima');
+
+INSERT INTO locacao (id_locacao, id_carro, id_cliente, data_saida)
+VALUES (100, 1, 10, CURRENT_DATE);
+
+DELETE FROM cliente
+WHERE id_cliente = 10;
+                            </pre>
+
+                            <p><strong>Gabarito — Consultas (Funcionários)</strong></p>
+                            <pre class='code sql'>
+-- 1
+SELECT nome, salario
+FROM funcionario;
+
+-- 2
+SELECT id, nome
+FROM funcionario
+WHERE salario > 1500;
+
+-- 3
+SELECT *
+FROM funcionario
+WHERE departamento_id = 2;
+
+-- 4
+SELECT id, nome, salario
+FROM funcionario
+ORDER BY salario DESC;
+
+-- 5
+SELECT DISTINCT nome
+FROM funcionario;
+
+-- 6
+SELECT nome
+FROM funcionario
+WHERE nome LIKE 'M%';
+
+-- 7
+SELECT nome,
+       salario * 1.10 AS salario_ajustado
+FROM funcionario;
+
+-- 8
+SELECT *
+FROM funcionario
+WHERE departamento_id IS NULL;
+                            </pre>
+
+                            <p><strong>Gabarito — Exercícios Integrados</strong></p>
+                            <pre class='code sql'>
+-- História
+CREATE TABLE evento_historico (
+    id INTEGER PRIMARY KEY,
+    titulo VARCHAR(120) NOT NULL,
+    ano INTEGER NOT NULL,
+    periodo VARCHAR(40) NOT NULL
+);
+
+SELECT titulo, ano
+FROM evento_historico
+WHERE periodo = 'República'
+ORDER BY ano;
+
+-- Geografia
+CREATE TABLE estado (
+    id INTEGER PRIMARY KEY,
+    nome VARCHAR(60) NOT NULL,
+    regiao VARCHAR(30) NOT NULL
+);
+
+CREATE TABLE cidade (
+    id INTEGER PRIMARY KEY,
+    nome VARCHAR(80) NOT NULL,
+    estado_id INTEGER NOT NULL,
+    populacao INTEGER NOT NULL,
+    FOREIGN KEY (estado_id)
+      REFERENCES estado(id)
+      ON DELETE RESTRICT
+);
+
+SELECT c.nome, c.populacao
+FROM cidade c
+JOIN estado e
+  ON e.id = c.estado_id
+WHERE e.regiao = 'Sudeste'
+  AND c.populacao > 300000;
+
+-- Biologia
+CREATE TABLE especie (
+    id INTEGER PRIMARY KEY,
+    nome_cientifico VARCHAR(120) NOT NULL,
+    genero VARCHAR(60) NOT NULL
+);
+
+CREATE TABLE habitat (
+    id INTEGER PRIMARY KEY,
+    tipo VARCHAR(40) NOT NULL
+);
+
+CREATE TABLE especie_habitat (
+    especie_id INTEGER NOT NULL,
+    habitat_id INTEGER NOT NULL,
+    PRIMARY KEY (especie_id, habitat_id),
+    FOREIGN KEY (especie_id)
+      REFERENCES especie(id)
+      ON DELETE CASCADE,
+    FOREIGN KEY (habitat_id)
+      REFERENCES habitat(id)
+      ON DELETE CASCADE
+);
+
+SELECT e.nome_cientifico
+FROM especie e
+JOIN especie_habitat eh
+  ON eh.especie_id = e.id
+JOIN habitat h
+  ON h.id = eh.habitat_id
+WHERE h.tipo = 'floresta';
+
+-- Química
+CREATE TABLE elemento (
+    id INTEGER PRIMARY KEY,
+    simbolo VARCHAR(4) NOT NULL,
+    numero_atomico INTEGER NOT NULL
+);
+
+CREATE TABLE reacao (
+    id INTEGER PRIMARY KEY,
+    descricao VARCHAR(150) NOT NULL
+);
+
+CREATE TABLE reacao_elemento (
+    reacao_id INTEGER NOT NULL,
+    elemento_id INTEGER NOT NULL,
+    PRIMARY KEY (reacao_id, elemento_id),
+    FOREIGN KEY (reacao_id)
+      REFERENCES reacao(id)
+      ON DELETE CASCADE,
+    FOREIGN KEY (elemento_id)
+      REFERENCES elemento(id)
+      ON DELETE CASCADE
+);
+
+SELECT r.id, r.descricao
+FROM reacao r
+JOIN reacao_elemento re
+  ON re.reacao_id = r.id
+JOIN elemento el
+  ON el.id = re.elemento_id
+WHERE el.numero_atomico >= 20;
+
+-- Português
+CREATE TABLE texto (
+    id INTEGER PRIMARY KEY,
+    titulo VARCHAR(120) NOT NULL,
+    autor VARCHAR(80) NOT NULL,
+    tipo VARCHAR(30) NOT NULL
+);
+
+SELECT titulo
+FROM texto
+WHERE autor = 'Machado'
+  AND tipo = 'crônica';
+
+SELECT tipo, COUNT(*) AS total
+FROM texto
+GROUP BY tipo;
+
+-- Educação Física
+CREATE TABLE modalidade (
+    id INTEGER PRIMARY KEY,
+    nome VARCHAR(60) NOT NULL
+);
+
+CREATE TABLE aluno_modalidade (
+    matricula_aluno INTEGER NOT NULL,
+    modalidade_id INTEGER NOT NULL,
+    PRIMARY KEY (matricula_aluno, modalidade_id)
+);
+
+SELECT m.nome,
+       COUNT(*) AS total
+FROM aluno_modalidade am
+JOIN modalidade m
+  ON m.id = am.modalidade_id
+GROUP BY m.nome;
+                            </pre>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </section>
+        <div class='page-foot'>Prof. Rafael Vargas Mesquita — Apostila: Banco de Dados • Capítulo 4</div>
+    </div>
+</body>
+</html>

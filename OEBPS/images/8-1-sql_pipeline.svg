@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="920" height="160" viewBox="0 0 920 160">
+  <defs>
+    <style>
+      .title{font-family:Segoe UI,Arial,sans-serif;font-size:20px;fill:#0b5d57;font-weight:600}
+      .box{fill:#e9f6ff;stroke:#0b5d57;stroke-width:2}
+      .label{font-family:Segoe UI,Arial,sans-serif;font-size:16px;fill:#0b5d57;font-weight:600}
+      .small{font-size:13px;font-weight:500}
+      .note{font-family:Segoe UI,Arial,sans-serif;font-size:12px;fill:#555}
+      .arrow{stroke:#0b5d57;stroke-width:2;fill:none;marker-end:url(#ah)}
+    </style>
+    <marker id="ah" markerWidth="10" markerHeight="10" refX="6" refY="3" orient="auto">
+      <path d="M0,0 L6,3 L0,6 Z" fill="#0b5d57" />
+    </marker>
+  </defs>
+
+  <text x="460" y="30" text-anchor="middle" class="title">Pipeline SQL → Dataset CSV</text>
+
+  <!-- Boxes -->
+  <rect x="40" y="70" rx="10" ry="10" width="110" height="50" class="box"/>
+  <text x="95" y="100" text-anchor="middle" class="label">SELECT</text>
+
+  <rect x="170" y="70" rx="10" ry="10" width="110" height="50" class="box"/>
+  <text x="225" y="100" text-anchor="middle" class="label">FROM</text>
+
+  <rect x="300" y="70" rx="10" ry="10" width="110" height="50" class="box"/>
+  <text x="355" y="100" text-anchor="middle" class="label">WHERE</text>
+
+  <rect x="430" y="70" rx="10" ry="10" width="120" height="50" class="box"/>
+  <text x="490" y="100" text-anchor="middle" class="label">ORDER BY</text>
+
+  <rect x="570" y="70" rx="10" ry="10" width="120" height="50" class="box"/>
+  <text x="630" y="92" text-anchor="middle" class="label">EXPORT</text>
+  <text x="630" y="110" text-anchor="middle" class="label small">CSV</text>
+
+  <rect x="720" y="60" rx="10" ry="10" width="150" height="70" class="box"/>
+  <text x="795" y="92" text-anchor="middle" class="label">Pandas</text>
+  <text x="795" y="112" text-anchor="middle" class="label small">DataFrame</text>
+
+  <!-- Arrows -->
+  <path class="arrow" d="M150,95 L170,95"/>
+  <path class="arrow" d="M280,95 L300,95"/>
+  <path class="arrow" d="M410,95 L430,95"/>
+  <path class="arrow" d="M550,95 L570,95"/>
+  <path class="arrow" d="M690,95 L720,95"/>
+
+  <!-- Notes -->
+  
+  
+</svg>
